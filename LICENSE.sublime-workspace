@@ -1,0 +1,402 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"assertT",
+				"assertTrue\tjunit method"
+			],
+			[
+				"toS",
+				"toString()\tfunc"
+			],
+			[
+				"println",
+				"println()\tfunc"
+			],
+			[
+				"me",
+				"messageUtil"
+			],
+			[
+				"assert",
+				"assertEquals\tjunit method"
+			],
+			[
+				"Test",
+				"Test\tjunit anno"
+			],
+			[
+				"M",
+				"MessageUtil\t(MessageUtil.java)"
+			],
+			[
+				"print",
+				"println()\tfunc"
+			],
+			[
+				"TestU",
+				"TestJunit\t(TestJunit.java)"
+			],
+			[
+				"qin",
+				"qingzhi.HelloWorld\t(build.xml)"
+			],
+			[
+				"i-sca",
+				"I-Scanner\tinit"
+			],
+			[
+				"pub",
+				"public"
+			],
+			[
+				"test",
+				"Test\tjunit anno"
+			],
+			[
+				"H",
+				"HelloWorld\t(HelloWorld.java)"
+			],
+			[
+				"cla",
+				"classes"
+			],
+			[
+				"h",
+				"HelloWorld"
+			],
+			[
+				"sr",
+				"src.dir"
+			],
+			[
+				"buil",
+				"build.dir"
+			],
+			[
+				"bui",
+				"build.dir"
+			],
+			[
+				"pa",
+				"path"
+			],
+			[
+				"onmouseo",
+				"onmouseover\tAttr"
+			],
+			[
+				"getEl",
+				"getElementById\t( elementId: DOMString ): Element Document"
+			],
+			[
+				"getE",
+				"getElementById\t( elementId: DOMString ): Element Document"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"s",
+				"style"
+			],
+			[
+				"d",
+				"demo"
+			],
+			[
+				"in",
+				"innerHTML"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"re",
+				"repeat-x"
+			],
+			[
+				"t",
+				"type\tAttr"
+			],
+			[
+				"action",
+				"action_page"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"my",
+				"myFunction"
+			],
+			[
+				"co",
+				"color"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"list",
+				"list-style-type"
+			],
+			[
+				"he",
+				"head2"
+			],
+			[
+				"head",
+				"head1"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"ba",
+				"background-color"
+			],
+			[
+				"rgb",
+				"rgba()"
+			],
+			[
+				"bo",
+				"border"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"fon",
+				"font-family"
+			]
+		]
+	},
+	"buffers":
+	[
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "bro",
+		"selected_items":
+		[
+			[
+				"bro",
+				"Browse Mode: Outline (Right)"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"package",
+				"Install Package Control"
+			]
+		],
+		"width": 524.0
+	},
+	"console":
+	{
+		"height": 130.0,
+		"history":
+		[
+			"import urllib.request,os,hashlib; h = '6f4c264a24d933ce70df5dedcf1dcaee' + 'ebe013ee18cced0ef93d5f746d80ef60'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/disk/workspace/CRegressionRDBM/cpm/ClientClass.py",
+		"/disk/workspace/CRegressionRDBM/cpm/Data.py",
+		"/disk/workspace/CRegressionRDBM/setup.py",
+		"/disk/workspace/CRegressionRDBM/requirements.txt",
+		"/disk/workspace/CRegressionRDBM/tests/test_advanced.py",
+		"/disk/workspace/CRegressionRDBM/tests/context.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/Fold Python/Default (Linux).sublime-keymap",
+		"/disk/workspace/CRegressionRDBM/cpm/helpers.py",
+		"/disk/workspace/CRegressionRDBM/cpm/core.py",
+		"/disk/workspace/CRegressionRDBM/tests/test_basic.py",
+		"/disk/workspace/CRegressionRDBM/cpm/__init__.py",
+		"/disk/workspace/Cregression/tests/context.py",
+		"/disk/workspace/Cregression/cpm/run_code.py",
+		"/disk/workspace/Cregression/tests/test_basic.py",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-default.xml.template",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-site.xml",
+		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath._hbase",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/.classpath._hbase",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb/conf/blinkdb-env.sh",
+		"/home/u1796377/Program/blinkdb/hive_blinkdb/ql/src/test/queries/clientpositive/date_3.q",
+		"/home/u1796377/Program/blinkdb/bin/dev/run-tests-from-scratch",
+		"/home/u1796377/Program/blinkdb/hive_blinkdb/build.xml",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmpBusinessLogic.java",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmployeeDetails.java",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/MessageUtil.java",
+		"/home/u1796377/workspace/ant_trial/build.xml",
+		"/home/u1796377/workspace/ant_trial/src/test/TestRunner.java",
+		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.java",
+		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.class",
+		"/home/u1796377/workspace/ant_trial/src/test/TestJunit.java",
+		"/home/u1796377/workspace/ant_trial/src/HelloWorld.java",
+		"/home/u1796377/.config/sublime-text-3/Packages/AdvancedNewFile/README.md",
+		"/home/u1796377/.config/sublime-text-3/Packages/TrailingSpaces/README.md",
+		"/home/u1796377/workspace/ant_trial/haha.java",
+		"/home/u1796377/Desktop/myWebSite/test.html",
+		"/var/www/html/index.html",
+		"/home/u1796377/Desktop/myWebSite/myScript.js",
+		"/home/u1796377/Desktop/myWebSite/index.html",
+		"/home/u1796377/Desktop/index.html",
+		"/home/u1796377/Desktop/my.php",
+		"/home/u1796377/Desktop/mystyle.css",
+		"/home/u1796377/Desktop/test.html",
+		"/home/u1796377/Desktop/test1.html"
+	],
+	"find":
+	{
+		"height": 41.0
+	},
+	"find_in_files":
+	{
+		"height": 104.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 28.0
+	},
+	"input":
+	{
+		"height": 40.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.SublimeLinter":
+	{
+		"height": 0.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/Python/Python.sublime-build",
+	"project": "LICENSE.sublime-project",
+	"replace":
+	{
+		"height": 52.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 342.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
