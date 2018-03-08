@@ -9,3 +9,4 @@ ethylene_methane.txt
 CRegressionRDBMWorkspace
 CRegressionRDBMWorkspace.sublime-project
 CRegressionRDBMWorkspace.sublime-workspace
+*.pyc

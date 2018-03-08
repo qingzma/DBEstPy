@@ -320,6 +320,16 @@
 	"buffers":
 	[
 		{
+			"contents": "QueryLogs:\n    __init__(…)\n    set_logging(…)\n    set_no_output(…)",
+			"settings":
+			{
+				"buffer_size": 66,
+				"line_ending": "Unix",
+				"name": "𝌆 Outline",
+				"scratch": true
+			}
+		},
+		{
 			"file": "creg/core.py",
 			"settings":
 			{
@@ -381,10 +391,18 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 392.0,
-		"last_filter": "au",
+		"height": 184.0,
+		"last_filter": "install",
 		"selected_items":
 		[
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"out",
+				"Browse Mode: Outline (Right)"
+			],
 			[
 				"au",
 				"AutoPEP8: Format Code"
@@ -400,10 +418,6 @@
 			[
 				"doc",
 				"AutoDocstring: Current"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
 			],
 			[
 				"remove",
@@ -466,6 +480,7 @@
 	],
 	"file_history":
 	[
+		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
 		"/disk/workspace/CRegressionRDBM/CRegressionRDBMWorkspace.sublime-project",
 		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
@@ -578,7 +593,7 @@
 			"logger_object=this.logger",
 			"CRegression"
 		],
-		"reverse": false,
+		"reverse": true,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -592,6 +607,65 @@
 			[
 				{
 					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 66,
+						"regions":
+						{
+						},
+						"selection":
+						[
+						],
+						"settings":
+						{
+							"current_file": "/disk/workspace/CRegressionRDBM/creg/logs.py",
+							"default_dir": "/disk/workspace/CRegressionRDBM",
+							"git_gutter_is_enabled": false,
+							"outline_rename_mode": false,
+							"symkeys":
+							[
+								[
+									137,
+									153
+								],
+								[
+									189,
+									222
+								],
+								[
+									679,
+									736
+								],
+								[
+									1654,
+									1682
+								]
+							],
+							"symlist":
+							[
+								"QueryLogs:",
+								"    __init__(…)",
+								"    set_logging(…)",
+								"    set_no_output(…)"
+							],
+							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 3,
+			"sheets":
+			[
+				{
+					"buffer": 1,
 					"file": "creg/core.py",
 					"semi_transient": false,
 					"settings":
@@ -603,8 +677,8 @@
 						"selection":
 						[
 							[
-								74221,
-								74221
+								74852,
+								74852
 							]
 						],
 						"settings":
@@ -640,11 +714,11 @@
 						"translation.y": 30818.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
 					"file": "creg/query_engine.py",
 					"semi_transient": false,
 					"settings":
@@ -698,14 +772,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2945.0,
+						"translation.y": 2810.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 2,
+					"buffer": 3,
 					"file": "creg/data_loader.py",
 					"semi_transient": false,
 					"settings":
@@ -717,8 +791,8 @@
 						"selection":
 						[
 							[
-								26928,
-								26928
+								26399,
+								26399
 							]
 						],
 						"settings":
@@ -738,14 +812,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 8911.0,
+						"translation.y": 9253.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
+					"buffer": 4,
 					"file": "creg/logs.py",
 					"semi_transient": false,
 					"settings":
@@ -757,12 +831,15 @@
 						"selection":
 						[
 							[
-								534,
-								534
+								643,
+								643
 							]
 						],
 						"settings":
 						{
+							"SL.17.region_keys":
+							[
+							],
 							"SL.20.region_keys":
 							[
 							],
@@ -772,10 +849,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 342.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
@@ -783,7 +860,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 27.0
+		"height": 40.0
 	},
 	"input":
 	{
@@ -794,20 +871,29 @@
 		"cells":
 		[
 			[
+				2,
+				0,
+				3,
+				2
+			],
+			[
 				0,
 				0,
-				1,
-				1
+				2,
+				2
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.2,
+			0.8,
 			1.0
 		],
 		"rows":
 		[
 			0.0,
+			0.5,
 			1.0
 		]
 	},
@@ -874,7 +960,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
