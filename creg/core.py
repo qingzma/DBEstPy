@@ -23,7 +23,7 @@ from sklearn.svm import SVC
 
 #import findspark
 
-#findspark.init()
+# findspark.init()
 #import pyspark
 
 import subprocess32 as subprocess
@@ -83,7 +83,6 @@ from sklearn.metrics import accuracy_score
 import logging
 
 
-
 r = ColorArray('red')
 g = ColorArray((0, 1, 0, 1))
 blue = ColorArray('blue')
@@ -97,7 +96,8 @@ markers_matplotlib = ['*', '1', 'v', 'o', 'h', 'x']
 
 
 class CRegression:
-    def __init__(self, logger_object=None, base_models=None, ensemble_models=None, classifier_type=tools.classifier_xgboost_name,
+    def __init__(self, logger_object=None, base_models=None, ensemble_models=None,
+                 classifier_type=tools.classifier_xgboost_name,
                  b_show_plot=False, b_disorder=False, b_select_classifier=False):
         """
 
@@ -129,7 +129,7 @@ class CRegression:
         self.time_cost_to_train_base_models = []
         self.time_cost_to_train_ensemble_models = []
 
-        self.predictions_testing=None
+        self.predictions_testing = None
 
         if not logger_object:
             import logs
@@ -288,8 +288,6 @@ class CRegression:
         latency = (end - start).total_seconds() * 1000.0 / len(xs)
         # throughput = 1000 / latency
 
-
-
         answer.predictions = results
         answer.latency = latency
         # answer.throughput = throughput
@@ -303,7 +301,6 @@ class CRegression:
         answer.time_query_execution_on_classifier = (sum(time_classifier) / float(len(time_classifier)))
         answer.num_of_instances = len(time_classifier)
         # print(answer.modelID)
-
 
         # print statistics for the queries
         model_counts = []
@@ -469,7 +466,7 @@ class CRegression:
             y = trainingData.labels
             start = datetime.now()
             reg = AdaBoostRegressor(DecisionTreeRegressor(max_depth=4),
-                                    n_estimators=300)  ##, random_state=rng)
+                                    n_estimators=300)  # , random_state=rng)
             reg.fit(X, y)
             end = datetime.now()
             time_train = (end - start).total_seconds()
@@ -660,8 +657,7 @@ class CRegression:
 
     # -----------------------------------------------------------------------------------------------
 
-
-    ############# the code below is a  modified version of ClassifiedClient.py, adjusted for pure python implementation.
+    # the code below is a  modified version of ClassifiedClient.py, adjusted for pure python implementation.
     def get_predictions_to_build_classifier(self, training_data_classifier):
 
         answers = []
@@ -700,7 +696,7 @@ class CRegression:
             values = []
             for j in range(dimension):
                 element_of_values = factor * abs(predictions[j].predictions[i] - predictions[j].labels[i]) + \
-                                    (1 - factor) * predictions[j].latency
+                    (1 - factor) * predictions[j].latency
                 # proportion_of_default_prediction = predictions[j].num_defaults/(predictions[j].num_defaults+ \
                 #                                                                predictions[j].num_success)
                 # if b_default_prediction_influence:
@@ -797,11 +793,11 @@ class CRegression:
     def predict(self, x):
         return self.get_classified_prediction(self.classifier, x)
 
-    def predicts(self,xs):
+    def predicts(self, xs):
         return [self.get_classified_prediction(self.classifier, x) for x in xs]
 
     def fit(self, training_data, testing_data=None, b_select_classifier=False):
-        training_data_model,training_data_classifier =tools.split_data_to_2(training_data)
+        training_data_model, training_data_classifier = tools.split_data_to_2(training_data)
 
         models, time_cost_to_train_base_models = self.deploy_all_models(training_data_model)
 
@@ -813,15 +809,15 @@ class CRegression:
 
         if not b_select_classifier:
             classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(training_data_classifier,
-                                                                                           y_classifier)
+                                                                                               y_classifier)
         else:
-            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, time_cost_to_train_the_best_classifier = self.select_classifiers(
-                training_data_classifier, y_classifier, testing_data)
+            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, \
+                time_cost_to_train_the_best_classifier = \
+                self.select_classifiers(training_data_classifier, y_classifier, testing_data)
 
         self.classifier = classifier
         self.num_total_training_points = len(training_data_model.labels) + len(training_data_classifier.labels)
         self.training_data = training_data
-
 
     def select_classifiers(self, training_data_classifier, y_classifier, testing_data):
         # global classifier_names_candidate
@@ -884,9 +880,16 @@ class CRegression:
 
         return classifier, NRMSEs, time_costs, time_cost  # time cost of the best classifier
 
+    def plot_training_data_2d(self):
+        fig, ax = plt.subplots()
+
+        ax.plot(self.training_data.features[:, 0], self.training_data.labels,
+                tools.markers_matplotlib[5], label='real data', linewidth=0.0)
+        plt.show()
+
     def matplotlib_plot_2D(self, answers, b_show_division_boundary=True, b_show_god_classifier=False, y_classifier=None,
                            xmin=None, xmax=None):
-        font_size=35
+        font_size = 35
         names = self.app_names_for_classifier
         symbols = ['*', '1', 'v', 'o', 'h', 'x']
         if b_show_division_boundary:
@@ -912,8 +915,7 @@ class CRegression:
                          symbols[i],
                          label=names[i],
                          linewidth=0.0)
-        ax1.plot(answers.features[:,0],answers.labels,symbols[5],label='real data',linewidth=0.0)
-
+        ax1.plot(answers.features[:, 0], answers.labels, symbols[5], label='real data', linewidth=0.0)
 
         # Now add the legend with some customizations.
         legend1 = ax1.legend(loc='upper right', shadow=True, fontsize=font_size)
@@ -975,8 +977,8 @@ class CRegression:
 
         return
 
-    def matplotlib_plot_2D_all_models(self, answers,answers_from_all_models,
-                           xmin=None, xmax=None):
+    def matplotlib_plot_2D_all_models(self, answers, answers_from_all_models,
+                                      xmin=None, xmax=None):
         font_size = 35
         names = self.app_names_for_classifier
         symbols = tools.markers_matplotlib
@@ -986,7 +988,6 @@ class CRegression:
         # ax.plot(a, c, 'k--', label='Model length')
         # ax.plot(a, d, 'k:', label='Data length')
         # ax.plot(a, c + d, 'k', label='Total message length')
-
 
         # for i in range(len(self.app_names_for_classifier)):
         #     # print(answers.get_vispy_plot_data(i))
@@ -998,7 +999,7 @@ class CRegression:
         #                  linewidth=0.0)
 
         for i in range(len(self.app_names_for_classifier)):
-            ax1.plot(answers_from_all_models[i].features[:,0],
+            ax1.plot(answers_from_all_models[i].features[:, 0],
                      answers_from_all_models[i].predictions,
                      symbols[i],
                      label=names[i],
@@ -1011,7 +1012,6 @@ class CRegression:
                  label='real data',
                  linewidth=0.0
                  )
-
 
         # Now add the legend with some customizations.
         legend1 = ax1.legend(loc='upper right', shadow=True, fontsize=font_size)
@@ -1027,7 +1027,6 @@ class CRegression:
         # ax1.set_title("Regression Curves of Linear and Polynomial Models")
         if xmin != None:
             ax1.set_xlim(xmin, xmax)
-
 
         plt.show()
 
@@ -1059,6 +1058,12 @@ class CRegression:
         fig.show(run=True)
         return
 
+    def plot_training_data_3d(self):
+        fig = plt.figure()
+        ax1 = fig.add_subplot(111, projection='3d')
+        ax1.scatter(self.training_data.features[:, 0], self.training_data.features[:, 1], self.training_data.labels)
+        plt.show()
+
     def matplotlib_plot_3D(self, answers, plot_region=[]):
         names = self.app_names_for_classifier
         symbols = tools.markers_matplotlib
@@ -1070,7 +1075,6 @@ class CRegression:
         # ax.plot(a, c, 'k--', label='Model length')
         # ax.plot(a, d, 'k:', label='Data length')
         # ax.plot(a, c + d, 'k', label='Total message length')
-
 
         for i in range(len(self.app_names_for_classifier)):
             # print(answers.get_vispy_plot_data(i))
@@ -1126,7 +1130,7 @@ class CRegression:
 
         return
 
-    def matplotlib_plot_3D_distribution_of_best_model(self, answers,y_classifier, plot_region=[]):
+    def matplotlib_plot_3D_distribution_of_best_model(self, answers, y_classifier, plot_region=[]):
         names = self.app_names_for_classifier
         symbols = tools.markers_matplotlib
 
@@ -1150,30 +1154,31 @@ class CRegression:
 
         return
 
-    def boxplot(self,predictions_from_base_models,classified_predictions,y_classifier):
-        num_of_plot=len(predictions_from_base_models)+1
-        labels=classified_predictions.labels
-        data_to_plot=[]
-        variance=[]
-        xlabels=self.input_base_models
-        #print(xlabels)
+    def boxplot(self, predictions_from_base_models, classified_predictions, y_classifier):
+        num_of_plot = len(predictions_from_base_models)+1
+        labels = classified_predictions.labels
+        data_to_plot = []
+        variance = []
+        xlabels = self.input_base_models
+        # print(xlabels)
         for i in range(num_of_plot-1):
-            data_to_plot.append(np.subtract(np.asarray(predictions_from_base_models[i].predictions),np.asarray(labels)))
-            variance.append(np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions),np.asarray(labels))))
+            data_to_plot.append(np.subtract(np.asarray(
+                predictions_from_base_models[i].predictions), np.asarray(labels)))
+            variance.append(
+                np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
 
-        data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(labels)))
-        variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(labels))))
-        #variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
+        data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
+        variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
+        # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
         xlabels.append("classified")
-        fig = plt.figure(1)     #, figsize=(9, 6))
+        fig = plt.figure(1)  # , figsize=(9, 6))
         ax = fig.add_subplot(111)
         # Create the boxplot
-        bp = ax.boxplot(data_to_plot, showfliers=False,showmeans=True)
+        bp = ax.boxplot(data_to_plot, showfliers=False, showmeans=True)
         ax.set_xticklabels(xlabels)
         ax.set_ylabel("absolute error")
         plt.show()
         return variance
-
 
     def run2d(self, data):
 
@@ -1228,16 +1233,17 @@ class CRegression:
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type
         else:
-            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, time_cost_to_train_the_best_classifier = self.select_classifiers(
-                training_data_classifier, y_classifier, testing_data)
+            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers,\
+                time_cost_to_train_the_best_classifier = self.select_classifiers(
+                    training_data_classifier, y_classifier, testing_data)
             statistics.classifier_name = self.classifier_name
-
-
 
         time_train_CPM = datetime.now()
 
         statistics.s_training_time_all_models.append((
-                                                         time_train_CPM - time_program_start).total_seconds())  # time cost for our classified prediction method, will be updated later on
+            time_train_CPM - time_program_start).total_seconds())  # time cost for our classified prediction method, \
+        # will be updated later on
+        #
         # save tempary results
         # statistics.classifier_selection_names = client.classifier_names_candidate
         # statistics.classifier_selection_NRMSEs = NRMSE_classifier_selection
@@ -1303,15 +1309,17 @@ class CRegression:
         statistics.print_summary()
 
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
-        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, b_show_god_classifier=True,
-        #                             y_classifier=y_classifier)
+        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,\
+        # b_show_god_classifier=True,
+        # y_classifier=y_classifier)
 
         if self.b_show_plot:
-            self.matplotlib_plot_2D(predictions_classified,b_show_division_boundary=True,b_show_god_classifier=True,y_classifier=y_classifier_testing)
+            self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
+                                    b_show_god_classifier=True, y_classifier=y_classifier_testing)
 
-        self.predictions_testing=answers_for_testing
+        self.predictions_testing = answers_for_testing
 
-        #self.matplotlib_plot_2D_all_models(predictions_classified,answers_for_testing)
+        # self.matplotlib_plot_2D_all_models(predictions_classified,answers_for_testing)
         return statistics
 
     def run3d(self, data):
@@ -1320,8 +1328,6 @@ class CRegression:
 
         if self.b_disorder:
             data.disorderNd()
-
-
 
         time_program_start = datetime.now()
 
@@ -1356,8 +1362,6 @@ class CRegression:
                                                                     # model_selection_index=index_models,
                                                                     factor=1)
 
-
-
         # select the best classifier
         if not self.b_select_classifier:
             if self.classifier_type is tools.classifier_xgboost_name:
@@ -1372,17 +1376,17 @@ class CRegression:
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type
         else:
-            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, time_cost_to_train_the_best_classifier = self.select_classifiers(
-                training_data_classifier, y_classifier, testing_data)
+            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers,\
+                time_cost_to_train_the_best_classifier = self.select_classifiers(
+                    training_data_classifier, y_classifier, testing_data)
             statistics.classifier_name = self.classifier_name
-
-
-
 
         time_train_CPM = datetime.now()
 
         statistics.s_training_time_all_models.append((
-                                                         time_train_CPM - time_program_start).total_seconds())  # time cost for our classified prediction method, will be updated later on
+            time_train_CPM - time_program_start).total_seconds())  # time cost for our classified prediction method,
+        # will be updated later on
+        #
         # save tempary results
         # statistics.classifier_selection_names = client.classifier_names_candidate
         # statistics.classifier_selection_NRMSEs = NRMSE_classifier_selection
@@ -1390,9 +1394,6 @@ class CRegression:
         # statistics.classifier_name = client.classifier_names_candidate[index]
         # statistics.time_training_classifiers = list(time_cost_to_select_classifiers)
         statistics.time_training_classifier = time_cost_to_train_the_best_classifier
-
-
-
 
         '''
         cc=ClientClass()
@@ -1408,8 +1409,6 @@ class CRegression:
         statistics.model_names_for_classifier = list(self.app_names_for_classifier)
         for element in answers_for_testing:
             statistics.NRMSE.append(element.NRMSE())
-
-
 
         # query to the classified prediction method
         predictions_classified = self.get_classified_predictions(classifier, testing_data)
@@ -1443,9 +1442,6 @@ class CRegression:
                                                                                   # model_selection_index=index_models,
                                                                                   factor=1)
 
-
-
-
         # save results of classifier accuracy
         statistics.classifier_accuracy = predictions_classified.predict_precision(y_classifier_testing)
         statistics.NRMSE_ideal = tools.NRMSE(errors_ideal, answers_for_testing[0].labels)
@@ -1459,9 +1455,8 @@ class CRegression:
         statistics.print_summary()
 
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
-        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, b_show_god_classifier=True,
-        #                             y_classifier=y_classifier)
-
+        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
+        #    b_show_god_classifier=True, y_classifier=y_classifier)
 
         if self.b_show_plot:
             self.matplotlib_plot_3D_distribution_of_best_model(predictions_classified, y_classifier_testing)
@@ -1491,7 +1486,6 @@ class CRegression:
         models = self.deploy_all_models(training_data_model)
         statistics.s_training_time_all_models = list(self.time_cost_to_train_base_models)
 
-
         # get predictions to build the classifier
         answers_for_classifier = self.get_predictions_to_build_classifier(training_data_classifier)
         # save tempary results
@@ -1507,15 +1501,7 @@ class CRegression:
         # index_models = [0, 1, 2]
         y_classifier, errors = self.init_classifier_training_values(answers_for_classifier,
                                                                     # model_selection_index=index_models,
-                                                                   factor=1)
-
-
-
-
-
-
-
-
+                                                                    factor=1)
 
         #########################################################
 
@@ -1549,14 +1535,16 @@ class CRegression:
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type
         else:
-            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, time_cost_to_train_the_best_classifier = self.select_classifiers(
-                training_data_classifier, y_classifier, testing_data)
+            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, \
+                time_cost_to_train_the_best_classifier = self.select_classifiers(
+                    training_data_classifier, y_classifier, testing_data)
             statistics.classifier_name = self.classifier_name
 
         time_train_CPM = datetime.now()
 
+        # time cost for our classified prediction method, will be updated later on
         statistics.s_training_time_all_models.append((
-                                                         time_train_CPM - time_program_start).total_seconds())  # time cost for our classified prediction method, will be updated later on
+            time_train_CPM - time_program_start).total_seconds())
         # save tempary results
         # statistics.classifier_selection_names = client.classifier_names_candidate
         # statistics.classifier_selection_NRMSEs = NRMSE_classifier_selection
@@ -1564,11 +1552,6 @@ class CRegression:
         # statistics.classifier_name = client.classifier_names_candidate[index]
         # statistics.time_training_classifiers = list(time_cost_to_select_classifiers)
         statistics.time_training_classifier = time_cost_to_train_the_best_classifier
-
-
-
-
-
 
         '''
         cc=ClientClass()
@@ -1629,8 +1612,8 @@ class CRegression:
         statistics.print_summary()
 
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
-        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, b_show_god_classifier=True,
-        #                             y_classifier=y_classifier)
+        # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
+        #   b_show_god_classifier=True, y_classifier=y_classifier)
 
         # client.matplotlib_plot_2D(predictions_classified)
 
@@ -1639,10 +1622,10 @@ class CRegression:
 
         self.predictions_testing = answers_for_testing
 
-        print(self.boxplot(answers_for_testing,predictions_classified,y_classifier_testing))
+        print(self.boxplot(answers_for_testing, predictions_classified, y_classifier_testing))
         return statistics
 
-    def get_NRMSE_for_clusters(self,answers_for_classifier,y_classifier):
+    def get_NRMSE_for_clusters(self, answers_for_classifier, y_classifier):
         # print(answers_for_classifier[0].labels)
         # print(y_classifier)
         indexs = []
@@ -1687,7 +1670,7 @@ if __name__ == "__main__":
     y_column = 1  # should be the order in the input file, not in the "fields" order.
     data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
 
-    training_data, testing_data = tools.split_data_to_2(data,0.66667)
+    training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
     '''
     training_data_model = training_data_model.get_before(100)

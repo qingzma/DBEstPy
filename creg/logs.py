@@ -13,17 +13,17 @@ class QueryLogs:
                 self.ch = None  # logger console handler
                 self.num_dataset = 8
                 self.logger = logging.getLogger(default_logger_name)
-                self.logging = logging 
+                self.logging = logging
                 if log == None:
                     self.set_logging(default_logger_name)
                     self.logger_name=default_logger_name
                 else:
                     self.set_logging(log)
                     self.logger_name=log
-                self.set_no_output()
+                # self.set_no_output()
 
 
-        def set_logging(self, file_name):
+        def set_logging(self, file_name=default_logger_name):
                 self.logger.removeHandler(self.fh)
                 self.logger.removeHandler(self.ch)
                 self.logger.setLevel(logging.DEBUG)
