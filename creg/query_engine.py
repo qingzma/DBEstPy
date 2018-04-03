@@ -11,9 +11,14 @@ import evaluation
 import logs
 import data_loader as dl
 from scipy import integrate
+from datetime import datetime
 
+epsabs = 1E-01
+epsrel = 1E-03
 mesh_grid_num = 30
-opts = {'epsabs': 1.49e-03, 'epsrel': 1.49e-03, 'limit': 100}
+opts = {'epsabs': epsabs, 'epsrel': epsrel, 'limit': 100}
+# opts = {'epsabs': 1.49e-03, 'epsrel': 1.49e-03, 'limit': 100}
+
 # variable_names=[a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1,l1,m1,n1,o1,p1,q1,r1,s1,t1,u1,v1,w1,x1,y1,z1,
 # a2,b2,c2,d2,e2,f2,g2,h2,i2,j2,k2,l2,m2,n2,o2,p2,q2,r2,s2,t2,u2,v2,w2,x2,y2,z2]
 
@@ -32,7 +37,7 @@ class QueryEngine:
         training_data (TYPE): Description
     """
 
-    def __init__(self, cregression, logger_object=None):
+    def __init__(self, cregression, logger_object=None, b_print_time_cost=True):
         self.num_training_points = cregression.num_total_training_points
         self.log_dens = None
         self.training_data = cregression.training_data
@@ -43,6 +48,8 @@ class QueryEngine:
             self.logger = logger_object.logger
         else:
             self.logger = logs.QueryLogs().logger
+        self.b_print_time_cost = b_print_time_cost
+
 
     def density_estimation(self, kernel=None):
         """Estimate the density of points.
@@ -111,7 +118,7 @@ class QueryEngine:
         plt.show()
         return True
 
-    def approximate_ave_from_to(self, x_min, x_max, x_columnID):
+    def approximate_avg_from_to(self, x_min, x_max, x_columnID):
         """ calculate the approximate average value between x_min and x_max
 
         Args:
@@ -122,14 +129,22 @@ class QueryEngine:
         Returns:
             TYPE: the integeral value
         """
-        # if self.dimension < 1:
-        #     def f_pRx(x):
-        #         # print(self.cregression.predict(x))
-        #         return np.exp(self.kde.score_samples(x))*self.cregression.predict(x)
-        #     def f_p(x):
-        #         return np.exp(self.kde.score_samples(x))
-        #     return integrate.nquad(f_pRx,[[x_min,x_max]])[0]/integrate.nquad(f_p,[[x_min,x_max]])[0]
-        if self.dimension >= 1:
+        start = datetime.now()
+        if self.dimension is 1:
+            def f_pRx(x):
+                # print(self.cregression.predict(x))
+                return np.exp(self.kde.score_samples(x))*self.cregression.predict(x)
+            def f_p(x):
+                return np.exp(self.kde.score_samples(x))
+            a = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            b = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+
+            if  b:
+                result = a/b
+            else:
+                result =  None
+
+        if self.dimension > 1:
             data_range_length_half = [(max(self.training_data.features[:, i])-min(
                 self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
             data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
@@ -153,20 +168,27 @@ class QueryEngine:
                     * self.cregression.predict(np.array(args))
             a = integrate.nquad(f_pRx, bounds, opts=opts)[0]
             b = integrate.nquad(f_p, bounds, opts=opts)[0]
-            if b is not 0:
-                return a/b
+
+            if  b:
+                result = a/b
             else:
-                self.logger.error("divide by zero, exit!")
-                exit(1)
+                result =  None
+        end = datetime.now()
+        if self.b_print_time_cost:
+            self.logger.info("Time spent for AVG: %.4fs." % (end - start).total_seconds())
+        return result
 
     def approximate_sum_from_to(self, x_min, x_max, x_columnID):
-        # if self.dimension < 1:
-        #     average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
-        #     def f_p(x):
-        #         return np.exp(self.kde.score_samples(x))
-        #     return integrate.nquad(f_p,[[x_min,x_max]])[0]*average*self.num_training_points
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_pRx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+                    * self.cregression.predict(np.array(args))
+            result = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            # return result
 
-        if self.dimension >= 1:
+        if self.dimension > 1:
             data_range_length_half = [(max(self.training_data.features[:, i])-min(
                 self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
             data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
@@ -184,7 +206,13 @@ class QueryEngine:
             def f_pRx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args))
-            return(integrate.nquad(f_pRx, bounds, opts=opts)[0]*self.num_training_points)
+            result = integrate.nquad(f_pRx, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        if self.b_print_time_cost:
+            self.logger.info("Time spent for SUM: %.4fs." % (end - start).total_seconds())
+        return(result)
+
+
 
 
 if __name__ == "__main__":
@@ -195,12 +223,12 @@ if __name__ == "__main__":
     cRegression.fit(data)
     # cRegression.plot_training_data_3d()
     # exit(1)
-    # cRegression.plot_training_data_2d()
+    cRegression.plot_training_data_2d()
     logger.set_logging()
     qe = QueryEngine(cRegression, logger_object=logger)
     qe.density_estimation()
-    # qe.desngity_estimation_plt2d()
+    qe.desngity_estimation_plt2d()
     # qe.desngity_estimation_plt3d()
-    print(qe.approximate_ave_from_to(70, 80, 0))
+    print(qe.approximate_avg_from_to(70, 80, 0))
     print(qe.approximate_sum_from_to(70, 80, 0))
     # qe.desngity_estimation_plt2d()

@@ -1,7 +1,16 @@
 #!/usr/bin/env python
 # coding=utf-8
 import tools
-
+import pandas as pd
+import numpy as np
+file1 = "../data/1online_video_dataset/1transcoding_mesurment.csv"
+file2 = "../data/2CASP.csv"
+file3 = "../data/3PRSA_data.csv"
+file4 = "../data/4OnlineNewsPopularity1.csv"
+file5 = "../data/5CCPP/5Folds5x2_pp.csv"
+file6 = "../data/6YearPredictionMSD_with_header.csv"
+file7 = "../data/7/7ethylene_methane_with_header.csv"
+file8 = "../data/8data.txt"
 
 def load2d(dataID):
     if dataID == 1:
@@ -17,20 +26,20 @@ def load2d(dataID):
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         # fields = ['bitrate','framerate', 'utime']
         # y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/1online_video_dataset/1transcoding_mesurment.csv", fields, y_column)
+        data = tools.load_csv(file1, fields, y_column)
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
         fields = ["RMSD", "F2"]
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/2CASP.csv", fields, y_column)
+        data = tools.load_csv(file2, fields, y_column)
     if dataID == 3:
         # Number 3 dataset
 
         fields = ['year', 'month', 'day', 'hour', 'pm2.5', 'DEWP', 'TEMP', 'PRES', 'Iws', 'Is', 'Ir']
         fields = ['pm2.5', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/3PRSA_data.csv", fields, y_column)
+        data = tools.load_csv(file3, fields, y_column)
     if dataID == 4:
         # Number 4 dataset
 
@@ -40,7 +49,7 @@ def load2d(dataID):
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # fields = ['n_unique_tokens', 'n_non_stop_unique_tokens']
         # y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/4OnlineNewsPopularity1.csv", fields, y_column)
+        data = tools.load_csv(file4, fields, y_column)
     if dataID == 5:
         # Number 5 dataset
         # '''
@@ -48,7 +57,7 @@ def load2d(dataID):
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
         fields = ['Relative_Humidity', 'energy_output']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+        data = tools.load_csv(file5, fields, y_column)
     if dataID == 6:
         # Number 6 dataset
 
@@ -67,7 +76,7 @@ def load2d(dataID):
                   'c78', 'c79', 'c80', 'c81', 'c82', 'c83', 'c84', 'c85', 'c86', 'c87', 'c88', 'c89', 'c90']
         fields = ['year', 'c1']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/6YearPredictionMSD_with_header.csv", fields, y_column)
+        data = tools.load_csv(file6, fields, y_column)
     if dataID == 7:
         # Number 7 dataset
 
@@ -80,7 +89,7 @@ def load2d(dataID):
         fields = ['c1', 'c2']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/7/7ethylene_methane_with_header.csv", fields, y_column, sep=' ')
+        data = tools.load_csv(file7, fields, y_column, sep=' ')
     if dataID == 8:
         # Number 8 dataset
 
@@ -94,7 +103,7 @@ def load2d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['timestamp', 'energy']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/8data.txt", fields, y_column, sep=',')
+        data = tools.load_csv(file8, fields, y_column, sep=',')
 
     return data
 
@@ -108,7 +117,8 @@ def load3d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['i_size', 'umem', 'utime']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/1online_video_dataset/1transcoding_mesurment.csv", fields, y_column)
+        data = tools.load_csv(file1, fields, y_column)
+        # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
@@ -118,7 +128,8 @@ def load3d(dataID):
         fields = ["RMSD", "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/2CASP.csv", fields, y_column)
+        data = tools.load_csv(file2, fields, y_column)
+        # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
 
@@ -129,7 +140,8 @@ def load3d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/3PRSA_data.csv", fields, y_column)
+        data = tools.load_csv(file3, fields, y_column)
+        # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
 
@@ -141,7 +153,8 @@ def load3d(dataID):
         fields = ['n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/4OnlineNewsPopularity1.csv", fields, y_column)
+        data = tools.load_csv(file4, fields, y_column)
+        # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
         # '''
@@ -156,7 +169,8 @@ def load3d(dataID):
         # fields = ['Temperature', 'Exhaust_Vacuum', 'energy_output']
 
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+        data = tools.load_csv(file5, fields, y_column)
+        # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
 
@@ -179,7 +193,8 @@ def load3d(dataID):
         # fields = ['year', 'c2', 'c4']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/6YearPredictionMSD_with_header.csv", fields, y_column)
+        data = tools.load_csv(file6, fields, y_column)
+        # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
 
@@ -195,7 +210,8 @@ def load3d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/7/7ethylene_methane_with_header.csv", fields, y_column, sep=' ')
+        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
 
@@ -207,7 +223,8 @@ def load3d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'energy']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/8data.txt", fields, y_column, sep=',')
+        data = tools.load_csv(file8, fields, y_column, sep=',')
+        # "../data/8data.txt"
     return data
 
 
@@ -220,7 +237,8 @@ def load4d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['duration', 'i_size', 'umem', 'utime']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/1online_video_dataset/1transcoding_mesurment.csv", fields, y_column)
+        data = tools.load_csv(file1, fields, y_column)
+        # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
@@ -231,7 +249,8 @@ def load4d(dataID):
         fields = ["RMSD", 'F3', "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/2CASP.csv", fields, y_column)
+        data = tools.load_csv(file2, fields, y_column)
+        # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
 
@@ -242,7 +261,8 @@ def load4d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'TEMP', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/3PRSA_data.csv", fields, y_column)
+        data = tools.load_csv(file3, fields, y_column)
+        # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
 
@@ -251,7 +271,8 @@ def load4d(dataID):
 
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/4OnlineNewsPopularity1.csv", fields, y_column)
+        data = tools.load_csv(file4, fields, y_column)
+        # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
         # '''
@@ -266,7 +287,8 @@ def load4d(dataID):
         # fields = ['Temperature', 'Exhaust_Vacuum', 'energy_output']
 
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+        data = tools.load_csv(file5, fields, y_column)
+        # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
 
@@ -289,7 +311,8 @@ def load4d(dataID):
         fields = ['year', 'c2', 'c2', 'c3']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/6YearPredictionMSD_with_header.csv", fields, y_column)
+        data = tools.load_csv(file6, fields, y_column)
+        # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
 
@@ -306,7 +329,8 @@ def load4d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2', 'c3']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/7/7ethylene_methane_with_header.csv", fields, y_column, sep=' ')
+        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        # "../data/7/7ethylene_methane_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
 
@@ -318,7 +342,8 @@ def load4d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'Voltage', 'energy']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/8data.txt", fields, y_column, sep=',')
+        data = tools.load_csv(file8, fields, y_column, sep=',')
+        # "../data/8data.txt"
     return data
 
 
@@ -331,7 +356,8 @@ def load5d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['duration', 'width', 'i_size', 'umem', 'utime']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/1online_video_dataset/1transcoding_mesurment.csv", fields, y_column)
+        data = tools.load_csv(file1, fields, y_column)
+        # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
@@ -343,7 +369,8 @@ def load5d(dataID):
         fields = ["RMSD", 'F2', 'F3', "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/2CASP.csv", fields, y_column)
+        data = tools.load_csv(file2, fields, y_column)
+        # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
 
@@ -354,7 +381,8 @@ def load5d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'DEWP', 'TEMP', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/3PRSA_data.csv", fields, y_column)
+        data = tools.load_csv(file3, fields, y_column)
+        # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
 
@@ -363,7 +391,8 @@ def load5d(dataID):
 
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/4OnlineNewsPopularity1.csv", fields, y_column)
+        data = tools.load_csv(file4, fields, y_column)
+        # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
         # '''
@@ -379,7 +408,8 @@ def load5d(dataID):
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
 
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+        data = tools.load_csv(file5, fields, y_column)
+        # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
 
@@ -402,7 +432,8 @@ def load5d(dataID):
         # fields = ['year', 'c2', 'c4']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/6YearPredictionMSD_with_header.csv", fields, y_column)
+        data = tools.load_csv(file6, fields, y_column)
+        # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
 
@@ -419,7 +450,8 @@ def load5d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2', 'c3', 'c4']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/7/7ethylene_methane_with_header.csv", fields, y_column, sep=' ')
+        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        # "../data/7/7ethylene_methane_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
 
@@ -431,7 +463,8 @@ def load5d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity', 'energy']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/8data.txt", fields, y_column, sep=',')
+        data = tools.load_csv(file8, fields, y_column, sep=',')
+        # "../data/8data.txt"
     return data
 
 
@@ -445,7 +478,8 @@ def loadNd(dataID):
         # fields = ['i_size', 'umem','utime']
         fields = ['duration', 'bitrate', 'framerate', 'size', 'umem', 'utime']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/1online_video_dataset/1transcoding_mesurment.csv", fields, y_column)
+        data = tools.load_csv(file1, fields, y_column)
+        # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
@@ -455,7 +489,8 @@ def loadNd(dataID):
         fields = ["RMSD", "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/2CASP.csv", fields, y_column)
+        data = tools.load_csv(file2, fields, y_column)
+        # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
 
@@ -467,7 +502,7 @@ def loadNd(dataID):
         # fields = ['pm2.5', 'TEMP', 'Iws'] # good vision
         # fields = ['pm2.5', 'PRES', 'Iws']
         # y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/3PRSA_data.csv", fields, y_column)
+        data = tools.load_csv(file3, fields, y_column)
     if dataID == 4:
         # Number 4 dataset
 
@@ -480,14 +515,14 @@ def loadNd(dataID):
         # fields = ['n_tokens_content', 'n_unique_tokens','n_non_stop_unique_tokens']
         # #fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         # y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/4OnlineNewsPopularity1.csv", fields, y_column)
+        data = tools.load_csv(file4, fields, y_column)
     if dataID == 5:
         # Number 5 dataset
         # '''
         # load the data
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+        data = tools.load_csv(file5, fields, y_column)
     if dataID == 6:
         # Number 6 dataset
 
@@ -506,7 +541,7 @@ def loadNd(dataID):
                   'c78', 'c79', 'c80', 'c81', 'c82', 'c83', 'c84', 'c85', 'c86', 'c87', 'c88', 'c89', 'c90']
         fields = ['year', 'c1', 'c2', 'c3']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/6YearPredictionMSD_with_header.csv", fields, y_column)
+        data = tools.load_csv(file6, fields, y_column)
     if dataID == 7:
         # Number 7 dataset
 
@@ -522,7 +557,7 @@ def loadNd(dataID):
         fields = ['Methane_conc_(ppm)', 'Ethylene_conc_(ppm)', 'c1', 'c2', 'c3', 'c4']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv("../data/7/7ethylene_methane_with_header.csv", fields, y_column, sep=' ')
+        data = tools.load_csv(file7, fields, y_column, sep=' ')
     if dataID == 8:
         # Number 8 dataset
 
@@ -534,9 +569,37 @@ def loadNd(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         # fields = ['Global_active_power', 'Global_reactive_power', 'energy']
         y_column = 8  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv("../data/8data.txt", fields, y_column, sep=',')
+        data = tools.load_csv(file8, fields, y_column, sep=',')
     return data
+
+def save_2d(dataID):
+    data = load2d(dataID)
+    d = {'x':np.array(data.features).reshape(1,-1)[0],'y':data.labels}
+    # print(d)
+    df = pd.DataFrame(data=d)
+    # print(df)
+    df.to_csv('file'+str(dataID)+'.csv', sep=',',index=False)
+
+def save_2d_no_repeated_value(dataID):
+    data = load2d(dataID)
+    data.remove_repeated_x_1d()
+    d = {'x':np.array(data.features).reshape(1,-1)[0],'y':data.labels}
+    # print(d)
+    df = pd.DataFrame(data=d)
+    # print(df)
+    df.to_csv('file'+str(dataID)+'_unique.csv', sep=',',index=False)
 
 
 if __name__ == "__main__":
     data = load2d(5)
+    # save_2d(1)
+    # save_2d(2)
+    # save_2d(3)
+    # save_2d(4)
+    # save_2d(5)
+    # save_2d(6)
+    # save_2d(7)
+    # save_2d(8)
+    for i in range(1,9):
+        save_2d_no_repeated_value(i)
+

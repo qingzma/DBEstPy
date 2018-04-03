@@ -4,6 +4,50 @@
 		"selected_items":
 		[
 			[
+				"rand",
+				"randrange\tstatement"
+			],
+			[
+				"Q",
+				"Query_Engine_2d"
+			],
+			[
+				"2d",
+				"2d_query_engine"
+			],
+			[
+				"allow",
+				"b_allow_repeated_value"
+			],
+			[
+				"re",
+				"remove_repeated_x_1d\tfunction"
+			],
+			[
+				"to",
+				"to_csv\tfunction"
+			],
+			[
+				"l",
+				"labels\tstatement"
+			],
+			[
+				"loa",
+				"load2d"
+			],
+			[
+				"defa",
+				"default_logger_name"
+			],
+			[
+				"qu",
+				"query_2d"
+			],
+			[
+				"if",
+				"ifmain\tif __name__ == '__main__'"
+			],
+			[
 				"nu",
 				"num_training_points\tstatement"
 			],
@@ -252,10 +296,6 @@
 				"getElementById"
 			],
 			[
-				"re",
-				"repeat-x"
-			],
-			[
 				"t",
 				"type\tAttr"
 			],
@@ -320,10 +360,10 @@
 	"buffers":
 	[
 		{
-			"contents": "QueryLogs:\n    __init__(…)\n    set_logging(…)\n    set_no_output(…)",
+			"contents": "",
 			"settings":
 			{
-				"buffer_size": 66,
+				"buffer_size": 0,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -339,10 +379,46 @@
 			}
 		},
 		{
+			"file": "creg/2d.py",
+			"settings":
+			{
+				"buffer_size": 2799,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/cli.py",
+			"settings":
+			{
+				"buffer_size": 1007,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "creg/query_engine.py",
 			"settings":
 			{
-				"buffer_size": 8206,
+				"buffer_size": 9043,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
+			"settings":
+			{
+				"buffer_size": 1103,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/logs.py",
+			"settings":
+			{
+				"buffer_size": 1980,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -351,19 +427,8 @@
 			"file": "creg/data_loader.py",
 			"settings":
 			{
-				"buffer_size": 29551,
+				"buffer_size": 30686,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "#!/usr/bin/env python\n# coding=utf-8\nimport logging.config\nimport logging\nimport core\ndefault_logger_name = \"../results/deletable.log\"\n\n\nclass QueryLogs:\n    \"\"\"docstring for ClassName\"\"\"\n\n    def __init__(self, log=None):\n        self.fh = None  # logger file handler\n        self.ch = None  # logger console handler\n        self.num_dataset = 8\n        self.logger = logging.getLogger(default_logger_name)\n        self.logging = logging\n        if log == None:\n            self.set_logging(default_logger_name)\n            self.logger_name = default_logger_name\n        else:\n            self.set_logging(log)\n            self.logger_name = log\n        # self.set_no_output()\n\n    def set_logging(self, file_name=default_logger_name):\n        self.logger.removeHandler(self.fh)\n        self.logger.removeHandler(self.ch)\n        self.logger.setLevel(logging.DEBUG)\n        # create file handler which logs even debug messages\n        self.fh = logging.FileHandler(file_name, mode='w')\n        self.fh.setLevel(logging.DEBUG)\n        # create console handler with a higher log level\n        self.ch = logging.StreamHandler()\n        self.ch.setLevel(logging.DEBUG)\n        # create formatter and add it to the handlers\n        formatter = self.logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')\n        formatter = self.logging.Formatter('%(levelname)s - %(message)s')\n        #formatter = self.logging.Formatter('%(message)s')\n        self.fh.setFormatter(formatter)\n        self.ch.setFormatter(formatter)\n        # add the handlers to the logger\n        self.logger.addHandler(self.fh)\n        self.logger.addHandler(self.ch)\n\n    def set_no_output(self):\n        self.logger.removeHandler(self.fh)\n        self.logger.removeHandler(self.ch)\n        self.logger.setLevel(60)\n\n\nif __name__ == \"__main__\":\n    ql = QueryLogs()\n    ql.logger.info(\"haha\")\n    ql.logger.warning(\"warning\")\n    coreQ = core.CRegression()\n",
-			"file": "creg/logs.py",
-			"file_size": 2229,
-			"file_write_time": 131649910086835414,
-			"settings":
-			{
-				"buffer_size": 1943,
 				"line_ending": "Unix"
 			}
 		}
@@ -391,10 +456,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 184.0,
-		"last_filter": "install",
+		"height": 392.0,
+		"last_filter": "do",
 		"selected_items":
 		[
+			[
+				"do",
+				"AutoDocstring: Current"
+			],
 			[
 				"install",
 				"Package Control: Install Package"
@@ -480,11 +549,53 @@
 	],
 	"file_history":
 	[
-		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
+		"/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
+		"/home/u1796377/Program/apache-hive-2.3.3-bin/conf/hive-site.xml",
+		"/home/u1796377/Documents/CV/CV_latex/CV_Qingzhi_Ma.tex",
+		"/disk/workspace/CRegressionRDBM/results/deletable.log",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/disk/workspace/CRegressionRDBM/CRegressionRDBMWorkspace.sublime-project",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file5_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file6_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file7_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file8_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file4_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file1_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file2_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file3_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file4_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file5_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file6_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file7_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file8_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file1_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file2_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file3_u.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file8.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file7.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file6.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file5.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file4.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file3.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file2.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file1.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file8.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file7.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file6.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file5.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file4.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file3.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file2.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file1.q",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/2d.py",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/context.py",
+		"/disk/workspace/CRegressionRDBM.",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/__init__.py",
+		"/disk/workspace/CRegressionRDBM/creg/logs.py",
+		"/disk/workspace/CRegressionRDBM/.gitignore",
+		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
 		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
-		"/disk/workspace/CRegressionRDBM/creg/logs.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/Default.sublime-keymap",
 		"/home/u1796377/.config/sublime-text-3/Packages/TrailingSpaces/README.md",
 		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/sublime_jedi.sublime-settings",
@@ -492,7 +603,6 @@
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Default.sublime-keymap",
 		"/disk/workspace/CRegressionRDBM/tests/test_query_engine.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Python.sublime-settings",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/disk/workspace/CRegressionRDBM/requirements.txt",
 		"/disk/workspace/CRegressionRDBM/tests/test_core.py",
 		"/disk/workspace/CRegressionRDBM/creg/data_loader.py",
@@ -502,7 +612,6 @@
 		"/disk/workspace/CRegressionRDBM/creg/__init__.py",
 		"/disk/workspace/CRegressionRDBM/tests/context.py",
 		"/disk/workspace/CRegressionRDBM/creg/cli/client.py",
-		"/disk/workspace/CRegressionRDBM/results/deletable.log",
 		"/disk/workspace/CRegressionRDBM/creg/cli/__init__.py",
 		"/disk/workspace/CRegressionRDBM/tests/test_ClientClass.py",
 		"/disk/workspace/CRegressionRDBM/tests/test_advanced.py",
@@ -593,7 +702,7 @@
 			"logger_object=this.logger",
 			"CRegression"
 		],
-		"reverse": true,
+		"reverse": false,
 		"show_context": true,
 		"use_buffer2": true,
 		"whole_word": false,
@@ -610,7 +719,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 66,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -619,35 +728,18 @@
 						],
 						"settings":
 						{
-							"current_file": "/disk/workspace/CRegressionRDBM/creg/logs.py",
+							"SL.15.region_keys":
+							[
+							],
+							"current_file": "/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
 							"default_dir": "/disk/workspace/CRegressionRDBM",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
-								[
-									137,
-									153
-								],
-								[
-									189,
-									222
-								],
-								[
-									679,
-									736
-								],
-								[
-									1654,
-									1682
-								]
 							],
 							"symlist":
 							[
-								"QueryLogs:",
-								"    __init__(…)",
-								"    set_logging(…)",
-								"    set_no_output(…)"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
 						},
@@ -655,13 +747,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 3,
+			"selected": 4,
 			"sheets":
 			[
 				{
@@ -677,8 +769,8 @@
 						"selection":
 						[
 							[
-								74852,
-								74852
+								2921,
+								3149
 							]
 						],
 						"settings":
@@ -711,27 +803,129 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 30818.0,
+						"translation.y": 1439.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "creg/query_engine.py",
+					"file": "creg/2d.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 8206,
+						"buffer_size": 2799,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7006,
-								7006
+								2482,
+								2482
+							]
+						],
+						"settings":
+						{
+							"SL.17.region_keys":
+							[
+							],
+							"SL.39.region_keys":
+							[
+							],
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"show_definitions": false,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 342.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "creg/cli.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1007,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25,
+								25
+							]
+						],
+						"settings":
+						{
+							"SL.18.region_keys":
+							[
+							],
+							"SL.19.region_keys":
+							[
+							],
+							"SL.42.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"open_with_edit": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "creg/query_engine.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9043,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5169,
+								5169
 							]
 						],
 						"settings":
@@ -740,6 +934,9 @@
 							[
 							],
 							"SL.17.region_keys":
+							[
+							],
+							"SL.19.region_keys":
 							[
 							],
 							"SL.66.region_keys":
@@ -762,6 +959,14 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -772,27 +977,104 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2810.0,
+						"translation.y": 2300.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "creg/data_loader.py",
+					"buffer": 5,
+					"file": "/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 29551,
+						"buffer_size": 1103,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								26399,
-								26399
+								1030,
+								1030
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/XML/XML.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "creg/logs.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1980,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1866,
+								1866
+							]
+						],
+						"settings":
+						{
+							"SL.20.region_keys":
+							[
+							],
+							"SL.29.region_keys":
+							[
+							],
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "creg/data_loader.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 30686,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								29311,
+								29311
 							]
 						],
 						"settings":
@@ -803,45 +1085,22 @@
 							"SL.18.region_keys":
 							[
 							],
+							"SL.21.region_keys":
+							[
+							],
 							"SL.67.region_keys":
 							[
 							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 9253.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "creg/logs.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1943,
-						"regions":
-						{
-						},
-						"selection":
-						[
+							"auto_complete_triggers":
 							[
-								643,
-								643
-							]
-						],
-						"settings":
-						{
-							"SL.17.region_keys":
-							[
-							],
-							"SL.20.region_keys":
-							[
+								{
+									"characters": ".",
+									"selector": "source.python"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
 							],
 							"git_gutter_is_enabled": true,
 							"syntax": "Packages/Python/Python.sublime-syntax",
@@ -849,10 +1108,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 342.0,
+						"translation.y": 10555.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 5,
 					"type": "text"
 				}
 			]
@@ -860,7 +1119,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 40.0
+		"height": 27.0
 	},
 	"input":
 	{
@@ -901,6 +1160,10 @@
 	"output.SublimeLinter":
 	{
 		"height": 0.0
+	},
+	"output.SublimeLinter Messages":
+	{
+		"height": 126.0
 	},
 	"output.UnitTesting":
 	{
