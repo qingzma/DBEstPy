@@ -1,0 +1,2 @@
+CREATE TABLE table6 (x DOUBLE, y DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY ",";
+LOAD DATA LOCAL INPATH '/Users/hduser/workspace/CRegressionRDBM/data/file6.csv' INTO TABLE table6;
