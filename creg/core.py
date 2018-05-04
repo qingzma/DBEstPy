@@ -81,7 +81,12 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import logging
+from scipy import stats
 
+import matplotlib
+import matplotlib.ticker as mtick
+from matplotlib.ticker import FuncFormatter
+import warnings
 
 r = ColorArray('red')
 g = ColorArray((0, 1, 0, 1))
@@ -146,6 +151,10 @@ class CRegression:
         self.b_disorder = b_disorder
         self.b_select_classifier = b_select_classifier
         self.num_total_training_points = None  # the number of training points, used for density estimation.
+        self.num_training_points_model = None  # the number of the model training points, used for confidence interval.
+        self.variance_training_points_model = None # the variance of the prediction from CRegression. used for CI
+        self.averageX_training_points_model = None # the average of x, used for CI
+        self.dimensionX = None                     # the dimension of x
         self.training_data = None
         self.summary = tools.CPMstatistics(logger_name=self.logger_name)
 
@@ -244,7 +253,7 @@ class CRegression:
         return answers
 
     def get_classified_predictions(self, classifier, xs):
-
+        warnings.filterwarnings(module='sklearn*', action='ignore', category=DeprecationWarning)
         self.logger.info("Start querying to Classified Prediction System.")
         answer = tools.PredictionSummary()
         # xs = [[1.0 2.0],[2.0 3.0]]
@@ -817,6 +826,19 @@ class CRegression:
 
         self.classifier = classifier
         self.num_total_training_points = len(training_data_model.labels) + len(training_data_classifier.labels)
+        self.num_training_points_model = len(training_data_model.labels)
+
+
+        if len(np.array(training_data_model.labels).shape) is 1:       # for 2 dimensional dataset only
+            self.dimensionX = 1
+            self.averageX_training_points_model = sum(training_data_model.labels)/float(len(training_data_model.labels))
+            self.variance_training_points_model = np.var(training_data_model.labels)
+
+
+
+
+
+        #self.averageX_training_points_model =
         self.training_data = training_data
 
     def select_classifiers(self, training_data_classifier, y_classifier, testing_data):
@@ -972,6 +994,105 @@ class CRegression:
             ax3.set_ylim(-1, len(self.app_names_for_classifier) + 1)
             if xmin != None:
                 ax3.set_xlim(xmin, xmax)
+
+        plt.show()
+
+        return
+
+    def matplotlib_plot_2D_confidence_interval(self, answers, classifier):
+        min_xvalue = min(answers.features[:, 0])
+        max_xvalue = max(answers.features[:, 0])
+        x = np.linspace(min_xvalue,max_xvalue,500)
+        # Xs=tools.DataSource()
+        # Xs.features = [x.tolist()]
+        # print(x.tolist())
+        font_size = 15
+        names = self.app_names_for_classifier
+        symbols = ['*', '1', 'v', 'o', 'h', 'x']
+        gs = gridspec.GridSpec(1, 1)
+        fig = plt.figure()
+        ax1 = plt.subplot(gs[0])
+        y=[self.get_classified_prediction(classifier=classifier,x=x[i]) for i in range(len(x))]
+        ax1.plot(x,y,label="CRegression curve")
+        lower_bound = [y[i]-self.CI(x[i]) for i in range(len(x))]
+        upper_bound = [y[i]+self.CI(x[i]) for i in range(len(x))]
+        ax1.plot(x, lower_bound, '--', label='lower 95% CI', linewidth=2.0)
+        ax1.plot(x, upper_bound, '--', label='uppper 95% CI', linewidth=2.0)
+        ax1.scatter(answers.features[:, 0], answers.labels,label="training data",s=2)
+        # for i in range(len(self.app_names_for_classifier)):
+        #     if answers.get_vispy_plot_data_2d(i) != []:
+        #         ax1.plot(answers.get_vispy_plot_data_2d(i)[:, 0],
+        #                  answers.get_vispy_plot_data_2d(i)[:, 1],
+        #                  symbols[i],
+        #                  label=names[i],
+        #                  linewidth=1.0)
+        # ax1.plot(answers.features[:, 0], answers.labels, symbols[5], label='training data', linewidth=0.0)
+        # lower_bound = [answers.predictions[i]-self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
+        # upper_bound = [answers.predictions[i]+self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
+        # ax1.plot(answers.features[:, 0], lower_bound, 'o', label='lower boundary', linewidth=0.0)
+        # ax1.plot(answers.features[:, 0], upper_bound, 'x', label='uppper boundary', linewidth=0.0)
+        # Now add the legend with some customizations.
+        legend1 = ax1.legend(loc='upper right', shadow=True, fontsize=font_size)
+
+        # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
+        frame = legend1.get_frame()
+        frame.set_facecolor('0.90')
+
+        ax1.set_xlabel(answers.headers[0], fontsize=font_size)
+        ax1.set_ylabel(answers.headers[1], fontsize=font_size)
+        plt.xticks(fontsize=font_size)
+        plt.yticks(fontsize=font_size)
+        #ax1.set_title("Classified Regression Curve")
+
+
+        plt.show()
+
+        return
+    def matplotlib_plot_2D_prediction_interval(self, answers, classifier):
+        min_xvalue = min(answers.features[:, 0])
+        max_xvalue = max(answers.features[:, 0])
+        x = np.linspace(min_xvalue,max_xvalue,500)
+        # Xs=tools.DataSource()
+        # Xs.features = [x.tolist()]
+        # print(x.tolist())
+        font_size = 15
+        names = self.app_names_for_classifier
+        symbols = ['*', '1', 'v', 'o', 'h', 'x']
+        gs = gridspec.GridSpec(1, 1)
+        fig = plt.figure()
+        ax1 = plt.subplot(gs[0])
+        y=[self.get_classified_prediction(classifier=classifier,x=x[i]) for i in range(len(x))]
+        ax1.plot(x,y,label="CRegression curve")
+        lower_bound = [y[i]-self.PI(x[i]) for i in range(len(x))]
+        upper_bound = [y[i]+self.PI(x[i]) for i in range(len(x))]
+        ax1.plot(x, lower_bound, '--', label='lower 95% PI', linewidth=2.0)
+        ax1.plot(x, upper_bound, '--', label='uppper 95% PI', linewidth=2.0)
+        ax1.scatter(answers.features[:, 0], answers.labels,label="training data",s=2)
+        # for i in range(len(self.app_names_for_classifier)):
+        #     if answers.get_vispy_plot_data_2d(i) != []:
+        #         ax1.plot(answers.get_vispy_plot_data_2d(i)[:, 0],
+        #                  answers.get_vispy_plot_data_2d(i)[:, 1],
+        #                  symbols[i],
+        #                  label=names[i],
+        #                  linewidth=1.0)
+        # ax1.plot(answers.features[:, 0], answers.labels, symbols[5], label='training data', linewidth=0.0)
+        # lower_bound = [answers.predictions[i]-self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
+        # upper_bound = [answers.predictions[i]+self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
+        # ax1.plot(answers.features[:, 0], lower_bound, 'o', label='lower boundary', linewidth=0.0)
+        # ax1.plot(answers.features[:, 0], upper_bound, 'x', label='uppper boundary', linewidth=0.0)
+        # Now add the legend with some customizations.
+        legend1 = ax1.legend(loc='upper right', shadow=True, fontsize=font_size)
+
+        # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
+        frame = legend1.get_frame()
+        frame.set_facecolor('0.90')
+
+        ax1.set_xlabel(answers.headers[0], fontsize=font_size)
+        ax1.set_ylabel(answers.headers[1], fontsize=font_size)
+        plt.xticks(fontsize=font_size)
+        plt.yticks(fontsize=font_size)
+        #ax1.set_title("Classified Regression Curve")
+
 
         plt.show()
 
@@ -1156,8 +1277,11 @@ class CRegression:
 
     def boxplot(self, predictions_from_base_models, classified_predictions, y_classifier):
         num_of_plot = len(predictions_from_base_models)+1
+        num_of_bins = 50
+        opacity = 0.6
         labels = classified_predictions.labels
         data_to_plot = []
+
         variance = []
         xlabels = self.input_base_models
         # print(xlabels)
@@ -1169,14 +1293,51 @@ class CRegression:
 
         data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
         variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
+        data_range = max(data_to_plot[0])-min(data_to_plot[0])
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
-        xlabels.append("classified")
-        fig = plt.figure(1)  # , figsize=(9, 6))
-        ax = fig.add_subplot(111)
+        xlabels.append("CRegression")
+        fig = plt.figure(num_of_plot,figsize=(7,10))  # , figsize=(9, 6))
+        plot_index=int(str(num_of_plot)+str(1)+str(1))
+        ax1 = fig.add_subplot(plot_index)
         # Create the boxplot
-        bp = ax.boxplot(data_to_plot, showfliers=False, showmeans=True)
-        ax.set_xticklabels(xlabels)
-        ax.set_ylabel("absolute error")
+        bp = ax1.boxplot(data_to_plot, showfliers=False, showmeans=True)
+        ax1.set_xticklabels(xlabels)
+        ax1.set_ylabel("absolute error")
+        print(bp["whiskers"][1].get_data()[1])
+        data_range = max(bp["whiskers"][1].get_data()[1])-min(bp["whiskers"][1].get_data()[1])
+        # add variance information
+        for i in range(num_of_plot):
+            ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.2f"%variance[i]**0.5)
+
+
+        def to_percent(y, position):
+            # Ignore the passed in position. This has the effect of scaling the default
+            # tick locations.
+            s = str(100 * y)
+
+            # The percent symbol needs escaping in latex
+            if matplotlib.rcParams['text.usetex'] is True:
+                return s + r'$\%$'
+            else:
+                return s + '%'
+        for i in range(num_of_plot-1):
+            plot_index=int(str(num_of_plot)+str(1)+str(i+2))
+
+            ax2 = fig.add_subplot(plot_index)
+            # Create the histgram
+            n, bins, patches = ax2.hist(abs(data_to_plot[num_of_plot-1]),bins=num_of_bins,normed=True,facecolor='green',alpha=0.2,label='CRegression')
+            n, bins, patches = ax2.hist(abs(data_to_plot[i]),bins=num_of_bins,normed=True,facecolor='purple',alpha=0.4,label=xlabels[i])
+
+            #fmt = '%2.1f%%' # Format you want the ticks, e.g. '40%'
+            #yticks = mtick.FormatStrFormatter(fmt)
+            #ax2.yaxis.set_major_formatter(yticks)
+            # ax2.set_xticklabels(xlabels)
+            formatter = FuncFormatter(to_percent)
+            plt.gca().yaxis.set_major_formatter(formatter)
+            ax2.set_ylabel("Probability")
+            ax2.set_xlabel("Absolute error")
+            # ax2.text(30,0.03,xlabels[i])
+            ax2.legend()
         plt.show()
         return variance
 
@@ -1189,6 +1350,14 @@ class CRegression:
         time_program_start = datetime.now()
 
         training_data_model, training_data_classifier, testing_data = tools.split_data(data)
+
+        # for plot CI
+        self.num_total_training_points = len(training_data_model.labels) + len(training_data_classifier.labels)
+        self.num_training_points_model = len(training_data_model.labels)
+        self.dimensionX = 1
+        self.averageX_training_points_model = sum(training_data_model.labels)/float(len(training_data_model.labels))
+        self.variance_training_points_model = np.var(training_data_model.labels)
+
 
         training_data_model = training_data_model  # .get_before(300000)
         training_data_classifier = training_data_classifier  # .get_before(300000)
@@ -1314,8 +1483,10 @@ class CRegression:
         # y_classifier=y_classifier)
 
         if self.b_show_plot:
-            self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
-                                    b_show_god_classifier=True, y_classifier=y_classifier_testing)
+            # self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
+            #                         b_show_god_classifier=True, y_classifier=y_classifier_testing)
+            self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
+            self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
 
         self.predictions_testing = answers_for_testing
 
@@ -1621,8 +1792,8 @@ class CRegression:
         # client.matplotlib_plot_3D_decision_boundary(predictions_classified)
 
         self.predictions_testing = answers_for_testing
-
-        print(self.boxplot(answers_for_testing, predictions_classified, y_classifier_testing))
+        self.logger.info("**************************************************************")
+        self.logger.info(self.boxplot(answers_for_testing, predictions_classified, y_classifier_testing))
         return statistics
 
     def get_NRMSE_for_clusters(self, answers_for_classifier, y_classifier):
@@ -1663,12 +1834,22 @@ class CRegression:
         # print(error_models)
         return NRMSE_comparisons
 
+    def CI(self,x,confidence=0.95):
+        t = stats.t.ppf(confidence, self.num_training_points_model-2)
+        s = self.variance_training_points_model**0.5
+        tmp = (1/self.num_training_points_model+(x-self.averageX_training_points_model)**2/(self.num_training_points_model-1)/self.variance_training_points_model)**0.5
+        return t*s*tmp
+    def PI(self,x,confidence=0.95):
+        t = stats.t.ppf(confidence, self.num_training_points_model-2)
+        s = self.variance_training_points_model**0.5
+        tmp = (1+1/self.num_training_points_model+(x-self.averageX_training_points_model)**2/(self.num_training_points_model-1)/self.variance_training_points_model)**0.5
+        return t*s*tmp
+
 
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
-    fields = ['Relative_Humidity', 'energy_output']
-    y_column = 1  # should be the order in the input file, not in the "fields" order.
-    data = tools.load_csv("../data/5CCPP/5Folds5x2_pp.csv", fields, y_column)
+    import data_loader as dl
+    data = dl.load5d(7)
 
     training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -1677,12 +1858,16 @@ if __name__ == "__main__":
     training_data_classifier = training_data_classifier.get_before(100)
     testing_data = testing_data.get_before(100)
     '''
+    #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
+    cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=True)
+    # cs.fit(training_data, testing_data)
 
-    cs = CRegression()
-    cs.fit(training_data, testing_data)
+    # #models = cs.deploy_all_models(training_data_model)
 
-    #models = cs.deploy_all_models(training_data_model)
+    # # answers_for_classifier = get_predictions_to_build_classifier(training_data_classifier)
+    # predictions0 = cs.predicts([80])
+    # print(cs.CI(80))
+    # # print(predictions0)
+    #
 
-    # answers_for_classifier = get_predictions_to_build_classifier(training_data_classifier)
-    predictions0 = cs.predicts(testing_data.features)
-    # print(predictions0)
+    cs.run(data)

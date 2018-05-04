@@ -12,6 +12,7 @@ import logs
 import data_loader as dl
 from scipy import integrate
 from datetime import datetime
+import warnings
 
 epsabs = 1E-01
 epsrel = 1E-03
@@ -174,9 +175,11 @@ class QueryEngine:
             else:
                 result =  None
         end = datetime.now()
+        time_cost =  (end - start).total_seconds()
         if self.b_print_time_cost:
-            self.logger.info("Time spent for AVG: %.4fs." % (end - start).total_seconds())
-        return result
+            self.logger.info("Approximate AVG: %.4f." % result)
+            self.logger.info("Time spent for approximate AVG: %.4fs." % time_cost)
+        return result, time_cost
 
     def approximate_sum_from_to(self, x_min, x_max, x_columnID):
         start = datetime.now()
@@ -208,17 +211,230 @@ class QueryEngine:
                     * self.cregression.predict(np.array(args))
             result = integrate.nquad(f_pRx, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
+        time_cost =  (end - start).total_seconds()
         if self.b_print_time_cost:
-            self.logger.info("Time spent for SUM: %.4fs." % (end - start).total_seconds())
-        return(result)
+            self.logger.info("Approximate SUM: %.4f." % result)
+            self.logger.info("Time spent for approximate SUM: %.4fs." % time_cost)
+        return result, time_cost
+
+    def approximate_count_from_to(self, x_min, x_max, x_columnID):
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+            result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            # return result
+
+        if self.dimension > 1:
+            data_range_length_half = [(max(self.training_data.features[:, i])-min(
+                self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
+            data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
+                self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+
+            # generate the integral bounds
+            bounds = []
+            for i in range(x_columnID):
+                bounds.append(data_range[i])
+            bounds.append([x_min, x_max])
+            # print(bounds)
+            for i in range(x_columnID+1, self.dimension):
+                bounds.append(data_range[i])
+
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+            result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate count: %.4f." % result)
+            self.logger.info("Time spent for approximate COUNT: %.4fs." % time_cost)
+        return int(result), time_cost
+
+
+    def approximate_variance_x_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+            def f_x2Px(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]**2
+            def f_xPx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]
+            def f_xRxPx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+                    * self.cregression.predict(np.array(args)) * np.array(args)[0]
+            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            Ex2 = integrate.quad(f_x2Px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            Ex_2 = integrate.quad(f_xPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0] **2
+            result = Ex2 / Ep - Ex_2 / Ep /Ep
+
+        # if self.dimension > 1:
+        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
+        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
+        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
+        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+
+        #     # generate the integral bounds
+        #     bounds = []
+        #     for i in range(x_columnID):
+        #         bounds.append(data_range[i])
+        #     bounds.append([x_min, x_max])
+        #     # print(bounds)
+        #     for i in range(x_columnID+1, self.dimension):
+        #         bounds.append(data_range[i])
+
+        #     def f_p(*args):
+        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate variance x: %.4f." % result)
+            self.logger.info("Time spent for approximate variance x: %.4fs." % time_cost)
+        return result, time_cost
+
+    def approximate_variance_y_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+            def f_R2Px(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args)) **2
+            def f_RxPx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))
+            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            Ey2 = integrate.quad(f_R2Px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            Ey_2 = integrate.quad(f_RxPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0] **2
+            result = Ey2 / Ep - Ey_2 / Ep /Ep
+
+        # if self.dimension > 1:
+        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
+        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
+        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
+        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+
+        #     # generate the integral bounds
+        #     bounds = []
+        #     for i in range(x_columnID):
+        #         bounds.append(data_range[i])
+        #     bounds.append([x_min, x_max])
+        #     # print(bounds)
+        #     for i in range(x_columnID+1, self.dimension):
+        #         bounds.append(data_range[i])
+
+        #     def f_p(*args):
+        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate variance y: %.4f." % result)
+            self.logger.info("Time spent for approximate variance y: %.4fs." % time_cost)
+        return result, time_cost
+
+    def approximate_covar_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+            def f_px(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))*np.array(args)[0]
+            def f_pRx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+                    * self.cregression.predict(np.array(args))
+            def f_xRxPx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+                    * self.cregression.predict(np.array(args)) * np.array(args)[0]
+            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            ExPx = integrate.quad(f_px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            ERxPx = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            ExRxPx = integrate.quad(f_xRxPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            result = ExRxPx / Ep - ExPx*ERxPx / Ep /Ep
+
+        # if self.dimension > 1:
+        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
+        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
+        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
+        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+
+        #     # generate the integral bounds
+        #     bounds = []
+        #     for i in range(x_columnID):
+        #         bounds.append(data_range[i])
+        #     bounds.append([x_min, x_max])
+        #     # print(bounds)
+        #     for i in range(x_columnID+1, self.dimension):
+        #         bounds.append(data_range[i])
+
+        #     def f_p(*args):
+        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate COVAR: %.4fs." % result)
+            self.logger.info("Time spent for approximate COVAR: %.4fs." % time_cost)
+        return result, time_cost
+
+    def approximate_corr_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+        start = datetime.now()
+        tmp_b = self.b_print_time_cost
+        self.b_print_time_cost = False
+        if self.dimension is 1:
+            var_x,_ = self.approximate_variance_x_from_to(1, x_min=x_min, x_max=x_max)
+            var_y,_ = self.approximate_variance_y_from_to(1,x_min=x_min, x_max=x_max)
+            if (var_x>=0) and (var_y>=0):
+                var_x = var_x**0.5
+                var_y = var_y**0.5
+            else:
+                result = None
+                self.logger.warning("Cant be divided by zero! see Function approximate_corr_from_to()")
+        result = self.approximate_covar_from_to(1, x_min=x_min, x_max=x_max)[0]/var_x/var_y
+
+
+        # if self.dimension > 1:
+        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
+        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
+        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
+        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+
+        #     # generate the integral bounds
+        #     bounds = []
+        #     for i in range(x_columnID):
+        #         bounds.append(data_range[i])
+        #     bounds.append([x_min, x_max])
+        #     # print(bounds)
+        #     for i in range(x_columnID+1, self.dimension):
+        #         bounds.append(data_range[i])
+
+        #     def f_p(*args):
+        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        self.b_print_time_cost = tmp_b
+        if self.b_print_time_cost:
+            self.logger.info("Approximate CORR: %.4f." % result)
+            self.logger.info("Time spent for approximate CORR: %.4fs." % time_cost)
+        return result, time_cost
 
 
 
 
 if __name__ == "__main__":
+    warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+
+
     logger = logs.QueryLogs()
     logger.set_no_output()
-    data = dl.load2d(5)
+    data = dl.load2d(4)
     cRegression = CRegression(logger_object=logger)
     cRegression.fit(data)
     # cRegression.plot_training_data_3d()
@@ -229,6 +445,19 @@ if __name__ == "__main__":
     qe.density_estimation()
     qe.desngity_estimation_plt2d()
     # qe.desngity_estimation_plt3d()
-    print(qe.approximate_avg_from_to(70, 80, 0))
-    print(qe.approximate_sum_from_to(70, 80, 0))
+    # qe.approximate_avg_from_to(70, 80, 0)[0]
+    # qe.approximate_sum_from_to(70, 80, 0)[0]
+    # qe.approximate_count_from_to(70, 80, 0)[0]
+    # qe.approximate_variance_x_from_to(70, 80, 0)[0]
+    # qe.approximate_variance_y_from_to(70, 80, 0)[0]
+    # qe.approximate_covar_from_to(70, 80, 0)[0]
+    #
+    # qe.approximate_avg_from_to(0.6, 0.8, 0)[0]
+    # qe.approximate_sum_from_to(0.6, 0.8, 0)[0]
+    # qe.approximate_count_from_to(0.6, 0.8, 0)[0]
+    # qe.approximate_variance_x_from_to(0.6, 0.8, 0)[0]
+    # qe.approximate_variance_y_from_to(0.6, 0.8, 0)[0]
+    # qe.approximate_covar_from_to(0.6, 0.8, 0)[0]
+    qe.approximate_corr_from_to(0.6, 0.8, 0)[0]
+
     # qe.desngity_estimation_plt2d()

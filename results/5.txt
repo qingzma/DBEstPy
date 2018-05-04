@@ -1,0 +1,46 @@
+INFO - start query No.1 out of 1
+INFO - Approximate count: 10.0598.
+INFO - Time spent for approximate COUNT: 0.0189s.
+INFO - 10
+INFO - SELECT COUNT(y) FROM table5 WHERE  x BETWEEN 35.21057261078513 AND 35.95657261078512
+INFO - Time spent for HIVE AVG: 16.0193s.
+INFO - 8
+INFO - HIVE query results: [8]
+INFO - HIVE query time cost: [16.019276]
+INFO - Approximate query results: [10]
+INFO - Approximate query time cost: [0.018932]
+INFO - Relative error is : 0.25
+INFO - Time ratio is : 0.00118182619489
+INFO - start query No.1 out of 1
+INFO - Approximate count: 4.5623.
+INFO - Time spent for approximate COUNT: 0.9186s.
+INFO - 4
+INFO - SELECT COUNT(y) FROM table6 WHERE  x BETWEEN 9.69001510568709 AND 9.99112080568709
+INFO - Time spent for HIVE AVG: 16.7544s.
+INFO - 9
+INFO - HIVE query results: [9]
+INFO - HIVE query time cost: [16.7544]
+INFO - Approximate query results: [4]
+INFO - Approximate query time cost: [0.918581]
+INFO - start query No.1 out of 1
+INFO - Approximate count: 9.1206.
+INFO - Time spent for approximate COUNT: 0.8806s.
+INFO - 9
+INFO - SELECT COUNT(y) FROM table6 WHERE  x BETWEEN 9.53946225568709 AND 10.141673655687091
+INFO - Time spent for HIVE AVG: 21.5141s.
+INFO - 12
+INFO - HIVE query results: [12]
+INFO - HIVE query time cost: [21.514141]
+INFO - Approximate query results: [9]
+INFO - Approximate query time cost: [0.880578]
+INFO - start query No.1 out of 1
+INFO - Approximate count: 45.5831.
+INFO - Time spent for approximate COUNT: 0.8284s.
+INFO - 45
+INFO - SELECT COUNT(y) FROM table6 WHERE  x BETWEEN 8.33503945568709 AND 11.346096455687091
+INFO - Time spent for HIVE AVG: 18.4061s.
+INFO - 44
+INFO - HIVE query results: [44]
+INFO - HIVE query time cost: [18.406071]
+INFO - Approximate query results: [45]
+INFO - Approximate query time cost: [0.828351]

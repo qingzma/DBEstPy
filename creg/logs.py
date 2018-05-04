@@ -48,6 +48,22 @@ class QueryLogs:
         self.logger.removeHandler(self.fh)
         self.logger.removeHandler(self.ch)
         self.logger.setLevel(60)
+    def set_level(self, level=logging.INFO):
+        """Summary
+
+        Args:
+            level (TYPE, optional): "DEBUG", "INFO", "WARNING", "ERROR","CRITICAL"
+        """
+        if level is "DEBUG":
+            self.logger.setLevel(logging.DEBUG)
+        if level is "INFO":
+            self.logger.setLevel(logging.INFO)
+        if level is "WARNING":
+            self.logger.setLevel(logging.WARNING)
+        if level is "ERROR":
+            self.logger.setLevel(logging.ERROR)
+        if level is "CRITICAL":
+            self.logger.setLevel(logging.CRITICAL)
 
 
 if __name__ == "__main__":

@@ -302,6 +302,7 @@ if __name__ == "__main__":
     base_models = [tools.app_boosting, tools.app_xgboost]
     ensemble_models = [tools.app_xgboost]
     runner.run2d(5,base_models,ensemble_models, tools.classifier_xgboost_name)
+
     #runner.run2d_all(base_models,ensemble_models,classifier_type=tools.classifier_rbf_name,b_show_plot=False)
     #runner.run3d_xgb(base_models,ensemble_models)
 

@@ -5,6 +5,7 @@ import pandas as pd
 import numpy as np
 import sys
 import matplotlib.pyplot as plt
+import random
 
 from sklearn import preprocessing
 
@@ -858,5 +859,47 @@ def prepare_data8():
             f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(t1, y0, y1, y2, y3, y4, y5, y6, t2))
 
 
+# http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/
+def fast_reservoir_sampling(file_handle, N=1000000, callable=None):
+    sample = []
+
+    if callable is None:
+        callable = lambda x: x
+
+    j = N
+    for n, line in enumerate(file_handle):
+        if n < N:
+            sample.append(callable(line))
+        else:
+            if n < j:
+                continue
+            p = N / n
+            g = np.random.geometric(p)
+            j = j + g
+            replace = random.randint(0, N-1)
+            sample[replace] = callable(line)
+
+    return sample
+
+
+def reservoir_sampling(file_handle, N=1000000, callable=None):
+    sample = []
+
+    if callable is None:
+        callable = lambda x: x
+
+    for n, line in enumerate(file_handle):
+        if n < N:
+            sample.append(callable(line))
+        elif n >= N and random.random() < N/float(n+1):
+            replace = random.randint(0,len(sample)-1)
+            sample[replace] = callable(line)
+    return sample
+
+def t_distribution(region=0.95):
+    return stats.t.ppf(region, 5)
+
+
+
 if __name__ == "__main__":
-    mix_gaussian(100)
+    t_distribution()
