@@ -1043,8 +1043,6 @@ class CRegression:
         plt.xticks(fontsize=font_size)
         plt.yticks(fontsize=font_size)
         #ax1.set_title("Classified Regression Curve")
-
-
         plt.show()
 
         return
