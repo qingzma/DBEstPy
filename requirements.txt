@@ -2,3 +2,4 @@ scipy
 vispy
 xgboost
 pyhs2
+pwlf

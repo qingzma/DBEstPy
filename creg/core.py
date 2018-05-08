@@ -51,6 +51,9 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
+# piecewise_linear_fit
+import pwlf
+
 
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
@@ -87,6 +90,8 @@ import matplotlib
 import matplotlib.ticker as mtick
 from matplotlib.ticker import FuncFormatter
 import warnings
+
+
 
 r = ColorArray('red')
 g = ColorArray((0, 1, 0, 1))
@@ -377,6 +382,27 @@ class CRegression:
         sklearn_linear_model, time_train = train_sklearn_linear_regression(training_data)
         return sklearn_linear_model, tools.app_linear, time_train
 
+    def deploy_model_pwlf_regression(self, training_data,num_of_segments=20):
+        def train_pwlf_regression(trainingData):
+            start = datetime.now()
+            X = np.array(trainingData.features)[:,0]
+            y = np.array(trainingData.labels)
+
+            reg = pwlf.PiecewiseLinFit(X, y)
+            reg.fit(num_of_segments, disp=True)
+            end = datetime.now()
+            time_train = (end - start).total_seconds()
+            self.logger.debug("Sucessfully deployed " + tools.app_pwlf)
+            self.logger.debug("Time cost to train the model is : %.5f s." % time_train)
+
+            return reg, time_train
+        def pwlf_predict_fn(inputs):
+            return pwlf_model.predict(inputs)
+
+        pwlf_model, time_train = train_pwlf_regression(training_data)
+        return pwlf_model, tools.app_pwlf, time_train
+
+
     def deploy_model_sklearn_poly_regression(self, training_data):
         def train_sklearn_poly_regression(trainingData):
             start = datetime.now()
@@ -627,6 +653,12 @@ class CRegression:
 
         if tools.app_xgboost in self.input_base_models:
             model, name, time = self.deploy_xgboost_regression(training_data)
+            self.apps_deployed.append(model)
+            self.app_names_deployed.append(name)
+            self.time_cost_to_train_base_models.append(time)
+
+        if tools.app_pwlf in self.input_base_models:
+            model, name, time = self.deploy_model_pwlf_regression(training_data)
             self.apps_deployed.append(model)
             self.app_names_deployed.append(name)
             self.time_cost_to_train_base_models.append(time)
@@ -911,7 +943,7 @@ class CRegression:
 
     def matplotlib_plot_2D(self, answers, b_show_division_boundary=True, b_show_god_classifier=False, y_classifier=None,
                            xmin=None, xmax=None):
-        font_size = 35
+        font_size = 15
         names = self.app_names_for_classifier
         symbols = ['*', '1', 'v', 'o', 'h', 'x']
         if b_show_division_boundary:
@@ -1557,10 +1589,10 @@ class CRegression:
         # y_classifier=y_classifier)
 
         if self.b_show_plot:
-            # self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
-            #                         b_show_god_classifier=True, y_classifier=y_classifier_testing)
-            self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
-            self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
+            self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
+                                    b_show_god_classifier=True, y_classifier=y_classifier_testing)
+            # self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
+            # self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
 
         self.predictions_testing = answers_for_testing
 
@@ -1923,7 +1955,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load5d(5)
+    data = dl.load2d(5)
 
     training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -1933,8 +1965,9 @@ if __name__ == "__main__":
     testing_data = testing_data.get_before(100)
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
-    cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=True)
+    # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=True)
     # cs.fit(training_data, testing_data)
+    cs = CRegression(base_models=[tools.app_linear,tools.app_pwlf],b_show_plot=True)
 
     # #models = cs.deploy_all_models(training_data_model)
 
@@ -1944,4 +1977,4 @@ if __name__ == "__main__":
     # # print(predictions0)
     #
 
-    cs.run(data)
+    cs.run2d(data)

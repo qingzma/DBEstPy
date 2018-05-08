@@ -69,11 +69,13 @@ model_name8 = "sklearn_decision_tree_model"
 app_xgboost = "xgboost"
 model_name9 = "xgboost_model"
 
-CPM_name = "Classified Prediction Method"
-base_model_library = ["sklearn_linear", "sklearn_poly", "sklearn_decision_tree", "sklearn_knn",
-                      "sklearn_svr_rbf", "mllib_regression", "sklearn_gaussian_process",
-                      "sklearn_adaboost", "sklearn_gradient_tree_boosting", "xgboost"]
-ensemble_model_library = ["sklearn_adaboost", "sklearn_gradient_tree_boosting", "xgboost"]
+app_pwlf = "piecewise linear"
+
+CPM_name = "CRegression"
+# base_model_library = ["sklearn_linear", "sklearn_poly", "sklearn_decision_tree", "sklearn_knn",
+#                       "sklearn_svr_rbf", "mllib_regression", "sklearn_gaussian_process",
+#                       "sklearn_adaboost", "sklearn_gradient_tree_boosting", "xgboost"]
+# ensemble_model_library = ["sklearn_adaboost", "sklearn_gradient_tree_boosting", "xgboost"]
 
 classifier_linear_name = 'linear'
 classifier_rbf_name = 'rbf'
