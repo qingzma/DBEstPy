@@ -168,6 +168,8 @@ class CRegression:
         self.predictions_classified = None
         self.y_classifier_testing = None
 
+        self.dataset_name = None
+
         # logging.basicConfig(level=logging.ERROR)
 
     def _test_deployed_model(self, model, training_data):
@@ -849,6 +851,7 @@ class CRegression:
         return [self.get_classified_prediction(self.classifier, x) for x in xs]
 
     def fit(self, training_data, testing_data=None, b_select_classifier=False):
+        self.dataset_name = data.file
         training_data_model, training_data_classifier = tools.split_data_to_2(training_data)
 
         models, time_cost_to_train_base_models = self.deploy_all_models(training_data_model)
@@ -1385,6 +1388,7 @@ class CRegression:
         return variance
 
     def boxplot_with_hist_percent(self,proportion_to_show=0.4,bin_percent=0.01):
+        num_of_coutliers_to_delete = 5 #remove the very bad predictions, the number of points to be removed.
         predictions_from_base_models=self.answers_for_testing
         classified_predictions = self.predictions_classified
         y_classifier = self.y_classifier_testing
@@ -1404,19 +1408,23 @@ class CRegression:
                 predictions_from_base_models[i].predictions), np.asarray(labels)))
             data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(
                 predictions_from_base_models[i].predictions), np.asarray(labels))))
-            # data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+            data_for_variance = data_proportion_to_plot[:-5]
+            data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
             data_proportions_to_plot.append(data_proportion_to_plot)
 
-            variance.append(
-                np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
+            variance.append(np.var(data_for_variance))
+            # variance.append(
+            #     np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
 
         data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
-        variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
+        # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
         data_range = max(data_to_plot[0])-min(data_to_plot[0])
         data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
-        # data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+        data_for_variance = data_proportion_to_plot[:-5]
+        data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
         data_proportions_to_plot.append(data_proportion_to_plot)
-        print(data_proportions_to_plot)
+        # print(data_proportions_to_plot)
+        variance.append(np.var(data_for_variance))
 
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
         xlabels.append("CRegression")
@@ -1427,17 +1435,18 @@ class CRegression:
         bp = ax1.boxplot(data_to_plot, showfliers=False, showmeans=True)
         ax1.set_xticklabels(xlabels)
         ax1.set_ylabel("absolute error")
+        ax1.set_title("Dataset: "+self.dataset_name)
         # print(bp["whiskers"][1].get_data()[1])
         data_range = max(bp["whiskers"][1].get_data()[1])-min(bp["whiskers"][1].get_data()[1])
         # add variance information
         for i in range(num_of_plot):
-            ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.2f"%variance[i]**0.5)
+            ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.3f"%variance[i]**0.5)
 
 
         def to_percent(y, position):
             # Ignore the passed in position. This has the effect of scaling the default
             # tick locations.
-            s = str(100 * y)
+            s = "%.2f" % (100 * y)
 
             # The percent symbol needs escaping in latex
             if matplotlib.rcParams['text.usetex'] is True:
@@ -1466,7 +1475,7 @@ class CRegression:
         return variance
 
     def run2d(self, data):
-
+        self.dataset_name = data.file
         data.remove_repeated_x_1d()
         if self.b_disorder:
             data.disorder2d()
@@ -1623,7 +1632,7 @@ class CRegression:
         return statistics
 
     def run3d(self, data):
-
+        self.dataset_name = data.file
         data.remove_repeated_x_2d()
 
         if self.b_disorder:
@@ -1771,6 +1780,7 @@ class CRegression:
         return statistics
 
     def run(self, data):
+        self.dataset_name = data.file
         if self.b_disorder:
             data.disorderNd()
 
@@ -1988,7 +1998,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load5d(5)
+    data = dl.load5d(4)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2015,4 +2025,5 @@ if __name__ == "__main__":
 
     cs.run(data)
     # cs.boxplot()
-    cs.boxplot_with_hist_percent(proportion_to_show=0.8, bin_percent=0.01)
+    cs.boxplot_with_hist_percent(proportion_to_show=0.10, bin_percent=0.01)
+    cs.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
