@@ -163,6 +163,11 @@ class CRegression:
         self.training_data = None
         self.summary = tools.CPMstatistics(logger_name=self.logger_name)
 
+        # for box plot
+        self.answers_for_testing = None
+        self.predictions_classified = None
+        self.y_classifier_testing = None
+
         # logging.basicConfig(level=logging.ERROR)
 
     def _test_deployed_model(self, model, training_data):
@@ -1310,10 +1315,13 @@ class CRegression:
 
         return
 
-    def boxplot(self, predictions_from_base_models, classified_predictions, y_classifier):
+    def boxplot(self):
+        predictions_from_base_models=self.answers_for_testing
+        classified_predictions = self.predictions_classified
+        y_classifier = self.y_classifier_testing
         num_of_plot = len(predictions_from_base_models)+1
         num_of_bins = 50
-        opacity = 0.6
+
         labels = classified_predictions.labels
         data_to_plot = []
 
@@ -1376,7 +1384,11 @@ class CRegression:
         plt.show()
         return variance
 
-    def boxplot_with_hist_percent(self, predictions_from_base_models, classified_predictions, y_classifier,proportion_to_show=0.4,bin_percent=0.01):
+    def boxplot_with_hist_percent(self,proportion_to_show=0.4,bin_percent=0.01):
+        predictions_from_base_models=self.answers_for_testing
+        classified_predictions = self.predictions_classified
+        y_classifier = self.y_classifier_testing
+
         num_of_plot = len(predictions_from_base_models)+1
         num_of_bins = int(proportion_to_show/bin_percent)
         # opacity = 0.6
@@ -1392,19 +1404,19 @@ class CRegression:
                 predictions_from_base_models[i].predictions), np.asarray(labels)))
             data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(
                 predictions_from_base_models[i].predictions), np.asarray(labels))))
-            data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+            # data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
             data_proportions_to_plot.append(data_proportion_to_plot)
 
             variance.append(
                 np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
-        # print(data_proportions_to_plot)
+
         data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
         variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
         data_range = max(data_to_plot[0])-min(data_to_plot[0])
         data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
-        data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+        # data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
         data_proportions_to_plot.append(data_proportion_to_plot)
-
+        print(data_proportions_to_plot)
 
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
         xlabels.append("CRegression")
@@ -1594,10 +1606,14 @@ class CRegression:
         # b_show_god_classifier=True,
         # y_classifier=y_classifier)
 
+        self.answers_for_testing = answers_for_testing
+        self.predictions_classified = predictions_classified
+        self.y_classifier_testing = y_classifier_testing
+
         if self.b_show_plot:
             self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
                                     b_show_god_classifier=True, y_classifier=y_classifier_testing)
-            self.boxplot_with_hist_percent(answers_for_testing, predictions_classified, y_classifier_testing,proportion_to_show=0.1)
+            self.boxplot_with_hist_percent(proportion_to_show=0.1)
             # self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
             # self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
 
@@ -1741,6 +1757,10 @@ class CRegression:
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
         # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
         #    b_show_god_classifier=True, y_classifier=y_classifier)
+
+        self.answers_for_testing = answers_for_testing
+        self.predictions_classified = predictions_classified
+        self.y_classifier_testing = y_classifier_testing
 
         if self.b_show_plot:
             self.matplotlib_plot_3D_distribution_of_best_model(predictions_classified, y_classifier_testing)
@@ -1905,8 +1925,14 @@ class CRegression:
         # client.matplotlib_plot_3D_decision_boundary(predictions_classified)
 
         self.predictions_testing = answers_for_testing
-        self.logger.info("**************************************************************")
-        self.logger.info(self.boxplot_with_hist_percent(answers_for_testing, predictions_classified, y_classifier_testing,proportion_to_show=0.1))
+
+
+        self.answers_for_testing = answers_for_testing
+        self.predictions_classified = predictions_classified
+        self.y_classifier_testing = y_classifier_testing
+        if self.b_show_plot:
+            self.logger.info("**************************************************************")
+            self.logger.info(self.boxplot_with_hist_percent(proportion_to_show=0.4))
         return statistics
 
     def get_NRMSE_for_clusters(self, answers_for_classifier, y_classifier):
@@ -1962,7 +1988,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load2d(4)
+    data = dl.load5d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -1972,11 +1998,11 @@ if __name__ == "__main__":
     testing_data = testing_data.get_before(100)
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
-    # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=True)
+    cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=False)
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
-    cs = CRegression(base_models=[tools.app_pwlf,tools.app_xgboost,tools.app_boosting],b_show_plot=True)
+    # cs = CRegression(base_models=[tools.app_pwlf,tools.app_xgboost,tools.app_boosting],b_show_plot=True)
 
 
     # #models = cs.deploy_all_models(training_data_model)
@@ -1987,4 +2013,6 @@ if __name__ == "__main__":
     # # print(predictions0)
     #
 
-    cs.run2d(data)
+    cs.run(data)
+    # cs.boxplot()
+    cs.boxplot_with_hist_percent(proportion_to_show=0.8, bin_percent=0.01)
