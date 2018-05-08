@@ -10,3 +10,4 @@ CRegressionRDBMWorkspace
 CRegressionRDBMWorkspace.sublime-project
 CRegressionRDBMWorkspace.sublime-workspace
 *.pyc
+*.log
