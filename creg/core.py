@@ -206,6 +206,7 @@ class CRegression:
             # print(element)
 
             # print(element)
+            # print([element])
             results.append(app.predict([element])[0])
             answer.status.append(1)
 
@@ -382,11 +383,11 @@ class CRegression:
         sklearn_linear_model, time_train = train_sklearn_linear_regression(training_data)
         return sklearn_linear_model, tools.app_linear, time_train
 
-    def deploy_model_pwlf_regression(self, training_data,num_of_segments=20):
+    def deploy_model_pwlf_regression(self, training_data,num_of_segments=5):
         def train_pwlf_regression(trainingData):
             start = datetime.now()
-            X = np.array(trainingData.features)[:,0]
-            y = np.array(trainingData.labels)
+            X = trainingData.features[:,0]
+            y = trainingData.labels
 
             reg = pwlf.PiecewiseLinFit(X, y)
             reg.fit(num_of_segments, disp=True)
@@ -396,11 +397,16 @@ class CRegression:
             self.logger.debug("Time cost to train the model is : %.5f s." % time_train)
 
             return reg, time_train
-        def pwlf_predict_fn(inputs):
-            return pwlf_model.predict(inputs)
+        class pwlf_model_wrapper:
+            def __init__(self,reg):
+                self.reg = reg
+            def predict(self,x):
+                return self.reg.predict(x[0])
+
 
         pwlf_model, time_train = train_pwlf_regression(training_data)
-        return pwlf_model, tools.app_pwlf, time_train
+        model_wrapper = pwlf_model_wrapper(pwlf_model)
+        return model_wrapper, tools.app_pwlf, time_train
 
 
     def deploy_model_sklearn_poly_regression(self, training_data):
@@ -1591,6 +1597,7 @@ class CRegression:
         if self.b_show_plot:
             self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
                                     b_show_god_classifier=True, y_classifier=y_classifier_testing)
+            self.boxplot_with_hist_percent(answers_for_testing, predictions_classified, y_classifier_testing,proportion_to_show=0.1)
             # self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
             # self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
 
@@ -1955,9 +1962,9 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load2d(5)
+    data = dl.load2d(4)
 
-    training_data, testing_data = tools.split_data_to_2(data, 0.66667)
+    # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
     '''
     training_data_model = training_data_model.get_before(100)
@@ -1967,7 +1974,10 @@ if __name__ == "__main__":
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=True)
     # cs.fit(training_data, testing_data)
-    cs = CRegression(base_models=[tools.app_linear,tools.app_pwlf],b_show_plot=True)
+
+    # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
+    cs = CRegression(base_models=[tools.app_pwlf,tools.app_xgboost,tools.app_boosting],b_show_plot=True)
+
 
     # #models = cs.deploy_all_models(training_data_model)
 
