@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"INP",
+				"INPUT_STRING"
+			],
+			[
+				"to",
+				"tools"
+			],
+			[
+				"mat",
+				"matplotlib_plot_2D_single_regression"
+			],
+			[
+				"datase",
+				"dataset_name"
+			],
+			[
+				"file",
+				"file_name"
+			],
+			[
+				"datas",
+				"dataset_name"
+			],
+			[
+				"data_to_",
+				"data_to_plot_without_outliers"
+			],
+			[
+				"box",
+				"boxplot"
+			],
+			[
+				"b_",
+				"b_show_plot"
+			],
+			[
+				"b",
+				"bin_percent"
+			],
+			[
+				"y_cla",
+				"y_classifier_testing"
+			],
+			[
+				"app_",
+				"app_boosting\tstatement"
+			],
+			[
 				"prop",
 				"proportion_to_show"
 			],
@@ -20,16 +68,8 @@
 				"DataSource\tclass"
 			],
 			[
-				"datas",
-				"data_source\t(tools.py)"
-			],
-			[
 				"min",
 				"min_xvalue"
-			],
-			[
-				"mat",
-				"matplotlib_plot_2D_confidence_interval\tfunction"
 			],
 			[
 				"num_of",
@@ -162,10 +202,6 @@
 			[
 				"re",
 				"remove_repeated_x_1d\tfunction"
-			],
-			[
-				"to",
-				"to_csv\tfunction"
 			],
 			[
 				"l",
@@ -478,20 +514,16 @@
 			[
 				"text",
 				"text-align"
-			],
-			[
-				"fon",
-				"font-family"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"contents": "CRegression:\n    __init__(…)\n    _test_deployed_model(…)\n    get_test_point(…)\n    get_predictions(…)\n    get_predictions_from_models_for_testing(…)\n    get_predictions_from_models(…)\n    get_classified_predictions(…)\n    get_classified_prediction(…)\n    load_data(…)\n    deploy_model_sklearn_linear_regression(…)\n        train_sklearn_linear_regression(…)\n        sklearn_lr_predict_fn(…)\n    deploy_model_sklearn_poly_regression(…)\n        train_sklearn_poly_regression(…)\n        sklearn_poly_predict_fn(…)\n    deploy_model_sklearn_knn_regression(…)\n        train_sklearn_knn_regression(…)\n        sklearn_knn_predict_fn(…)\n    deploy_model_sklearn_svr_rbf_regression(…)\n        train_sklearn_rbf_regression(…)\n        sklearn_rbf_predict_fn(…)\n    deploy_model_sklearn_gaussion_process_regression(…)\n        train_sklearn_gp_regression(…)\n        sklearn_gp_predict_fn(…)\n    deploy_model_sklearn_ensemble_adaboost(…)\n        train_sklearn_ensemble_adaboost(…)\n        sklearn_ensemble_adaboost_predict_fn(…)\n    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)\n        train_sklearn_ensemble_gradient_tree_boosting(…)\n        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)\n    deploy_model_sklearn_decision_tree_regression(…)\n        train_sklearn_decision_tree_regression(…)\n        sklearn_decision_tree_predict_fn(…)\n    deploy_xgboost_regression(…)\n    deploy_all_models(…)\n    deploy_ensemble_methods(…)\n    set_app_names_deployed(…)\n    get_app_names_deployed(…)\n    get_predictions_to_build_classifier(…)\n    init_classifier_training_values(…)\n    build_classifier(…)\n            classifier1:\n                predict(…)\n    build_classifier_rbf(…)\n            classifier1:\n                predict(…)\n    build_classifier_xgboost(…)\n            classifier1:\n                predict(…)\n    get_cluster_points(…)\n    predict(…)\n    predicts(…)\n    fit(…)\n    select_classifiers(…)\n            classifier1:\n                predict(…)\n    plot_training_data_2d(…)\n    matplotlib_plot_2D(…)\n    matplotlib_plot_2D_confidence_interval(…)\n    matplotlib_plot_2D_prediction_interval(…)\n    matplotlib_plot_2D_all_models(…)\n    plot_classified_prediction_curves_2D(…)\n    plot_training_data_3d(…)\n    matplotlib_plot_3D(…)\n    matplotlib_plot_3D_decision_boundary(…)\n    matplotlib_plot_3D_distribution_of_best_model(…)\n    boxplot(…)\n        to_percent(…)\n    boxplot_with_hist_percent(…)\n        to_percent(…)\n    run2d(…)\n    run3d(…)\n    run(…)\n    get_NRMSE_for_clusters(…)\n    CI(…)\n    PI(…)",
+			"contents": "CRegression:\n    __init__(…)\n    _test_deployed_model(…)\n    get_test_point(…)\n    get_prediction(…)\n    get_predictions(…)\n    get_predictions_from_models_for_testing(…)\n    get_predictions_from_models(…)\n    get_classified_predictions(…)\n    get_classified_prediction(…)\n    load_data(…)\n    deploy_model_sklearn_linear_regression(…)\n        train_sklearn_linear_regression(…)\n        sklearn_lr_predict_fn(…)\n    deploy_model_pwlf_regression(…)\n        train_pwlf_regression(…)\n        pwlf_model_wrapper:\n            __init__(…)\n            predict(…)\n    deploy_model_sklearn_poly_regression(…)\n        train_sklearn_poly_regression(…)\n        sklearn_poly_predict_fn(…)\n    deploy_model_sklearn_knn_regression(…)\n        train_sklearn_knn_regression(…)\n        sklearn_knn_predict_fn(…)\n    deploy_model_sklearn_svr_rbf_regression(…)\n        train_sklearn_rbf_regression(…)\n        sklearn_rbf_predict_fn(…)\n    deploy_model_sklearn_gaussion_process_regression(…)\n        train_sklearn_gp_regression(…)\n        sklearn_gp_predict_fn(…)\n    deploy_model_sklearn_ensemble_adaboost(…)\n        train_sklearn_ensemble_adaboost(…)\n        sklearn_ensemble_adaboost_predict_fn(…)\n    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)\n        train_sklearn_ensemble_gradient_tree_boosting(…)\n        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)\n    deploy_model_sklearn_decision_tree_regression(…)\n        train_sklearn_decision_tree_regression(…)\n        sklearn_decision_tree_predict_fn(…)\n    deploy_xgboost_regression(…)\n    deploy_all_models(…)\n    deploy_ensemble_methods(…)\n    set_app_names_deployed(…)\n    get_app_names_deployed(…)\n    get_predictions_to_build_classifier(…)\n    init_classifier_training_values(…)\n    build_classifier(…)\n            classifier1:\n                predict(…)\n    build_classifier_rbf(…)\n            classifier1:\n                predict(…)\n    build_classifier_xgboost(…)\n            classifier1:\n                predict(…)\n    get_cluster_points(…)\n    predict(…)\n    predicts(…)\n    fit(…)\n    select_classifiers(…)\n            classifier1:\n                predict(…)\n    plot_training_data_2d(…)\n    matplotlib_plot_2D(…)\n    matplotlib_plot_2D_single_regression(…)\n    matplotlib_plot_2D_confidence_interval(…)\n    matplotlib_plot_2D_prediction_interval(…)\n    matplotlib_plot_2D_all_models(…)\n    plot_classified_prediction_curves_2D(…)\n    plot_training_data_3d(…)\n    matplotlib_plot_3D(…)\n    matplotlib_plot_3D_decision_boundary(…)\n    matplotlib_plot_3D_distribution_of_best_model(…)\n    boxplot(…)\n        to_percent(…)\n    boxplot_with_hist_percent(…)\n        to_percent(…)\n    run2d(…)\n    run3d(…)\n    run(…)\n    get_NRMSE_for_clusters(…)\n    CI(…)\n    PI(…)",
 			"settings":
 			{
-				"buffer_size": 2514,
+				"buffer_size": 2724,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -501,16 +533,17 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 90403,
+				"buffer_size": 95278,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "creg/data_loader.py",
+			"file": "setup.py",
 			"settings":
 			{
-				"buffer_size": 30686,
+				"buffer_size": 554,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -518,7 +551,7 @@
 			"file": "results/deletable.log",
 			"settings":
 			{
-				"buffer_size": 4795,
+				"buffer_size": 4615,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -554,8 +587,16 @@
 			"file": "creg/tools.py",
 			"settings":
 			{
-				"buffer_size": 33877,
+				"buffer_size": 33899,
 				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/data_loader.py",
+			"settings":
+			{
+				"buffer_size": 30686,
 				"line_ending": "Unix"
 			}
 		},
@@ -689,13 +730,15 @@
 	[
 		"/disk/workspace/CRegressionRDBM",
 		"/disk/workspace/CRegressionRDBM/creg",
-		"/disk/workspace/CRegressionRDBM/query",
-		"/disk/workspace/CRegressionRDBM/query/load_data",
-		"/disk/workspace/CRegressionRDBM/results",
 		"/disk/workspace/CRegressionRDBM/tests"
 	],
 	"file_history":
 	[
+		"/home/u1796377/workspace/shells/while.sh",
+		"/disk/workspace/CRegressionRDBM/sdfs",
+		"/home/u1796377/workspace/shells/fisrt.sh",
+		"/disk/workspace/CRegressionRDBM/requirements.txt",
+		"/disk/workspace/CRegressionRDBM/.gitignore",
 		"/disk/workspace/CRegressionRDBM/results/6_AVG_0.5.txt",
 		"/disk/workspace/CRegressionRDBM/creg/cli.py",
 		"/disk/workspace/CRegressionRDBM/results/6_SUM_5.txt",
@@ -712,7 +755,6 @@
 		"/home/u1796377/.bashrc",
 		"/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
 		"/disk/workspace/CRegressionRDBM/results/deletable.log",
-		"/disk/workspace/CRegressionRDBM/requirements.txt",
 		"/disk/workspace/CRegressionRDBM/creg/data_loader.py",
 		"/disk/TPC/TPC-DS/tools/makefile",
 		"/disk/workspace/CRegressionRDBM/query/load_data/file1.sql",
@@ -757,7 +799,6 @@
 		"/disk/workspace/CRegressionRDBM.",
 		"/disk/workspace/CRegressionRDBM/creg/evaluation/__init__.py",
 		"/disk/workspace/CRegressionRDBM/creg/logs.py",
-		"/disk/workspace/CRegressionRDBM/.gitignore",
 		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
 		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
@@ -820,14 +861,11 @@
 		"/var/www/html/index.html",
 		"/home/u1796377/Desktop/myWebSite/myScript.js",
 		"/home/u1796377/Desktop/myWebSite/index.html",
-		"/home/u1796377/Desktop/index.html",
-		"/home/u1796377/Desktop/my.php",
-		"/home/u1796377/Desktop/mystyle.css",
-		"/home/u1796377/Desktop/test.html"
+		"/home/u1796377/Desktop/index.html"
 	],
 	"find":
 	{
-		"height": 28.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -841,6 +879,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"print",
+			"self.dataset_name = data.file_name",
 			"preprocessing",
 			"boxplot",
 			"num_total_training_points",
@@ -865,6 +905,7 @@
 		"regex": false,
 		"replace_history":
 		[
+			"self.dataset_name = data.file",
 			"",
 			"INT",
 			"",
@@ -891,7 +932,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2514,
+						"buffer_size": 2724,
 						"regions":
 						{
 						},
@@ -910,312 +951,340 @@
 							"symkeys":
 							[
 								[
-									3038,
-									3056
+									3076,
+									3094
 								],
 								[
-									3057,
-									3285
+									3095,
+									3323
 								],
 								[
-									5765,
-									5822
+									5985,
+									6042
 								],
 								[
-									6173,
-									6217
+									6393,
+									6437
 								],
 								[
-									6682,
-									6721
+									6901,
+									6936
 								],
 								[
-									8665,
-									8734
+									6968,
+									7007
 								],
 								[
-									9038,
-									9103
+									8982,
+									9051
 								],
 								[
-									9321,
-									9378
+									9355,
+									9420
 								],
 								[
-									12716,
-									12771
+									9638,
+									9695
 								],
 								[
-									13148,
-									13176
+									13033,
+									13088
 								],
 								[
-									13990,
-									14058
+									13465,
+									13493
 								],
 								[
-									14059,
-									14117
+									14307,
+									14375
 								],
 								[
-									14590,
-									14632
+									14376,
+									14434
 								],
 								[
-									14847,
-									14913
+									14907,
+									14949
 								],
 								[
-									14914,
-									14970
+									15164,
+									15240
 								],
 								[
-									15462,
-									15506
+									15241,
+									15289
 								],
 								[
-									15711,
-									15776
+									15782,
+									15815
 								],
 								[
-									15777,
-									15832
+									15816,
+									15851
 								],
 								[
-									16430,
-									16473
+									15883,
+									15915
 								],
 								[
-									16708,
-									16777
+									16252,
+									16318
 								],
 								[
-									16778,
-									16833
+									16319,
+									16375
 								],
 								[
-									17338,
-									17381
+									16867,
+									16911
 								],
 								[
-									17582,
-									17660
+									17116,
+									17181
 								],
 								[
-									17661,
-									17715
+									17182,
+									17237
 								],
 								[
-									18414,
-									18456
+									17835,
+									17878
 								],
 								[
-									18693,
-									18761
+									18113,
+									18182
 								],
 								[
-									18762,
-									18820
+									18183,
+									18238
 								],
 								[
-									19413,
-									19470
+									18743,
+									18786
 								],
 								[
-									19693,
-									19775
+									18987,
+									19065
 								],
 								[
-									19776,
-									19848
+									19066,
+									19120
 								],
 								[
-									20396,
-									20467
+									19819,
+									19861
 								],
 								[
-									20785,
-									20860
+									20098,
+									20166
 								],
 								[
-									20861,
-									20926
+									20167,
+									20225
 								],
 								[
-									21410,
-									21463
+									20818,
+									20875
 								],
 								[
-									21859,
-									21913
+									21098,
+									21180
 								],
 								[
-									22621,
-									22668
+									21181,
+									21253
 								],
 								[
-									26257,
-									26310
+									21801,
+									21872
 								],
 								[
-									27389,
-									27433
+									22190,
+									22265
 								],
 								[
-									27495,
-									27532
+									22266,
+									22331
 								],
 								[
-									27786,
-									27862
+									22815,
+									22868
 								],
 								[
-									28169,
-									28266
+									23264,
+									23318
 								],
 								[
-									30380,
-									30458
+									24026,
+									24073
 								],
 								[
-									30578,
-									30608
+									27952,
+									28005
 								],
 								[
-									30609,
-									30646
+									29084,
+									29128
 								],
 								[
-									31355,
-									31435
+									29190,
+									29227
 								],
 								[
-									31556,
-									31586
+									29481,
+									29557
 								],
 								[
-									31587,
-									31624
+									29864,
+									29961
 								],
 								[
-									32330,
-									32409
+									32075,
+									32153
 								],
 								[
-									32529,
-									32559
+									32273,
+									32303
 								],
 								[
-									32560,
-									32597
+									32304,
+									32341
 								],
 								[
-									33330,
-									33417
+									33050,
+									33130
 								],
 								[
-									33638,
-									33663
+									33251,
+									33281
 								],
 								[
-									33731,
-									33758
+									33282,
+									33319
 								],
 								[
-									33840,
-									33919
+									34025,
+									34104
 								],
 								[
-									35718,
-									35805
+									34224,
+									34254
 								],
 								[
-									36241,
-									36271
+									34255,
+									34292
 								],
 								[
-									36272,
-									36309
+									35025,
+									35112
 								],
 								[
-									38684,
-									38720
+									35333,
+									35358
 								],
 								[
-									38932,
-									39102
+									35426,
+									35453
 								],
 								[
-									43070,
-									43144
+									35535,
+									35614
 								],
 								[
-									45633,
-									45707
+									37451,
+									37538
 								],
 								[
-									48160,
-									48298
+									37974,
+									38004
 								],
 								[
-									50287,
-									50368
+									38005,
+									38042
 								],
 								[
-									51432,
-									51468
+									40417,
+									40453
 								],
 								[
-									51685,
-									51743
+									40665,
+									40835
 								],
 								[
-									53242,
-									53318
+									44803,
+									44881
 								],
 								[
-									54286,
-									54385
+									46138,
+									46212
 								],
 								[
-									55350,
-									55440
+									48701,
+									48775
 								],
 								[
-									57167,
-									57203
+									51228,
+									51366
 								],
 								[
-									58545,
-									58693
+									53355,
+									53436
 								],
 								[
-									61199,
-									61235
+									54500,
+									54536
 								],
 								[
-									62601,
-									62627
+									54753,
+									54811
 								],
 								[
-									70989,
-									71015
+									56310,
+									56386
 								],
 								[
-									78679,
-									78703
+									57354,
+									57453
 								],
 								[
-									87141,
-									87216
+									58418,
+									58440
 								],
 								[
-									88732,
-									88767
+									60318,
+									60354
 								],
 								[
-									89082,
-									89117
+									61696,
+									61776
+								],
+								[
+									64847,
+									64883
+								],
+								[
+									66255,
+									66281
+								],
+								[
+									74925,
+									74951
+								],
+								[
+									82826,
+									82850
+								],
+								[
+									91473,
+									91548
+								],
+								[
+									93064,
+									93099
+								],
+								[
+									93414,
+									93449
 								]
 							],
 							"symlist":
@@ -1224,6 +1293,7 @@
 								"    __init__(…)",
 								"    _test_deployed_model(…)",
 								"    get_test_point(…)",
+								"    get_prediction(…)",
 								"    get_predictions(…)",
 								"    get_predictions_from_models_for_testing(…)",
 								"    get_predictions_from_models(…)",
@@ -1233,6 +1303,11 @@
 								"    deploy_model_sklearn_linear_regression(…)",
 								"        train_sklearn_linear_regression(…)",
 								"        sklearn_lr_predict_fn(…)",
+								"    deploy_model_pwlf_regression(…)",
+								"        train_pwlf_regression(…)",
+								"        pwlf_model_wrapper:",
+								"            __init__(…)",
+								"            predict(…)",
 								"    deploy_model_sklearn_poly_regression(…)",
 								"        train_sklearn_poly_regression(…)",
 								"        sklearn_poly_predict_fn(…)",
@@ -1279,6 +1354,7 @@
 								"                predict(…)",
 								"    plot_training_data_2d(…)",
 								"    matplotlib_plot_2D(…)",
+								"    matplotlib_plot_2D_single_regression(…)",
 								"    matplotlib_plot_2D_confidence_interval(…)",
 								"    matplotlib_plot_2D_prediction_interval(…)",
 								"    matplotlib_plot_2D_all_models(…)",
@@ -1301,10 +1377,10 @@
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 4.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
@@ -1319,15 +1395,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 90403,
+						"buffer_size": 95278,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58488,
-								58488
+								93948,
+								93948
 							]
 						],
 						"settings":
@@ -1337,6 +1413,55 @@
 							],
 							"SL.15.region_keys":
 							[
+								"SL.pyflakes.Highlights.|85ee7a4d8f01da38fb7a6d57185d778324ddc7c37589c616dcd33d3d5c1574e1|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|bae9a0a8ebe560f3755eeb91ce790414892d475ea412c7c337df81b2ec4e3f9c|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|71be33ac33068307b6c42513f0bb4e6744b40f6cb014bf59bebc24f4351ae8db|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|7a564349ce74831875acbbb77a3b86f8ea8ebb965c565acc85af47f9d92a902e|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|d1d29e2ea9710c335ce9eac4258fa56ba86e200ecb95d6ae1dd66308d8d5dc50|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|afe1848c03c924509aaf700f1c709265cd9a04be402c2f96b3c633d9e2699328|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|a439c20bb2bc949afde53fdcc812d97051585c6c5a36d905f28a0d2fa7811d10|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|5b9571ac7177ab8f87c68f5e0b72e56910177759158931249eac3d72334f2daf|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|541d531e95d0d89240fc55fa403ecf987fbd7db5dc1184c93ce440a95b71e0f2|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|87d9d4c1f433951dc8be88e3ffcba7200cddffbbcffc8b649597eb579f4eec27|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|c796a2cb1dcb5eb24d0bad375a7ab040fb9647fd9496fb0cfd59d2006a212fb5|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|19eb2231145fb3bab8e87effa9af9cc97c98ddd8595714dd4b41b53e1446bec3|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|2a306ad64e6304cf8cdb913616ee742d577ed3f71c2ebffa7169d085272924ad|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|d9392f25106f1e9e7e1f6083dc2506899c954a02f8088c4347d96a3ac5deda95|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|390c3bdc9cf3440f717f812f9bce374ec5b1fb0dda2b98ad262d930bb2e19708|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"sublime_linter.protected_regions",
+								"SL.pyflakes.Highlights.|8f7d6c8a67bf9db9f11bb17a6823f88e63f2c662841ea4f9cfad9b4da56005d1|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|2a3b89eaf58f74488c3cb424b2327dcd7ad747f0048a24496a72264ea90f3d57|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|eb0d018856ac228e36c111794e54b2444717bbd1700e64d1d563be34c04d3716|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|cb779bb804856306d01b489a76bfff58d5629684c993a970eb025d9fc99fe1b9|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|aee2d6fa8c629b789600ed01e74d38f42581a19a3ca7530513d58d70f019bd58|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|2eb3116e44d895ed8c2f2067c40496c4ee0014e6d440afa1a18aebd42137b33d|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|e4108ec58a768000ee76d1658441ad0239d67cecd79103fa7c7d515bb2e18b9f|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|32142ad3d9c2ab4a48e76db99f967246d1a3ca7191ce104f229c50f6dec369da|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|4f988c307761233e6527c3cfc6e0573834b9585c15216145b49c2ae06587cf22|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|6776354c238f0045b604039186fd5215bd1780debe11347575719c11cdae64fd|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|089a13d1eebf943211918f01cb6e2f33f7fecd246d3f8478acedbe8be689a608|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|d7c90f406d81413d3acf2fcc4ec8d910e22f38a52d868ffc88d7ab48859e1568|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|acc2d5fba8241b669d65b3d13d18764130a750d677d78a3080b9f0a52fe786bf|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|d3418fd3f165ecf7e6bfffb114d1267cbf7f974784b4063405e1858f83fd5f8f|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|162ca943d7699f0eb88be7d84b930a15ead1ce73ea11df13b99431fdb61c728f|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|f540ff37f4382a446d8b2e89c252bc8579757d9e116736bd4d7a7dee48cf1ba5|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|a74c7489c7e7224fc37a6d71b53d690c291124c3ffb681ad7b787ed418de17c5|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|cef2a60266e7c9b4adb5a5d1ce62acca1c599f042de79d0ff86cade51ba27350|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|4b8459e353a4183389af86b77b52aa19de5283303f19d1234f3ae7a46c6b57fb|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|68b74c85374c6a65cfdc34bd8b57bfcabfd666d2a4ec9b647b53667e74b7d5b4|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|b30b48e09a31d6622b0d31f194a90d2c187ab93219939b323baf1045554c8bf7|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|2ea8a6a02e070950980d302249b79b3ad15946aef575de9c13a12df056b7c572|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|58af88390d2d00fb8d5643d7fa6c3c00e3185909948741a1975e07a88296ad1e|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|77730c9b1a042f8b376fe3775c7b67676a44ba4a2bbf2be558f023d8e5c87f34|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|9ae377f5a3c43948723d873660516683433b2bd635f4997b92e491a84647f68a|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Gutter.|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|dot",
+								"SL.pyflakes.Highlights.|d27f4c4edfb8252ca0783d6e63e7df1aa37ee5c4919e826f768377fb4c46a507|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|04d90b050cbd288a0ea46a96233014886bbe19507d2327123e247476eac25da5|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|c36c851dd55c45aff001681dfd138f9cba2173d34b23c3c61ebe6a3425213295|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|4374cc5c14e7c17da420142cc1f984b7daf5cfa0ab6c9e362e2aac06efa55b14|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|db9eeedaa87bd9e411adc41d3bc9d65405fbdfc51af315fda8fc98bdaf3162bd|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|141283c3fc39f2cb756a9c5eaf7bf81da3ff1f63cbc9164fa0c62e13aca0f0a4|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32",
+								"SL.pyflakes.Highlights.|e6230a8992f9073949b66c4376d65eeabf05230916b44900dfe67c76cf397cdb|region.redish markup.deleted.sublime_linter markup.error.sublime_linter|32"
 							],
 							"SL.16.region_keys":
 							[
@@ -1373,6 +1498,14 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"complete_parameters": false,
@@ -1383,7 +1516,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 25176.0,
+						"translation.y": 38590.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1391,11 +1524,45 @@
 				},
 				{
 					"buffer": 2,
-					"file": "creg/data_loader.py",
-					"semi_transient": true,
+					"file": "setup.py",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 30686,
+						"buffer_size": 554,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								206,
+								206
+							]
+						],
+						"settings":
+						{
+							"SL.27.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "results/deletable.log",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4615,
 						"regions":
 						{
 						},
@@ -1411,43 +1578,6 @@
 							"SL.17.region_keys":
 							[
 							],
-							"SL.26.region_keys":
-							[
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "results/deletable.log",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4795,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								97,
-								97
-							]
-						],
-						"settings":
-						{
-							"SL.17.region_keys":
-							[
-							],
 							"SL.18.region_keys":
 							[
 							],
@@ -1455,10 +1585,10 @@
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 836.0,
+						"translation.y": 1.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1506,10 +1636,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5145.0,
+						"translation.y": 5021.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1600,7 +1730,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1642,7 +1772,7 @@
 						"translation.y": 912.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1651,15 +1781,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33877,
+						"buffer_size": 33899,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								14428,
-								14445
+								28036,
+								28036
 							]
 						],
 						"settings":
@@ -1689,6 +1819,10 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -1697,14 +1831,48 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5741.0,
+						"translation.y": 12504.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
+					"file": "creg/data_loader.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 30686,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"SL.34.region_keys":
+							[
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "creg/query_engine.py",
 					"semi_transient": false,
 					"settings":
@@ -1785,11 +1953,11 @@
 						"translation.y": 3846.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 10,
 					"file": "creg/logs.py",
 					"semi_transient": false,
 					"settings":
@@ -1849,7 +2017,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
@@ -1913,7 +2081,7 @@
 	},
 	"output.exec":
 	{
-		"height": 177.0
+		"height": 254.0
 	},
 	"output.find_results":
 	{

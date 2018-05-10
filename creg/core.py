@@ -195,6 +195,8 @@ class CRegression:
         # print(sklearn_poly_predict_fn(training_data.features[1]))
         # print(list(training_data[1].features))
         return training_data.features[1]  # [13.0,1073.0, 0.663]
+    def get_prediction(self,app,x):
+        return app.predict(x)
 
     def get_predictions(self, app, xs):
         try:
@@ -390,7 +392,7 @@ class CRegression:
         sklearn_linear_model, time_train = train_sklearn_linear_regression(training_data)
         return sklearn_linear_model, tools.app_linear, time_train
 
-    def deploy_model_pwlf_regression(self, training_data,num_of_segments=5):
+    def deploy_model_pwlf_regression(self, training_data,num_of_segments=4):
         def train_pwlf_regression(trainingData):
             start = datetime.now()
             X = trainingData.features[:,0]
@@ -408,7 +410,10 @@ class CRegression:
             def __init__(self,reg):
                 self.reg = reg
             def predict(self,x):
-                return self.reg.predict(x[0])
+                # print(x)
+                # print(self.reg.predict([x]))
+                # print(x)
+                return self.reg.predict(x) #x[0]
 
 
         pwlf_model, time_train = train_pwlf_regression(training_data)
@@ -1045,6 +1050,40 @@ class CRegression:
 
         return
 
+    def matplotlib_plot_2D_single_regression(self, data,model=tools.app_pwlf):
+        min_xvalue = min(data.features[:, 0])
+        max_xvalue = max(data.features[:, 0])
+        x = np.linspace(min_xvalue,max_xvalue,500)
+        # Xs=tools.DataSource()
+        # Xs.features = [x.tolist()]
+        # print(x.tolist())
+        font_size = 15
+        names = self.app_names_for_classifier
+        symbols = ['*', '1', 'v', 'o', 'h', 'x']
+        gs = gridspec.GridSpec(1, 1)
+        fig = plt.figure()
+        ax1 = plt.subplot(gs[0])
+        app_index = self.app_names_deployed.index(model)
+        model_object = self.apps_deployed[app_index]
+        # print(model_object.predict([x[0]]))
+        y=[self.get_prediction(app=model_object,x=[x[i]]) for i in range(len(x))]
+        ax1.plot(x,y,label=model)
+
+        legend1 = ax1.legend(loc='upper right', shadow=True, fontsize=font_size)
+
+        # The frame is matplotlib.patches.Rectangle instance surrounding the legend.
+        frame = legend1.get_frame()
+        frame.set_facecolor('0.90')
+
+        ax1.set_xlabel(data.headers[0], fontsize=font_size)
+        ax1.set_ylabel(data.headers[1], fontsize=font_size)
+        plt.xticks(fontsize=font_size)
+        plt.yticks(fontsize=font_size)
+        #ax1.set_title("Classified Regression Curve")
+        plt.show()
+
+        return
+
     def matplotlib_plot_2D_confidence_interval(self, answers, classifier):
         min_xvalue = min(answers.features[:, 0])
         max_xvalue = max(answers.features[:, 0])
@@ -1620,9 +1659,9 @@ class CRegression:
         self.y_classifier_testing = y_classifier_testing
 
         if self.b_show_plot:
-            self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True,
-                                    b_show_god_classifier=True, y_classifier=y_classifier_testing)
-            self.boxplot_with_hist_percent(proportion_to_show=0.1)
+            self.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=False,
+                                    b_show_god_classifier=False, y_classifier=y_classifier_testing)
+            # self.boxplot_with_hist_percent(proportion_to_show=0.1)
             # self.matplotlib_plot_2D_confidence_interval(predictions_classified,classifier=classifier)
             # self.matplotlib_plot_2D_prediction_interval(predictions_classified,classifier=classifier)
 
@@ -1813,6 +1852,7 @@ class CRegression:
         # train and select the classifier
         # init training values to build the classifier
         # index_models = [0, 1, 2]
+
         y_classifier, errors = self.init_classifier_training_values(answers_for_classifier,
                                                                     # model_selection_index=index_models,
                                                                     factor=1)
@@ -1998,7 +2038,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load5d(4)
+    data = dl.load2d(2)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2008,7 +2048,8 @@ if __name__ == "__main__":
     testing_data = testing_data.get_before(100)
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
-    cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_decision_tree],b_show_plot=False)
+    # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
+    cr = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost,tools.app_pwlf],b_show_plot=False)
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
@@ -2023,7 +2064,8 @@ if __name__ == "__main__":
     # # print(predictions0)
     #
 
-    cs.run(data)
+    cr.run(data)
     # cs.boxplot()
-    cs.boxplot_with_hist_percent(proportion_to_show=0.10, bin_percent=0.01)
-    cs.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
+    # cr.matplotlib_plot_2D_single_regression(data)
+    cr.boxplot_with_hist_percent(proportion_to_show=0.10, bin_percent=0.01)
+    # cr.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
