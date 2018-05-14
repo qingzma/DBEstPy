@@ -12,3 +12,4 @@ CRegressionRDBMWorkspace.sublime-workspace
 *.pyc
 *.log
 *.ipynb
+.idea/
