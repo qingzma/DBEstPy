@@ -533,7 +533,7 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 106196,
+				"buffer_size": 107119,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -551,7 +551,7 @@
 			"file": "results/deletable.log",
 			"settings":
 			{
-				"buffer_size": 4099,
+				"buffer_size": 6067,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -865,7 +865,7 @@
 	],
 	"find":
 	{
-		"height": 40.0
+		"height": 28.0
 	},
 	"find_in_files":
 	{
@@ -1409,7 +1409,7 @@
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
 						},
-						"translation.x": 1.0,
+						"translation.x": 0.0,
 						"translation.y": 12.0,
 						"zoom_level": 1.0
 					},
@@ -1428,15 +1428,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 106196,
+						"buffer_size": 107119,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								105753,
-								105753
+								103751,
+								103751
 							]
 						],
 						"settings":
@@ -1494,6 +1494,10 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"complete_parameters": false,
@@ -1504,7 +1508,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 43477.0,
+						"translation.y": 42793.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1553,7 +1557,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 4099,
+						"buffer_size": 6067,
 						"regions":
 						{
 						},
@@ -2089,7 +2093,7 @@
 	"project": "CRegressionRDBMWorkspace.sublime-project",
 	"replace":
 	{
-		"height": 72.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":

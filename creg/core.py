@@ -2264,6 +2264,7 @@ class CRegression:
             qle = np.divide(aes[i],np.abs(self.optimal_error))
             qle=qle[qle!=np.inf]
             qle=qle[~np.isnan(qle)]
+
             QLOLs.append(sum(qle))
         # Cregression metrics:
         ae_cr=np.abs(np.subtract(np.asarray(
@@ -2274,20 +2275,63 @@ class CRegression:
         qle = np.divide(ae_cr,np.abs(self.optimal_error))
         qle=qle[qle!=np.inf]
         qle=qle[~np.isnan(qle)]
+
         QLOLs.append(sum(qle))
         self.logger.info("WLOL: "+str(WLOLs))
         self.logger.info("QLOL: "+str(QLOLs))
         return
 
-        self.optimal_y=y_classifier_testing
-        self.optimal_error=errors_ideal
+    def WLOL_QLOL_relative_error(self):
+        num_of_regressions = len(self.answers_for_testing)
+        aes=[]
+        res=[]
+        WLOLs=[]
+        QLOLs=[]
+        labels=self.answers_for_testing[0].labels
+        res_optimal = np.divide(np.abs(self.optimal_error),np.asarray(labels))
+        res_optimal = res_optimal[res_optimal!=np.inf]
+        res_optimal = res_optimal[~np.isnan(res_optimal)]
+        WLE_optimal = sum(res_optimal)
+        for i in range(num_of_regressions):
+            aes.append(np.abs(np.subtract(np.asarray(
+                self.answers_for_testing[i].predictions), np.asarray(labels))))
+            re=np.divide(aes[i],np.asanyarray(labels))
+            re = re[re!=np.inf]
+            re = re[~np.isnan(re)]
+            res.append(re)
+            WLOLs.append(sum(re)/WLE_optimal)
+
+            qle = np.divide(res[i],res_optimal)
+            qle=qle[qle!=np.inf]
+            qle=qle[~np.isnan(qle)]
+
+            QLOLs.append(sum(qle))
+        # Cregression metrics:
+        ae_cr=np.abs(np.subtract(np.asarray(
+                self.predictions_classified.predictions), np.asarray(labels)))
+        aes.append(ae_cr)
+        re_cr = np.divide(ae_cr,np.asanyarray(labels))
+        re_cr = re_cr[re_cr!=np.inf]
+        re_cr = re_cr[~np.isnan(re_cr)]
+        res.append(re_cr)
+        WLOLs.append(sum(re_cr)/WLE_optimal)
+        qle = np.divide(re_cr,res_optimal)
+        qle=qle[qle!=np.inf]
+        qle=qle[~np.isnan(qle)]
+
+        QLOLs.append(sum(qle))
+        self.logger.info("WLOL: "+str(WLOLs))
+        self.logger.info("QLOL: "+str(QLOLs))
+        return
+
+
 
 
 
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load5d(5)
+    data = dl.load5d(4)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2298,8 +2342,8 @@ if __name__ == "__main__":
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
     # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
-    cr = CRegression(base_models=[  #tools.app_linear,tools.app_poly,tools.app_decision_tree,\
-        tools.app_boosting,tools.app_xgboost],\
+    cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],\
+        #tools.app_boosting,tools.app_xgboost],\
         b_show_plot=False)
     # cs.fit(training_data, testing_data)
 
@@ -2317,10 +2361,11 @@ if __name__ == "__main__":
 
     cr.run(data)
     cr.WLOL_QLOL()
+    cr.WLOL_QLOL_relative_error()
     # cs.boxplot()
     # cr.matplotlib_plot_2D_single_regression(data)
-    cr.boxplot_with_barplot(proportion_to_show=0.5, bar_width=0.05,cumulative=False,\
-        b_show_rest=False,y_limit=[0,10])
-    cr.boxplot_with_barplot(proportion_to_show=0.1, bar_width=0.01,cumulative=True,\
-        b_show_rest=False,y_limit=[0,1.1])
+    # cr.boxplot_with_barplot(proportion_to_show=0.5, bar_width=0.05,cumulative=False,\
+    #     b_show_rest=False,y_limit=[0,10])
+    # cr.boxplot_with_barplot(proportion_to_show=0.1, bar_width=0.01,cumulative=True,\
+    #     b_show_rest=False,y_limit=[0,1.1])
     # cr.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
