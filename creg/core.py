@@ -89,6 +89,7 @@ from scipy import stats
 import matplotlib
 import matplotlib.ticker as mtick
 from matplotlib.ticker import FuncFormatter
+from matplotlib.ticker import FormatStrFormatter
 import warnings
 
 
@@ -167,6 +168,8 @@ class CRegression:
         self.answers_for_testing = None
         self.predictions_classified = None
         self.y_classifier_testing = None
+        self.optimal_y=None
+        self.optimal_error=None
 
         self.dataset_name = None
 
@@ -1282,10 +1285,10 @@ class CRegression:
         for i in range(len(self.app_names_for_classifier)):
             # print(answers.get_vispy_plot_data(i))
             if answers.get_vispy_plot_data_3d(i) != []:
-                data_to_plot = answers.get_vispy_plot_data_3d(i)
-                ax1.plot(data_to_plot[:, 0],
-                         data_to_plot[:, 1],
-                         data_to_plot[:, 2],
+                aes_to_plot = answers.get_vispy_plot_data_3d(i)
+                ax1.plot(aes_to_plot[:, 0],
+                         aes_to_plot[:, 1],
+                         aes_to_plot[:, 2],
                          symbols[i],
                          label=names[i],
                          linewidth=0.0)
@@ -1361,37 +1364,37 @@ class CRegression:
         predictions_from_base_models=self.answers_for_testing
         classified_predictions = self.predictions_classified
         y_classifier = self.y_classifier_testing
-        num_of_plot = len(predictions_from_base_models)+1
+        num_of_regressions = len(predictions_from_base_models)+1
         num_of_bins = 50
 
         labels = classified_predictions.labels
-        data_to_plot = []
+        aes_to_plot = []
 
         variance = []
         xlabels = self.input_base_models
         # print(xlabels)
-        for i in range(num_of_plot-1):
-            data_to_plot.append(np.subtract(np.asarray(
+        for i in range(num_of_regressions-1):
+            aes_to_plot.append(np.subtract(np.asarray(
                 predictions_from_base_models[i].predictions), np.asarray(labels)))
             variance.append(
                 np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
 
-        data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
+        aes_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
         variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
-        data_range = max(data_to_plot[0])-min(data_to_plot[0])
+        data_range = max(aes_to_plot[0])-min(aes_to_plot[0])
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
         xlabels.append("CRegression")
-        fig = plt.figure(num_of_plot,figsize=(7,10))  # , figsize=(9, 6))
-        plot_index=int(str(num_of_plot)+str(1)+str(1))
+        fig = plt.figure(num_of_regressions,figsize=(7,10))  # , figsize=(9, 6))
+        plot_index=int(str(num_of_regressions)+str(1)+str(1))
         ax1 = fig.add_subplot(plot_index)
         # Create the boxplot
-        bp = ax1.boxplot(data_to_plot, showfliers=False, showmeans=True)
+        bp = ax1.boxplot(aes_to_plot, showfliers=False, showmeans=True)
         ax1.set_xticklabels(xlabels)
         ax1.set_ylabel("absolute error")
         print(bp["whiskers"][1].get_data()[1])
         data_range = max(bp["whiskers"][1].get_data()[1])-min(bp["whiskers"][1].get_data()[1])
         # add variance information
-        for i in range(num_of_plot):
+        for i in range(num_of_regressions):
             ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.2f"%variance[i]**0.5)
 
 
@@ -1405,13 +1408,13 @@ class CRegression:
                 return s + r'$\%$'
             else:
                 return s + '%'
-        for i in range(num_of_plot-1):
-            plot_index=int(str(num_of_plot)+str(1)+str(i+2))
+        for i in range(num_of_regressions-1):
+            plot_index=int(str(num_of_regressions)+str(1)+str(i+2))
 
             ax2 = fig.add_subplot(plot_index)
             # Create the histgram
-            n, bins, patches = ax2.hist(abs(data_to_plot[num_of_plot-1]),bins=num_of_bins,normed=True,facecolor='green',alpha=0.2,label='CRegression')
-            n, bins, patches = ax2.hist(abs(data_to_plot[i]),bins=num_of_bins,normed=True,facecolor='purple',alpha=0.4,label=xlabels[i])
+            n, bins, patches = ax2.hist(abs(aes_to_plot[num_of_regressions-1]),bins=num_of_bins,normed=True,facecolor='green',alpha=0.2,label='CRegression')
+            n, bins, patches = ax2.hist(abs(aes_to_plot[i]),bins=num_of_bins,normed=True,facecolor='purple',alpha=0.4,label=xlabels[i])
 
             #fmt = '%2.1f%%' # Format you want the ticks, e.g. '40%'
             #yticks = mtick.FormatStrFormatter(fmt)
@@ -1432,22 +1435,22 @@ class CRegression:
         classified_predictions = self.predictions_classified
         y_classifier = self.y_classifier_testing
 
-        num_of_plot = len(predictions_from_base_models)+1
+        num_of_regressions = len(predictions_from_base_models)+1
         num_of_bins = int(proportion_to_show/bin_percent)
         # opacity = 0.6
         labels = classified_predictions.labels
-        data_to_plot = []
+        aes_to_plot = []
         data_proportions_to_plot = []
 
         variance = []
         xlabels = self.input_base_models
         # print(xlabels)
-        for i in range(num_of_plot-1):
-            data_to_plot.append(np.subtract(np.asarray(
+        for i in range(num_of_regressions-1):
+            aes_to_plot.append(np.subtract(np.asarray(
                 predictions_from_base_models[i].predictions), np.asarray(labels)))
             data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(
                 predictions_from_base_models[i].predictions), np.asarray(labels))))
-            data_for_variance = data_proportion_to_plot[:-5]
+            data_for_variance = data_proportion_to_plot[:-num_of_coutliers_to_delete]
             data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
             data_proportions_to_plot.append(data_proportion_to_plot)
 
@@ -1455,9 +1458,9 @@ class CRegression:
             # variance.append(
             #     np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
 
-        data_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
+        aes_to_plot.append(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels)))
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
-        data_range = max(data_to_plot[0])-min(data_to_plot[0])
+        data_range = max(aes_to_plot[0])-min(aes_to_plot[0])
         data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
         data_for_variance = data_proportion_to_plot[:-5]
         data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
@@ -1467,18 +1470,18 @@ class CRegression:
 
         # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
         xlabels.append("CRegression")
-        fig = plt.figure(num_of_plot,figsize=(7,10))  # , figsize=(9, 6))
-        plot_index=int(str(num_of_plot)+str(1)+str(1))
+        fig = plt.figure(num_of_regressions,figsize=(7,10))  # , figsize=(9, 6))
+        plot_index=int(str(num_of_regressions)+str(1)+str(1))
         ax1 = fig.add_subplot(plot_index)
         # Create the boxplot
-        bp = ax1.boxplot(data_to_plot, showfliers=False, showmeans=True)
+        bp = ax1.boxplot(aes_to_plot, showfliers=False, showmeans=True)
         ax1.set_xticklabels(xlabels)
         ax1.set_ylabel("absolute error")
         ax1.set_title("Dataset: "+self.dataset_name)
         # print(bp["whiskers"][1].get_data()[1])
         data_range = max(bp["whiskers"][1].get_data()[1])-min(bp["whiskers"][1].get_data()[1])
         # add variance information
-        for i in range(num_of_plot):
+        for i in range(num_of_regressions):
             ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.3f"%variance[i]**0.5)
 
 
@@ -1492,12 +1495,12 @@ class CRegression:
                 return s + r'$\%$'
             else:
                 return s + '%'
-        for i in range(num_of_plot-1):
-            plot_index=int(str(num_of_plot)+str(1)+str(i+2))
+        for i in range(num_of_regressions-1):
+            plot_index=int(str(num_of_regressions)+str(1)+str(i+2))
 
             ax2 = fig.add_subplot(plot_index)
             # Create the histgram
-            n, bins, patches = ax2.hist(abs(data_proportions_to_plot[num_of_plot-1]),bins=num_of_bins,normed=True,facecolor='green',alpha=0.2,label='CRegression')
+            n, bins, patches = ax2.hist(abs(data_proportions_to_plot[num_of_regressions-1]),bins=num_of_bins,normed=True,facecolor='green',alpha=0.2,label='CRegression')
             n, bins, patches = ax2.hist(abs(data_proportions_to_plot[i]),bins=num_of_bins,normed=True,facecolor='purple',alpha=0.4,label=xlabels[i])
 
             #fmt = '%2.1f%%' # Format you want the ticks, e.g. '40%'
@@ -1510,6 +1513,216 @@ class CRegression:
             ax2.set_xlabel("Absolute error")
             # ax2.text(30,0.03,xlabels[i])
             ax2.legend()
+        plt.show()
+        return variance
+
+    def boxplot_with_barplot(self,proportion_to_show=0.1,bar_width=0.01,cumulative=True, b_show_rest=False,y_limit=None):
+        bin_num = int(proportion_to_show/bar_width)
+        num_of_coutliers_to_delete = 5 #remove the very bad predictions, the number of points to be removed.
+        predictions_from_base_models=self.answers_for_testing
+        classified_predictions = self.predictions_classified
+        y_classifier = self.y_classifier_testing
+
+        num_of_regressions = len(predictions_from_base_models)+1
+
+        # opacity = 0.6
+        labels = classified_predictions.labels
+        aes_to_plot = []
+        data_proportions_to_plot = []
+        res_to_plot = []
+        re_proportions_to_plot = []
+        res_mins=[]
+        res_maxs=[]
+
+        variance = []
+        xlabels = []
+        xlabels.append("CRegression")
+
+
+
+        # data_range = max(aes_to_plot[0])-min(aes_to_plot[0])
+        data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
+        data_for_variance = data_proportion_to_plot[:-5]
+        data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+        data_proportions_to_plot.append(data_proportion_to_plot)
+        # print(data_proportions_to_plot)
+        variance.append(np.var(data_for_variance))
+
+        ae = np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))
+        aes_to_plot.append(ae)
+        re_to_plot = np.sort(np.abs(np.divide(ae,np.asarray(labels))))
+        re_to_plot = re_to_plot[~np.isnan(re_to_plot)]   #remove Nan value
+        re_to_plot = re_to_plot[re_to_plot<1E308]
+        res_to_plot.append(re_to_plot)
+
+        res_mins.append(min(re_to_plot))
+        res_maxs.append(max(re_to_plot))
+        # print(max(re_to_plot))
+        # print(min(re_to_plot))
+        # print(re_plot_max)
+
+
+        # print(xlabels)
+        for i in range(num_of_regressions-1):
+            ae = np.subtract(np.asarray(
+                predictions_from_base_models[i].predictions), np.asarray(labels))
+            aes_to_plot.append(ae)
+            re_to_plot = np.sort(np.abs(np.divide(ae,np.asarray(labels))))
+            re_to_plot = re_to_plot[~np.isnan(re_to_plot)]   #remove Nan value
+            re_to_plot = re_to_plot[re_to_plot<1E308]
+            res_to_plot.append(re_to_plot)
+            # print(re_to_plot)
+            data_proportion_to_plot = np.sort(np.abs(np.subtract(np.asarray(
+                predictions_from_base_models[i].predictions), np.asarray(labels))))
+            data_for_variance = data_proportion_to_plot[:-num_of_coutliers_to_delete]
+            data_proportion_to_plot=data_proportion_to_plot[:int(proportion_to_show*(len(data_proportion_to_plot)+1))]
+            data_proportions_to_plot.append(data_proportion_to_plot)
+
+            variance.append(np.var(data_for_variance))
+            xlabels.append(self.input_base_models[i])
+
+            # get the min and max re value of each regression model
+            res_mins.append(min(re_to_plot))
+            res_maxs.append(max(re_to_plot))
+            # variance.append(
+            #     np.var(np.subtract(np.asarray(predictions_from_base_models[i].predictions), np.asarray(labels))))
+
+        # get the range of the plot area (note, this range covers n-1 bars, the other bar covers the rest re)
+        ll= min(res_mins)
+        r_max = min(res_maxs)
+        rl = ll + (r_max-ll)*proportion_to_show
+        rl_plus_1_value = (rl-ll)*(bin_num+0.9)/bin_num + ll
+        rl_plus_1 = (rl-ll)*(bin_num+1.0)/bin_num + ll
+        # print(rl)
+        # print(rl_plus_1_value)
+        # print(rl_plus_1)
+        # re_plot_range =  (max(re_to_plot)-min(re_to_plot))*proportion_to_show
+        # re_plot_max = re_plot_range + min(re_to_plot)
+        # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions), np.asarray(labels))))
+
+
+        # variance.append(np.var(np.subtract(np.asarray(classified_predictions.predictions),np.asarray(y_classifier))))
+
+        fig = plt.figure(2,figsize=(7,10))  # , figsize=(9, 6))
+        plot_index=int(str(2)+str(1)+str(1))
+        ax1 = fig.add_subplot(plot_index)
+        # Create the boxplot
+        bp = ax1.boxplot(aes_to_plot, showfliers=False, showmeans=True)
+        ax1.set_xticklabels(xlabels)
+        ax1.set_ylabel("absolute error")
+        ax1.set_title("Dataset: "+self.dataset_name)
+        plt.xticks(rotation=45)
+        # print(bp["whiskers"][1].get_data()[1])
+        data_range = max(bp["whiskers"][1].get_data()[1])-min(bp["whiskers"][1].get_data()[1])
+        # add variance information
+        for i in range(num_of_regressions):
+            ax1.text(float(i+1)+0.01,min(bp["whiskers"][1].get_data()[1])+0.2*data_range,r'$\sigma=$'+"%.3f"%variance[i]**0.5)
+
+
+        def to_percent2(y, position):
+            # Ignore the passed in position. This has the effect of scaling the default
+            # tick locations.
+            s = "%.2f" % (100 * y)
+
+            # The percent symbol needs escaping in latex
+            if matplotlib.rcParams['text.usetex'] is True:
+                return s + r'$\%$'
+            else:
+                return s + '%'
+        def to_percent1(y, position):
+            # Ignore the passed in position. This has the effect of scaling the default
+            # tick locations.
+            s = "%.1f" % (100 * y)
+
+            # The percent symbol needs escaping in latex
+            if matplotlib.rcParams['text.usetex'] is True:
+                return s + r'$\%$'
+            else:
+                return s + '%'
+        def to_percent0(y, position):
+            # Ignore the passed in position. This has the effect of scaling the default
+            # tick locations.
+            s = "%.0f" % (100 * y)
+
+            # The percent symbol needs escaping in latex
+            if matplotlib.rcParams['text.usetex'] is True:
+                return s + r'$\%$'
+            else:
+                return s + '%'
+
+        # num_of_bins =  int((max(re_to_plot)-min(re_to_plot))/re_plot_range*bin_num)
+
+        # re_plot_max
+
+        labels = xlabels
+
+        res_mapping =[]
+        for i in range(num_of_regressions):
+            res_to_plot[i][res_to_plot[i]>rl]=rl_plus_1_value
+            re_mapping = [(xx-ll)/(rl-ll)*proportion_to_show for xx in res_to_plot[i]]
+            res_mapping.append(re_mapping)
+
+        # print(res_mapping)
+        # if not b_show_rest:
+        #     res = []
+        #     for i in range(num_of_regressions):
+        #         res.append(list(filter(lambda a:a<=proportion_to_show,res_mapping[i])))
+        #         # print(list(filter(lambda a:a<=proportion_to_show)))
+        #     res_mapping = res
+        # print(res_mapping)
+
+
+        ax2 = fig.add_subplot(212)
+        if b_show_rest:
+            n, bins, patches = ax2.hist(res_mapping,bins=bin_num+1,normed=True,label=labels,cumulative=cumulative)
+            xxx = range(bin_num+1)
+            xxxx=[i*bar_width for i in xxx]
+            ax2.set_xticks(xxxx)
+            ax2.text(xxxx[-1]+xxxx[1],-0.05,"rest")
+            if y_limit is not None:
+                ax2.set_ylim(y_limit)
+        else:
+            n, bins, patches = ax2.hist(res_mapping,bins=bin_num+1,normed=True,label=labels,cumulative=cumulative)
+            xxx = range(bin_num+1)
+            xxxx=[i*bar_width for i in xxx]
+            ax2.set_xticks(xxxx)
+            ax2.set_xlim([xxxx[0],xxxx[-1]-bar_width*0.05])
+            if y_limit is not None:
+                ax2.set_ylim(y_limit)
+            # ax2.set_ylim([min(),max()])
+        formatter = FuncFormatter(to_percent2)
+        plt.gca().yaxis.set_major_formatter(formatter)
+        formatter1 = FuncFormatter(to_percent0)
+        plt.gca().xaxis.set_major_formatter(formatter1)
+
+        if cumulative:
+            ax2.set_ylabel("Proportion of queries")
+        else:
+            ax2.set_ylabel("Probability")
+        ax2.set_xlabel("Relative error")
+        # ax2.set_xlim([ll,rl_plus_1])
+
+        ax2.legend()
+        # set x ticks
+        # xticks_ax2=[]
+        # for i in range(bin_num):
+        #     xticks_ax2.append("%.1f"%(bar_width*(i+1)*100)+"%")
+        # xticks_ax2.append("rest")
+        # ax2.set_xticklabels(xticks_ax2)
+
+        # for i in range(num_of_regressions-1):
+        #     plot_index=int(str(num_of_regressions)+str(1)+str(i+2))
+
+        #     ax2 = fig.add_subplot(plot_index)
+        #     # Create the histgram
+        #     n, bins, patches = ax2.hist([abs(res_to_plot[num_of_regressions-1]), abs(res_to_plot[i])],bins=num_of_bins,normed=True,label=['CRegression',xlabels[i]])
+        #     formatter = FuncFormatter(to_percent2)
+        #     plt.gca().yaxis.set_major_formatter(formatter)
+        #     formatter0 = FuncFormatter(to_percent0)
+        #     plt.gca().xaxis.set_major_formatter(formatter0)
+        #     ax2.set_ylabel("Probability")
+        #     ax2.set_xlabel("Absolute error")
+        #     ax2.legend()
         plt.show()
         return variance
 
@@ -1953,6 +2166,8 @@ class CRegression:
         y_classifier_testing, errors_ideal = self.init_classifier_training_values(answers_for_testing,
                                                                                   # model_selection_index=index_models,
                                                                                   factor=1)
+        self.optimal_y=y_classifier_testing
+        self.optimal_error=errors_ideal
         # save results of classifier accuracy
         statistics.classifier_accuracy = predictions_classified.predict_precision(y_classifier_testing)
         statistics.NRMSE_ideal = tools.NRMSE(errors_ideal, answers_for_testing[0].labels)
@@ -2033,12 +2248,46 @@ class CRegression:
         s = self.variance_training_points_model**0.5
         tmp = (1+1/self.num_training_points_model+(x-self.averageX_training_points_model)**2/(self.num_training_points_model-1)/self.variance_training_points_model)**0.5
         return t*s*tmp
+    def WLOL_QLOL(self):
+        num_of_regressions = len(self.answers_for_testing)
+        aes=[]
+        res=[]
+        WLOLs=[]
+        QLOLs=[]
+        labels=self.answers_for_testing[0].labels
+        WLE_optimal = sum(np.abs(self.optimal_error))
+        for i in range(num_of_regressions):
+            aes.append(np.abs(np.subtract(np.asarray(
+                self.answers_for_testing[i].predictions), np.asarray(labels))))
+            res.append(np.divide(aes[i],np.asanyarray(labels)))
+            WLOLs.append(sum(aes[i])/WLE_optimal)
+            qle = np.divide(aes[i],np.abs(self.optimal_error))
+            qle=qle[qle!=np.inf]
+            qle=qle[~np.isnan(qle)]
+            QLOLs.append(sum(qle))
+        # Cregression metrics:
+        ae_cr=np.abs(np.subtract(np.asarray(
+                self.predictions_classified.predictions), np.asarray(labels)))
+        aes.append(ae_cr)
+        res.append(np.divide(ae_cr,np.asanyarray(labels)))
+        WLOLs.append(sum(ae_cr)/WLE_optimal)
+        qle = np.divide(ae_cr,np.abs(self.optimal_error))
+        qle=qle[qle!=np.inf]
+        qle=qle[~np.isnan(qle)]
+        QLOLs.append(sum(qle))
+        self.logger.info("WLOL: "+str(WLOLs))
+        self.logger.info("QLOL: "+str(QLOLs))
+        return
+
+        self.optimal_y=y_classifier_testing
+        self.optimal_error=errors_ideal
+
 
 
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load2d(2)
+    data = dl.load5d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2049,7 +2298,9 @@ if __name__ == "__main__":
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
     # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
-    cr = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost,tools.app_pwlf],b_show_plot=False)
+    cr = CRegression(base_models=[  #tools.app_linear,tools.app_poly,tools.app_decision_tree,\
+        tools.app_boosting,tools.app_xgboost],\
+        b_show_plot=False)
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
@@ -2065,7 +2316,11 @@ if __name__ == "__main__":
     #
 
     cr.run(data)
+    cr.WLOL_QLOL()
     # cs.boxplot()
     # cr.matplotlib_plot_2D_single_regression(data)
-    cr.boxplot_with_hist_percent(proportion_to_show=0.10, bin_percent=0.01)
+    cr.boxplot_with_barplot(proportion_to_show=0.5, bar_width=0.05,cumulative=False,\
+        b_show_rest=False,y_limit=[0,10])
+    cr.boxplot_with_barplot(proportion_to_show=0.1, bar_width=0.01,cumulative=True,\
+        b_show_rest=False,y_limit=[0,1.1])
     # cr.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
