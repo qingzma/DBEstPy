@@ -13,3 +13,6 @@ CRegressionRDBMWorkspace.sublime-workspace
 *.log
 *.ipynb
 .idea/
+.idea/workspace.xml
+creg/*.pyc
+results/deletable.log
