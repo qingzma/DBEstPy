@@ -2043,8 +2043,8 @@ class CRegression:
 
 
         # get cluster point
-        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,top=1.0))
-        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing))
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=1.0))
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=0.2))
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
         # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
         #    b_show_god_classifier=True, y_classifier=y_classifier)
@@ -2259,18 +2259,26 @@ class CRegression:
                 error_i.append(error_i_j)
                 NRMSE_comparisons_i.append(tools.NRMSE_with_range(error_i_j, range_query))
 
+
+            # for Cregression NRMSE
+            xs_i_j = [classified_predictions.predictions[j] for j in index_i]
+            error_i_j = [abs(predictions_best_i[j] - xs_i_j[j]) for j in range(len(predictions_best_i))]
+            error_i_j.sort()
+            error_i_j=error_i_j[:int(top*len(answers_for_classifier[0].labels))]
+            # xs_i.append(xs_i_j)
+            error_i.append(error_i_j)
+            NRMSE_comparisons_i.append(tools.NRMSE_with_range(error_i_j, range_query))
+
             # xs.append(xs_i)
             error_models.append(error_i)
 
             NRMSE_comparisons.append(NRMSE_comparisons_i)
 
-            # get the overall NRMSE for the top 20% points in clusters for the same model
-            for i in range(len(self.app_names_deployed)):
-                pass
+
         # compute the NRMSE total for base models
         error_reversed = map(list, zip(*error_models))
         NRMSE_total=[]
-        for i in range(len(self.apps_deployed)):
+        for i in range(len(self.apps_deployed)+1):
             errors_model_i = error_reversed[i]
             errors_model_i_total = []
             for j in range(len(errors_model_i)):
@@ -2379,7 +2387,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load3d(5)
+    data = dl.load3d(4)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
