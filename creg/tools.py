@@ -273,7 +273,7 @@ class PredictionSummary:
         return c
 
     # Evaluate the model on training data
-    def MSE(self, b_exclude_default_prediction=True):
+    def MSE(self, b_exclude_default_prediction=False):
         if len(self.predictions) != len(self.labels):
             print("Error occurs when calculating MSE or RMSE, number mismatch! ")
             sys.exit(0)
@@ -292,10 +292,10 @@ class PredictionSummary:
             result = result / len(self.labels)
             return result
 
-    def RMSE(self, b_exclude_default_prediction=True):
+    def RMSE(self, b_exclude_default_prediction=False):
         return np.sqrt(self.MSE(b_exclude_default_prediction))
 
-    def NRMSE(self, b_exclude_default_prediction=True):
+    def NRMSE(self, b_exclude_default_prediction=False):
         return self.RMSE(b_exclude_default_prediction) / (np.amax(self.labels) - np.amin(self.labels))
 
     def plot(self):

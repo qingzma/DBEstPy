@@ -2,12 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff952b9c-7377-428e-ad81-11c6431ce6f8" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/creg/.ipynb_checkpoints/Untitled-Copy1-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/creg/.ipynb_checkpoints/Untitled-checkpoint.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/creg/Untitled-Copy1.ipynb" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/creg/Untitled.ipynb" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CRegressionRDBMWorkspace.sublime-workspace" afterPath="$PROJECT_DIR$/CRegressionRDBMWorkspace.sublime-workspace" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/creg/core.py" afterPath="$PROJECT_DIR$/creg/core.py" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/creg/tools.py" afterPath="$PROJECT_DIR$/creg/tools.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/deletable.log" afterPath="$PROJECT_DIR$/results/deletable.log" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -18,26 +14,28 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/CRegressionRDBM$core.coverage" NAME="core Coverage Results" MODIFIED="1526302648169" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/creg" />
+    <SUITE FILE_PATH="coverage/CRegressionRDBM$core.coverage" NAME="core Coverage Results" MODIFIED="1526385507982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/creg" />
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="core.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/creg/core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="166">
-              <caret line="2314" column="22" lean-forward="false" selection-start-line="2314" selection-start-column="22" selection-end-line="2314" selection-end-column="22" />
+            <state relative-caret-position="184">
+              <caret line="2259" column="18" lean-forward="false" selection-start-line="2259" selection-start-column="18" selection-end-line="2259" selection-end-column="18" />
               <folding>
-                <marker date="1526305206075" expanded="true" signature="3143:104643" ph="..." />
-                <marker date="1526305206075" expanded="true" signature="104382:104643" ph="..." />
-                <marker date="1526305206075" expanded="true" signature="106702:106738" ph="..." />
-                <marker date="1526305206075" expanded="true" signature="106773:107272" ph="..." />
+                <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>]</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -77,6 +75,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -94,7 +93,6 @@
         </subPane>
       </pane>
       <pane id="Scope" />
-      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -184,18 +182,14 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/creg/core.py</url>
-          <line>2277</line>
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/creg/core.py</url>
-          <line>2323</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="2" />
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+      <option name="time" value="3" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -205,10 +199,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526305206075" expanded="true" signature="3143:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="104382:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106702:106738" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106773:107272" ph="..." />
+            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>
@@ -218,23 +209,27 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526305206075" expanded="true" signature="3143:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="104382:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106702:106738" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106773:107272" ph="..." />
+            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/creg/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="166">
-          <caret line="2314" column="22" lean-forward="false" selection-start-line="2314" selection-start-column="22" selection-end-line="2314" selection-end-column="22" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526305206075" expanded="true" signature="3143:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="104382:104643" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106702:106738" ph="..." />
-            <marker date="1526305206075" expanded="true" signature="106773:107272" ph="..." />
+            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/creg/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="184">
+          <caret line="2259" column="18" lean-forward="false" selection-start-line="2259" selection-start-column="18" selection-end-line="2259" selection-end-column="18" />
+          <folding>
+            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>

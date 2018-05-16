@@ -845,12 +845,37 @@ class CRegression:
         self.classifier_name = tools.classifier_xgboost_name
         return classifier, (end - start).total_seconds()
 
-    def get_cluster_points(self, model_number, y_classifier, training_points_features):
-        results = []
+    def get_cluster_points(self, model_number, y_classifier, points):
+        x = []
         for i, element in enumerate(y_classifier):
             if element == model_number:
-                results.append(np.asarray(training_points_features[i]))
-        return np.asarray(results)
+                x.append(np.asarray(points[i]))
+        return np.asarray(x)
+    def get_cluster_predictions_NRMSEs(self,model_number,y_classifier,answers):
+        clusters_predictions=[]
+        clusters_features=[]
+        clusters_labels=[]
+        clusters_predictions_summary=[]
+        clusters_NRMSEs=[]
+        for cluster_index in range(len(self.apps_deployed)):    # go over different clusters
+            cluster_summary=[]
+            cluster_NRMSE=[]
+            cluster_features=self.get_cluster_points(cluster_index,y_classifier,answers[cluster_index].features)
+            cluster_labels=self.get_cluster_points(cluster_index,y_classifier,answers[cluster_index].labels)
+            for model_index in range(len(self.apps_deployed)): # go over different models
+                cluster_predictions=self.get_cluster_ponts(model_index,y_classifier,answers[cluster_index].predictions)
+                cluster_prediction_summary=tools.PredictionSummary()
+                cluster_prediction_summary.features=cluster_features
+                cluster_prediction_summary.labels=cluster_labels
+                cluster_prediction_summary.predictions = cluster_predictions
+                cluster_summary.append(cluster_prediction_summary)
+                cluster_NRMSE.append(cluster_prediction_summary.NRMSE())
+            clusters_predictions_summary.append(cluster_summary)
+            clusters_NRMSEs.append(cluster_NRMSE)
+        return clusters_NRMSEs
+
+
+
 
     def predict(self, x):
         return self.get_classified_prediction(self.classifier, x)
@@ -2015,6 +2040,11 @@ class CRegression:
         # print summary
         statistics.print_summary()
 
+
+
+        # get cluster point
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,top=1.0))
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing))
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
         # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
         #    b_show_god_classifier=True, y_classifier=y_classifier)
@@ -2200,7 +2230,7 @@ class CRegression:
             self.logger.info(self.boxplot_with_hist_percent(proportion_to_show=0.4))
         return statistics
 
-    def get_NRMSE_for_clusters(self, answers_for_classifier, y_classifier):
+    def get_NRMSE_for_clusters(self, answers_for_classifier, y_classifier,classified_predictions,top=0.2):
         # print(answers_for_classifier[0].labels)
         # print(y_classifier)
         indexs = []
@@ -2222,21 +2252,36 @@ class CRegression:
             # print(predictions_best_i)
             for method_i in range(len(self.app_names_deployed)):
                 xs_i_j = [answers_for_classifier[method_i].predictions[j] for j in index_i]
-                # print(xs_i_j)
                 error_i_j = [abs(predictions_best_i[j] - xs_i_j[j]) for j in range(len(predictions_best_i))]
-                # print(xs_i_j)
-                # print(error_i)
-                xs_i.append(xs_i_j)
+                error_i_j.sort()
+                error_i_j=error_i_j[:int(top*len(answers_for_classifier[0].labels))]
+                # xs_i.append(xs_i_j)
                 error_i.append(error_i_j)
                 NRMSE_comparisons_i.append(tools.NRMSE_with_range(error_i_j, range_query))
 
-            xs.append(xs_i)
+            # xs.append(xs_i)
             error_models.append(error_i)
-            NRMSE_comparisons.append(NRMSE_comparisons_i)
-            # print(NRMSE_comparisons_i)
 
-        # print(error_models)
-        return NRMSE_comparisons
+            NRMSE_comparisons.append(NRMSE_comparisons_i)
+
+            # get the overall NRMSE for the top 20% points in clusters for the same model
+            for i in range(len(self.app_names_deployed)):
+                pass
+        # compute the NRMSE total for base models
+        error_reversed = map(list, zip(*error_models))
+        NRMSE_total=[]
+        for i in range(len(self.apps_deployed)):
+            errors_model_i = error_reversed[i]
+            errors_model_i_total = []
+            for j in range(len(errors_model_i)):
+                for k in range(len(errors_model_i[j])):
+                    errors_model_i_total.append(errors_model_i[j][k])
+            NRMSE_total.append(tools.NRMSE_with_range(errors_model_i_total, range_query))
+
+        # compute the NRMSE for CRegression
+
+
+        return NRMSE_comparisons,NRMSE_total
 
     def CI(self,x,confidence=0.95):
         t = stats.t.ppf(confidence, self.num_training_points_model-2)
@@ -2328,10 +2373,13 @@ class CRegression:
 
 
 
+
+
+
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load5d(4)
+    data = dl.load3d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2359,9 +2407,11 @@ if __name__ == "__main__":
     # # print(predictions0)
     #
 
-    cr.run(data)
-    cr.WLOL_QLOL()
-    cr.WLOL_QLOL_relative_error()
+    cr.run3d(data)
+    # cr.WLOL_QLOL()
+    # cr.WLOL_QLOL_relative_error()
+    #
+    #
     # cs.boxplot()
     # cr.matplotlib_plot_2D_single_regression(data)
     # cr.boxplot_with_barplot(proportion_to_show=0.5, bar_width=0.05,cumulative=False,\
