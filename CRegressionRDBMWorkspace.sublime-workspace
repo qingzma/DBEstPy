@@ -4,6 +4,38 @@
 		"selected_items":
 		[
 			[
+				"error_",
+				"error_models"
+			],
+			[
+				"answers_for",
+				"answers_for_classifier"
+			],
+			[
+				"predictions",
+				"predictions\tstatement"
+			],
+			[
+				"cluster_pre",
+				"cluster_prediction_summary"
+			],
+			[
+				"Predi",
+				"PredictionSummary\tclass"
+			],
+			[
+				"cluster",
+				"cluster_points"
+			],
+			[
+				"testing",
+				"testing_data"
+			],
+			[
+				"y_cla",
+				"y_classifier"
+			],
+			[
 				"optimal",
 				"optimal_error"
 			],
@@ -110,10 +142,6 @@
 			[
 				"b",
 				"bin_percent"
-			],
-			[
-				"y_cla",
-				"y_classifier_testing"
 			],
 			[
 				"app_",
@@ -486,44 +514,16 @@
 			[
 				"getE",
 				"getElementById\t( elementId: DOMString ): Element Document"
-			],
-			[
-				"fun",
-				"function"
-			],
-			[
-				"s",
-				"style"
-			],
-			[
-				"d",
-				"demo"
-			],
-			[
-				"in",
-				"innerHTML"
-			],
-			[
-				"get",
-				"getElementById"
-			],
-			[
-				"t",
-				"type\tAttr"
-			],
-			[
-				"action",
-				"action_page"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"contents": "CRegression:\n    __init__(…)\n    _test_deployed_model(…)\n    get_test_point(…)\n    get_prediction(…)\n    get_predictions(…)\n    get_predictions_from_models_for_testing(…)\n    get_predictions_from_models(…)\n    get_classified_predictions(…)\n    get_classified_prediction(…)\n    load_data(…)\n    deploy_model_sklearn_linear_regression(…)\n        train_sklearn_linear_regression(…)\n        sklearn_lr_predict_fn(…)\n    deploy_model_pwlf_regression(…)\n        train_pwlf_regression(…)\n        pwlf_model_wrapper:\n            __init__(…)\n            predict(…)\n    deploy_model_sklearn_poly_regression(…)\n        train_sklearn_poly_regression(…)\n        sklearn_poly_predict_fn(…)\n    deploy_model_sklearn_knn_regression(…)\n        train_sklearn_knn_regression(…)\n        sklearn_knn_predict_fn(…)\n    deploy_model_sklearn_svr_rbf_regression(…)\n        train_sklearn_rbf_regression(…)\n        sklearn_rbf_predict_fn(…)\n    deploy_model_sklearn_gaussion_process_regression(…)\n        train_sklearn_gp_regression(…)\n        sklearn_gp_predict_fn(…)\n    deploy_model_sklearn_ensemble_adaboost(…)\n        train_sklearn_ensemble_adaboost(…)\n        sklearn_ensemble_adaboost_predict_fn(…)\n    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)\n        train_sklearn_ensemble_gradient_tree_boosting(…)\n        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)\n    deploy_model_sklearn_decision_tree_regression(…)\n        train_sklearn_decision_tree_regression(…)\n        sklearn_decision_tree_predict_fn(…)\n    deploy_xgboost_regression(…)\n    deploy_all_models(…)\n    deploy_ensemble_methods(…)\n    set_app_names_deployed(…)\n    get_app_names_deployed(…)\n    get_predictions_to_build_classifier(…)\n    init_classifier_training_values(…)\n    build_classifier(…)\n            classifier1:\n                predict(…)\n    build_classifier_rbf(…)\n            classifier1:\n                predict(…)\n    build_classifier_xgboost(…)\n            classifier1:\n                predict(…)\n    get_cluster_points(…)\n    predict(…)\n    predicts(…)\n    fit(…)\n    select_classifiers(…)\n            classifier1:\n                predict(…)\n    plot_training_data_2d(…)\n    matplotlib_plot_2D(…)\n    matplotlib_plot_2D_single_regression(…)\n    matplotlib_plot_2D_confidence_interval(…)\n    matplotlib_plot_2D_prediction_interval(…)\n    matplotlib_plot_2D_all_models(…)\n    plot_classified_prediction_curves_2D(…)\n    plot_training_data_3d(…)\n    matplotlib_plot_3D(…)\n    matplotlib_plot_3D_decision_boundary(…)\n    matplotlib_plot_3D_distribution_of_best_model(…)\n    boxplot(…)\n        to_percent(…)\n    boxplot_with_hist_percent(…)\n        to_percent(…)\n    boxplot_with_barplot(…)\n        to_percent2(…)\n        to_percent1(…)\n        to_percent0(…)\n    run2d(…)\n    run3d(…)\n    run(…)\n    get_NRMSE_for_clusters(…)\n    CI(…)\n    PI(…)\n    WLOL_QLOL(…)",
+			"contents": "model_training_time_ensemble(…)\nmodel_training_time_base_models(…)",
 			"settings":
 			{
-				"buffer_size": 2838,
+				"buffer_size": 66,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -533,25 +533,25 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 107119,
+				"buffer_size": 110485,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "setup.py",
+			"file": "creg/plot_results.py",
 			"settings":
 			{
-				"buffer_size": 554,
+				"buffer_size": 1568,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "results/deletable.log",
+			"file": ".gitignore",
 			"settings":
 			{
-				"buffer_size": 6067,
+				"buffer_size": 369,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -587,16 +587,8 @@
 			"file": "creg/tools.py",
 			"settings":
 			{
-				"buffer_size": 33899,
+				"buffer_size": 33963,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "creg/data_loader.py",
-			"settings":
-			{
-				"buffer_size": 30686,
 				"line_ending": "Unix"
 			}
 		},
@@ -643,7 +635,7 @@
 	"command_palette":
 	{
 		"height": 392.0,
-		"last_filter": "doc",
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -734,11 +726,16 @@
 	],
 	"file_history":
 	[
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/u1796377/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
+		"/disk/workspace/paper_git_backup/16127606tztmhbztpbrq/cikm18-optimalregression-sigconf.tex",
+		"/disk/workspace/CRegressionRDBM/results/deletable.log",
+		"/disk/workspace/CRegressionRDBM/setup.py",
+		"/disk/workspace/CRegressionRDBM/.gitignore",
 		"/home/u1796377/workspace/shells/while.sh",
 		"/disk/workspace/CRegressionRDBM/sdfs",
 		"/home/u1796377/workspace/shells/fisrt.sh",
 		"/disk/workspace/CRegressionRDBM/requirements.txt",
-		"/disk/workspace/CRegressionRDBM/.gitignore",
 		"/disk/workspace/CRegressionRDBM/results/6_AVG_0.5.txt",
 		"/disk/workspace/CRegressionRDBM/creg/cli.py",
 		"/disk/workspace/CRegressionRDBM/results/6_SUM_5.txt",
@@ -754,7 +751,6 @@
 		"/disk/workspace/CRegressionRDBM/results/6.txt",
 		"/home/u1796377/.bashrc",
 		"/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
-		"/disk/workspace/CRegressionRDBM/results/deletable.log",
 		"/disk/workspace/CRegressionRDBM/creg/data_loader.py",
 		"/disk/TPC/TPC-DS/tools/makefile",
 		"/disk/workspace/CRegressionRDBM/query/load_data/file1.sql",
@@ -801,7 +797,6 @@
 		"/disk/workspace/CRegressionRDBM/creg/logs.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
 		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/u1796377/.config/sublime-text-3/Packages/TrailingSpaces/README.md",
 		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/sublime_jedi.sublime-settings",
 		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/Default.sublime-mousemap",
@@ -821,7 +816,6 @@
 		"/disk/workspace/CRegressionRDBM/tests/test_basic.py",
 		"/disk/workspace/CRegressionRDBM/creg/Data.py",
 		"/disk/workspace/CRegressionRDBM/creg/run_code.py",
-		"/disk/workspace/CRegressionRDBM/setup.py",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/All Autocomplete.sublime-settings",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/python_anaconda.sublime-build",
 		"/disk/workspace/CRegressionRDBM.sublime-project",
@@ -859,9 +853,7 @@
 		"/home/u1796377/workspace/ant_trial/haha.java",
 		"/home/u1796377/Desktop/myWebSite/test.html",
 		"/var/www/html/index.html",
-		"/home/u1796377/Desktop/myWebSite/myScript.js",
-		"/home/u1796377/Desktop/myWebSite/index.html",
-		"/home/u1796377/Desktop/index.html"
+		"/home/u1796377/Desktop/myWebSite/myScript.js"
 	],
 	"find":
 	{
@@ -879,6 +871,8 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"get_NRMSE_for_clusters",
+			"get_cluster_points",
 			"num_of_plot",
 			"data_to_plot",
 			"num_of_coutliers_to_delete",
@@ -937,7 +931,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 2838,
+						"buffer_size": 66,
 						"regions":
 						{
 						},
@@ -952,474 +946,39 @@
 							"SL.15.region_keys":
 							[
 							],
-							"current_file": "/disk/workspace/CRegressionRDBM/creg/core.py",
+							"current_file": "/disk/workspace/CRegressionRDBM/creg/plot_results.py",
 							"default_dir": "/disk/workspace/CRegressionRDBM",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
 								[
-									3125,
-									3143
+									47,
+									82
 								],
 								[
-									3144,
-									3372
-								],
-								[
-									6094,
-									6151
-								],
-								[
-									6502,
-									6546
-								],
-								[
-									7010,
-									7045
-								],
-								[
-									7077,
-									7116
-								],
-								[
-									9091,
-									9160
-								],
-								[
-									9464,
-									9529
-								],
-								[
-									9747,
-									9804
-								],
-								[
-									13142,
-									13197
-								],
-								[
-									13574,
-									13602
-								],
-								[
-									14416,
-									14484
-								],
-								[
-									14485,
-									14543
-								],
-								[
-									15016,
-									15058
-								],
-								[
-									15273,
-									15349
-								],
-								[
-									15350,
-									15398
-								],
-								[
-									15891,
-									15924
-								],
-								[
-									15925,
-									15960
-								],
-								[
-									15992,
-									16024
-								],
-								[
-									16361,
-									16427
-								],
-								[
-									16428,
-									16484
-								],
-								[
-									16976,
-									17020
-								],
-								[
-									17225,
-									17290
-								],
-								[
-									17291,
-									17346
-								],
-								[
-									17944,
-									17987
-								],
-								[
-									18222,
-									18291
-								],
-								[
-									18292,
-									18347
-								],
-								[
-									18852,
-									18895
-								],
-								[
-									19096,
-									19174
-								],
-								[
-									19175,
-									19229
-								],
-								[
-									19928,
-									19970
-								],
-								[
-									20207,
-									20275
-								],
-								[
-									20276,
-									20334
-								],
-								[
-									20927,
-									20984
-								],
-								[
-									21207,
-									21289
-								],
-								[
-									21290,
-									21362
-								],
-								[
-									21910,
-									21981
-								],
-								[
-									22299,
-									22374
-								],
-								[
-									22375,
-									22440
-								],
-								[
-									22924,
-									22977
-								],
-								[
-									23373,
-									23427
-								],
-								[
-									24135,
-									24182
-								],
-								[
-									28061,
-									28114
-								],
-								[
-									29193,
-									29237
-								],
-								[
-									29299,
-									29336
-								],
-								[
-									29590,
-									29666
-								],
-								[
-									29973,
-									30070
-								],
-								[
-									32184,
-									32262
-								],
-								[
-									32382,
-									32412
-								],
-								[
-									32413,
-									32450
-								],
-								[
-									33159,
-									33239
-								],
-								[
-									33360,
-									33390
-								],
-								[
-									33391,
-									33428
-								],
-								[
-									34134,
-									34213
-								],
-								[
-									34333,
-									34363
-								],
-								[
-									34364,
-									34401
-								],
-								[
-									35134,
-									35221
-								],
-								[
-									35442,
-									35467
-								],
-								[
-									35535,
-									35562
-								],
-								[
-									35644,
-									35723
-								],
-								[
-									37560,
-									37647
-								],
-								[
-									38083,
-									38113
-								],
-								[
-									38114,
-									38151
-								],
-								[
-									40526,
-									40562
-								],
-								[
-									40774,
-									40944
-								],
-								[
-									44912,
-									44990
-								],
-								[
-									46247,
-									46321
-								],
-								[
-									48810,
-									48884
-								],
-								[
-									51337,
-									51475
-								],
-								[
-									53464,
-									53545
-								],
-								[
-									54609,
-									54645
-								],
-								[
-									54862,
-									54920
-								],
-								[
-									56415,
-									56491
-								],
-								[
-									57459,
-									57558
-								],
-								[
-									58523,
-									58545
-								],
-								[
-									60452,
-									60488
-								],
-								[
-									61849,
-									61929
-								],
-								[
-									65054,
-									65090
-								],
-								[
-									66483,
-									66604
-								],
-								[
-									71304,
-									71341
-								],
-								[
-									71696,
-									71733
-								],
-								[
-									72088,
-									72125
-								],
-								[
-									75492,
-									75518
-								],
-								[
-									84162,
-									84188
-								],
-								[
-									92063,
-									92087
-								],
-								[
-									100794,
-									100869
-								],
-								[
-									102385,
-									102420
-								],
-								[
-									102735,
-									102770
-								],
-								[
-									103087,
-									103111
+									594,
+									632
 								]
 							],
 							"symlist":
 							[
-								"CRegression:",
-								"    __init__(…)",
-								"    _test_deployed_model(…)",
-								"    get_test_point(…)",
-								"    get_prediction(…)",
-								"    get_predictions(…)",
-								"    get_predictions_from_models_for_testing(…)",
-								"    get_predictions_from_models(…)",
-								"    get_classified_predictions(…)",
-								"    get_classified_prediction(…)",
-								"    load_data(…)",
-								"    deploy_model_sklearn_linear_regression(…)",
-								"        train_sklearn_linear_regression(…)",
-								"        sklearn_lr_predict_fn(…)",
-								"    deploy_model_pwlf_regression(…)",
-								"        train_pwlf_regression(…)",
-								"        pwlf_model_wrapper:",
-								"            __init__(…)",
-								"            predict(…)",
-								"    deploy_model_sklearn_poly_regression(…)",
-								"        train_sklearn_poly_regression(…)",
-								"        sklearn_poly_predict_fn(…)",
-								"    deploy_model_sklearn_knn_regression(…)",
-								"        train_sklearn_knn_regression(…)",
-								"        sklearn_knn_predict_fn(…)",
-								"    deploy_model_sklearn_svr_rbf_regression(…)",
-								"        train_sklearn_rbf_regression(…)",
-								"        sklearn_rbf_predict_fn(…)",
-								"    deploy_model_sklearn_gaussion_process_regression(…)",
-								"        train_sklearn_gp_regression(…)",
-								"        sklearn_gp_predict_fn(…)",
-								"    deploy_model_sklearn_ensemble_adaboost(…)",
-								"        train_sklearn_ensemble_adaboost(…)",
-								"        sklearn_ensemble_adaboost_predict_fn(…)",
-								"    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)",
-								"        train_sklearn_ensemble_gradient_tree_boosting(…)",
-								"        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)",
-								"    deploy_model_sklearn_decision_tree_regression(…)",
-								"        train_sklearn_decision_tree_regression(…)",
-								"        sklearn_decision_tree_predict_fn(…)",
-								"    deploy_xgboost_regression(…)",
-								"    deploy_all_models(…)",
-								"    deploy_ensemble_methods(…)",
-								"    set_app_names_deployed(…)",
-								"    get_app_names_deployed(…)",
-								"    get_predictions_to_build_classifier(…)",
-								"    init_classifier_training_values(…)",
-								"    build_classifier(…)",
-								"            classifier1:",
-								"                predict(…)",
-								"    build_classifier_rbf(…)",
-								"            classifier1:",
-								"                predict(…)",
-								"    build_classifier_xgboost(…)",
-								"            classifier1:",
-								"                predict(…)",
-								"    get_cluster_points(…)",
-								"    predict(…)",
-								"    predicts(…)",
-								"    fit(…)",
-								"    select_classifiers(…)",
-								"            classifier1:",
-								"                predict(…)",
-								"    plot_training_data_2d(…)",
-								"    matplotlib_plot_2D(…)",
-								"    matplotlib_plot_2D_single_regression(…)",
-								"    matplotlib_plot_2D_confidence_interval(…)",
-								"    matplotlib_plot_2D_prediction_interval(…)",
-								"    matplotlib_plot_2D_all_models(…)",
-								"    plot_classified_prediction_curves_2D(…)",
-								"    plot_training_data_3d(…)",
-								"    matplotlib_plot_3D(…)",
-								"    matplotlib_plot_3D_decision_boundary(…)",
-								"    matplotlib_plot_3D_distribution_of_best_model(…)",
-								"    boxplot(…)",
-								"        to_percent(…)",
-								"    boxplot_with_hist_percent(…)",
-								"        to_percent(…)",
-								"    boxplot_with_barplot(…)",
-								"        to_percent2(…)",
-								"        to_percent1(…)",
-								"        to_percent0(…)",
-								"    run2d(…)",
-								"    run3d(…)",
-								"    run(…)",
-								"    get_NRMSE_for_clusters(…)",
-								"    CI(…)",
-								"    PI(…)",
-								"    WLOL_QLOL(…)"
+								"model_training_time_ensemble(…)",
+								"model_training_time_base_models(…)"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 12.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 10,
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 0,
+			"selected": 1,
 			"sheets":
 			[
 				{
@@ -1428,15 +987,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 107119,
+						"buffer_size": 110485,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								103751,
-								103751
+								58776,
+								58776
 							]
 						],
 						"settings":
@@ -1498,6 +1057,14 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"complete_parameters": false,
@@ -1508,27 +1075,71 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 42793.0,
+						"translation.y": 25475.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "setup.py",
+					"file": "creg/plot_results.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 554,
+						"buffer_size": 1568,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								206,
-								206
+								189,
+								189
+							]
+						],
+						"settings":
+						{
+							"SL.26.region_keys":
+							[
+							],
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"open_with_edit": true,
+							"syntax": "Packages/Python/Python.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 369,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								369,
+								369
 							]
 						],
 						"settings":
@@ -1536,54 +1147,14 @@
 							"SL.16.region_keys":
 							[
 							],
-							"SL.27.region_keys":
-							[
-							],
 							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Git Formats/Git Ignore.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "results/deletable.log",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6067,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"SL.17.region_keys":
-							[
-							],
-							"SL.18.region_keys":
-							[
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Text/Plain text.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1605,6 +1176,9 @@
 						],
 						"settings":
 						{
+							"SL.17.region_keys":
+							[
+							],
 							"SL.18.region_keys":
 							[
 							],
@@ -1631,7 +1205,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5021.0,
+						"translation.y": 5009.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -1657,6 +1231,9 @@
 						"settings":
 						{
 							"SL.17.region_keys":
+							[
+							],
+							"SL.18.region_keys":
 							[
 							],
 							"SL.19.region_keys":
@@ -1725,7 +1302,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1750,6 +1327,9 @@
 							"SL.18.region_keys":
 							[
 							],
+							"SL.19.region_keys":
+							[
+							],
 							"SL.20.region_keys":
 							[
 							],
@@ -1764,10 +1344,10 @@
 							"syntax": "Packages/SQL/SQL.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 912.0,
+						"translation.y": 411.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1776,20 +1356,31 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33899,
+						"buffer_size": 33963,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								11004,
-								11028
+								771,
+								771
+							],
+							[
+								853,
+								853
+							],
+							[
+								935,
+								935
 							]
 						],
 						"settings":
 						{
 							"SL.19.region_keys":
+							[
+							],
+							"SL.20.region_keys":
 							[
 							],
 							"SL.21.region_keys":
@@ -1818,6 +1409,10 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -1826,51 +1421,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3759.0,
+						"translation.y": 285.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
 					"buffer": 8,
-					"file": "creg/data_loader.py",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 30686,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"SL.22.region_keys":
-							[
-							],
-							"SL.34.region_keys":
-							[
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 9,
 					"file": "creg/query_engine.py",
 					"semi_transient": false,
 					"settings":
@@ -1898,6 +1456,9 @@
 							[
 							],
 							"SL.20.region_keys":
+							[
+							],
+							"SL.21.region_keys":
 							[
 							],
 							"SL.22.region_keys":
@@ -1948,14 +1509,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 3846.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 10,
+					"buffer": 9,
 					"file": "creg/logs.py",
 					"semi_transient": false,
 					"settings":
@@ -2015,7 +1576,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 3,
 					"type": "text"
 				}
 			]
@@ -2050,7 +1611,7 @@
 		[
 			0.0,
 			0.2,
-			0.838078500292,
+			0.731458699472,
 			1.0
 		],
 		"rows":
@@ -2079,7 +1640,7 @@
 	},
 	"output.exec":
 	{
-		"height": 185.0
+		"height": 242.0
 	},
 	"output.find_results":
 	{

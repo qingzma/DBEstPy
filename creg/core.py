@@ -2045,6 +2045,7 @@ class CRegression:
         # get cluster point
         print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=1.0))
         print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=0.2))
+        print(predictions_classified.NRMSE())
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
         # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
         #    b_show_god_classifier=True, y_classifier=y_classifier)
@@ -2387,7 +2388,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load3d(4)
+    data = dl.load3d(3)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2400,7 +2401,7 @@ if __name__ == "__main__":
     # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
     cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],\
         #tools.app_boosting,tools.app_xgboost],\
-        b_show_plot=False)
+        b_show_plot=True)
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)

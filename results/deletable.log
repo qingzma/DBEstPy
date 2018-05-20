@@ -1,136 +1,75 @@
-DEBUG - Sucessfully deployed sklearn_linear
-DEBUG - Time cost to train the model is : 0.02083 s.
-DEBUG - Sucessfully deployed sklearn_poly
-DEBUG - Time cost to train the model is : 0.25703 s.
-DEBUG - Sucessfully deployed sklearn_decision_tree
-DEBUG - Time cost to train the model is : 0.09035 s.
-INFO - Start querying to sklearn_linear.
-DEBUG - Finish 104813 queries, average latency is 0.022374 ms. 
-INFO - Total time spent: 2.3451 s.
+DEBUG - Sucessfully deployed LR
+DEBUG - Time cost to train the model is : 0.00656 s.
+DEBUG - Sucessfully deployed PR
+DEBUG - Time cost to train the model is : 0.00988 s.
+DEBUG - Sucessfully deployed DTR
+DEBUG - Time cost to train the model is : 0.00193 s.
+INFO - Start querying to LR.
+DEBUG - Finish 4129 queries, average latency is 0.030431 ms. 
+INFO - Total time spent: 0.1257 s.
 INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to sklearn_poly.
-DEBUG - Finish 104813 queries, average latency is 0.169376 ms. 
-INFO - Total time spent: 17.7528 s.
+INFO - Start querying to PR.
+DEBUG - Finish 4129 queries, average latency is 0.168281 ms. 
+INFO - Total time spent: 0.6948 s.
 INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to sklearn_decision_tree.
-DEBUG - Finish 104813 queries, average latency is 0.024595 ms. 
-INFO - Total time spent: 2.5779 s.
+INFO - Start querying to DTR.
+DEBUG - Finish 4129 queries, average latency is 0.024401 ms. 
+INFO - Total time spent: 0.1008 s.
 INFO - --------------------------------------------------------------------------------------------
 DEBUG - Queries are classified into 3 categories:  
-DEBUG - Counts are: [31161 23638 50014].
-DEBUG - Total time to train xgboost classifier is: 9.2224 s.
-INFO - Start querying to sklearn_linear.
-DEBUG - Finish 171709 queries, average latency is 0.021117 ms. 
-INFO - Total time spent: 3.6260 s.
+DEBUG - Counts are: [1070 1352 1707].
+DEBUG - Total time to train xgboost classifier is: 0.1632 s.
+INFO - Start querying to LR.
+DEBUG - Finish 4129 queries, average latency is 0.022219 ms. 
+INFO - Total time spent: 0.0917 s.
 INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to sklearn_poly.
-DEBUG - Finish 171709 queries, average latency is 0.165655 ms. 
-INFO - Total time spent: 28.4445 s.
+INFO - Start querying to PR.
+DEBUG - Finish 4129 queries, average latency is 0.169330 ms. 
+INFO - Total time spent: 0.6992 s.
 INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to sklearn_decision_tree.
-DEBUG - Finish 171709 queries, average latency is 0.024568 ms. 
-INFO - Total time spent: 4.2186 s.
+INFO - Start querying to DTR.
+DEBUG - Finish 4129 queries, average latency is 0.025665 ms. 
+INFO - Total time spent: 0.1060 s.
 INFO - --------------------------------------------------------------------------------------------
 INFO - Start querying to Classified Prediction System.
 INFO - Queries are classified into 3 categories:  
-INFO - Counts are: [69105 45750 56854].
-DEBUG - Finish 171709 queries, average latency is 0.198374 ms. 
-DEBUG - Average time spent on the classifier is 0.111013 ms.
-DEBUG - Total time spent: 34.06 s.
+INFO - Counts are: [ 626 1526 1977].
+DEBUG - Finish 4129 queries, average latency is 0.210905 ms. 
+DEBUG - Average time spent on the classifier is 0.110451 ms.
+DEBUG - Total time spent: 0.87 s.
 INFO - --------------------------------------------------------------------------------------------
-DEBUG - Sucessfully deployed xgboost
-DEBUG - Time cost to train the model is : 2.54935 s.
-INFO - Start querying to xgboost.
-DEBUG - Finish 171709 queries, average latency is 0.199379 ms. 
-INFO - Total time spent: 34.2351 s.
+DEBUG - Sucessfully deployed XGboost
+DEBUG - Time cost to train the model is : 0.04468 s.
+INFO - Start querying to XGboost.
+DEBUG - Finish 4129 queries, average latency is 0.190893 ms. 
+INFO - Total time spent: 0.7882 s.
 INFO - --------------------------------------------------------------------------------------------
 DEBUG - Queries are classified into 3 categories:  
-DEBUG - Counts are: [61760 52823 57126].
+DEBUG - Counts are: [1047 1385 1697].
 CRITICAL - 
 CRITICAL - 
 CRITICAL - 
 CRITICAL - -----------------------------------------------------------------------------------------------------------
 CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Dataset: 6YearPredictionMSD_with_header.csv, classifier is: xgboost
+CRITICAL - Dataset: 3PRSA_data.csv, classifier is: xgboost
 CRITICAL - Calculation Summary:
 CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Model: ['sklearn_linear', 'sklearn_poly', 'sklearn_decision_tree', 'CRegression', 'xgboost']
-CRITICAL - NRMSE: [0.12290529857414591, 0.12153153014809193, 0.1219936400010025, 0.12211972139059955, 0.12145905897759031]
-CRITICAL - Normalised NRMSE: [1.0064328445446882, 0.9951834868618288, 0.9989675591447366, 1.0, 0.994590043233917]
-CRITICAL - The lower boundary of the NRMSE is: 0.11491309295133867
+CRITICAL - Model: ['LR', 'PR', 'DTR', 'CRegression', 'XGboost']
+CRITICAL - NRMSE: [0.08488077988856259, 0.08842216229352406, 0.08230127697747025, 0.0815430948896702, 0.08351031639832733]
+CRITICAL - Normalised NRMSE: [1.04093154672886, 1.0843611272439613, 1.0092979312206127, 1.0, 1.0241249306433466]
+CRITICAL - The lower boundary of the NRMSE is: 0.07188406220993615
 CRITICAL - 
-CRITICAL - Time cost (seconds) to train the models: [0.013803, 0.129752, 0.181126, 46.65247, 2.549346]
-CRITICAL - Time cost (seconds) to train the linear classifier is: 9.222441
-CRITICAL - Classifier accuracy is 0.557827487202
+CRITICAL - Time cost (seconds) to train the models: [0.006556, 0.009885, 0.001925, 1.126447, 0.044677]
+CRITICAL - Time cost (seconds) to train the linear classifier is: 0.163185
+CRITICAL - Classifier accuracy is 0.591184306127
 CRITICAL - 
-CRITICAL - Average time cost(ms)  on the classifier is: 0.111012992912
-CRITICAL - Average time (ms) to process the queries is: [0.021093890862500728, 0.16698855628676257, 0.024082365616446333, 0.19837383014285798, 0.199378529954749]
-CRITICAL - Total time cost(s) to process queries of each model: [3.622032, 28.673605, 4.135183, 34.235088]
-CRITICAL - Number of instances in the testing dataset is 171709
-CRITICAL - Number of instances in the dataset is 515129
+CRITICAL - Average time cost(ms)  on the classifier is: 0.110450956648
+CRITICAL - Average time (ms) to process the queries is: [0.030431097117946237, 0.16828142407362556, 0.024400823443933153, 0.210905061758295, 0.19089319447808187]
+CRITICAL - Total time cost(s) to process queries of each model: [0.12565, 0.694834, 0.100751, 0.788198]
+CRITICAL - Number of instances in the testing dataset is 4129
+CRITICAL - Number of instances in the dataset is 12387
 CRITICAL - 
-CRITICAL - Program ended! Time cost is 154 s.
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
------------------------------------------------------------------------
-INFO - Start querying to sklearn_decision_tree.
-DEBUG - Finish 104813 queries, average latency is 0.024595 ms. 
-INFO - Total time spent: 2.5779 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 3 categories:  
-DEBUG - Counts are: [31161 23638 50014].
-DEBUG - Total time to traiDEBUG - Total time to train xgboost classifier is: 9.2224 s.
-INFO - Start quDEBUG - Finish 104813 querDEBUG - Finish 171709 queries, average latency is 0.021117 ms. 
-INFO - Total time spent: 3.6260 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start DEBUG - Finish 104813 querDEBUG - Finish 171709 queries, average latency is 0.165655 ms. 
-INFO - Total time spent: 28.4445 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to sklearn_decision_tree.
-DEBUG - Finish 171709 queries, average latency is 0.024568 ms. 
-INFO - Total time spent: 4.2186 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to ClasINFO - Queries are classifINFO - Queries are classified into 3 categories:  
-INFO - Counts are: [69105 45750 56854].
-DEBUG - Finish 171709 queries, average latency is 0.198374 ms. 
-DEBUG - Average time spent on the classifier is 0.111013 ms.
-DEBUG - Total time spent: 34.06 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Sucessfully deployed xgboost
-DEBUG - Time cost to train the model is : 2.54935 s.
-INFO - Start querying to xgboost.
-DEBUG - Finish 171709 queries, average latency is 0.199379 ms. 
-INFO - Total time spent: 34.2351 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 3 categories:  
-DEBUG - Counts are: [61760 52823 57126].
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Dataset: 6YearPredictionMSD_with_header.csv, classifier is: xgboost
-CRITICAL - Calculation Summary:
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Model: ['sklearn_linear', 'sklearn_poly', 'sklearn_decision_tree', 'CRegression', 'xgboost']
-CRITICAL - NRMSE: [0.12290529857414591, 0.12153153014809193, 0.1219936400010025, 0.12211972139059955, 0.12145905897759031]
-CRITICAL - Normalised NRMSE: [1.0064328445446882, 0.9951834868618288, 0.9989675591447366, 1.0, 0.994590043233917]
-CRITICAL - The lower boundary of the NRMSE is: 0.11491309295133867
-CRITICAL - 
-CRITICAL - Time cost (seconds) to train the models: [0.013803, 0.129752, 0.181126, 46.65247, 2.549346]
-CRITICAL - Time cost (seconds) to train the linear classifier is: 9.222441
-CRITICAL - Classifier accuracy is 0.557827487202
-CRITICAL - 
-CRITICAL - Average time cost(ms)  on the classifier is: 0.111012992912
-CRITICAL - Average time (ms) to process the queries is: [0.021093890862500728, 0.16698855628676257, 0.024082365616446333, 0.19837383014285798, 0.199378529954749]
-CRITICAL - Total time cost(s) to process queries of each model: [3.622032, 28.673605, 4.135183, 34.235088]
-CRITICAL - Number of instances in the testing dataset is 171709
-CRITICAL - Number of instances in the dataset is 515129
-CRITICAL - 
-CRITICAL - Program ended! Time cost is 154 s.
+CRITICAL - Program ended! Time cost is 3 s.
 CRITICAL - -----------------------------------------------------------------------------------------------------------
 CRITICAL - -----------------------------------------------------------------------------------------------------------
 CRITICAL - 

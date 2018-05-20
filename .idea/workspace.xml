@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ff952b9c-7377-428e-ad81-11c6431ce6f8" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/CRegressionRDBMWorkspace.sublime-workspace" afterPath="$PROJECT_DIR$/CRegressionRDBMWorkspace.sublime-workspace" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/creg/core.py" afterPath="$PROJECT_DIR$/creg/core.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/creg/tools.py" afterPath="$PROJECT_DIR$/creg/tools.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/results/deletable.log" afterPath="$PROJECT_DIR$/results/deletable.log" />
@@ -21,10 +22,10 @@
       <file leaf-file-name="core.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/creg/core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="184">
-              <caret line="2259" column="18" lean-forward="false" selection-start-line="2259" selection-start-column="18" selection-end-line="2259" selection-end-column="18" />
+            <state relative-caret-position="256">
+              <caret line="2264" column="12" lean-forward="true" selection-start-line="2264" selection-start-column="12" selection-end-line="2264" selection-end-column="12" />
               <folding>
-                <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+                <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
               </folding>
             </state>
           </provider>
@@ -55,9 +56,9 @@
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="183" />
-    <option name="y" value="379" />
+    <option name="y" value="409" />
     <option name="width" value="1855" />
-    <option name="height" value="1200" />
+    <option name="height" value="1170" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -75,6 +76,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
@@ -92,12 +94,11 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Cregression" />
     <property name="WebServerToolWindowFactoryState" value="false" />
   </component>
   <component name="RunDashboard">
@@ -199,7 +200,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+            <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>
@@ -209,7 +210,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+            <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>
@@ -219,17 +220,27 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+            <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/creg/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="184">
-          <caret line="2259" column="18" lean-forward="false" selection-start-line="2259" selection-start-column="18" selection-end-line="2259" selection-end-column="18" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <marker date="1526386039766" expanded="true" signature="3143:35195" ph="..." />
+            <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/creg/core.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="256">
+          <caret line="2264" column="12" lean-forward="true" selection-start-line="2264" selection-start-column="12" selection-end-line="2264" selection-end-column="12" />
+          <folding>
+            <marker date="1526826118610" expanded="true" signature="3143:35195" ph="..." />
           </folding>
         </state>
       </provider>

@@ -28,9 +28,9 @@ color2 = (0.4, 0.4, 0.3)
 color3 = (0.6, 0.7, 0.5)
 color4 = (0.8, 0.9, 0.7)
 color5 = (0.9, 0.1, 0.2)
-colors_matploblib = ['b', 'g', 'r', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
-                     'b', 'g', 'r', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
-                     'b', 'g', 'r', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y']
+colors_matploblib = [ 'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
+                      'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
+                      'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y']
 
 markers_matplotlib = ['*', '1', 'v', 'o', 'h', '.', ',', '^', '<', '>', '2', '3', '4', '8', 's', 'p', 'H', '+', 'D',
                       'd', '|', '_',
@@ -39,35 +39,35 @@ markers_matplotlib = ['*', '1', 'v', 'o', 'h', '.', ',', '^', '<', '>', '2', '3'
                       'H', '+', 'D', 'd', '|', '_']
 # ----------------------------------------------------------------------------------------------------------------#
 # parameters for the ClientClass
-app_linear = "sklearn_linear"
-model_name0 = "sklearn_linear_model"
+app_linear = "LR" #"sklearn_linear"
+#model_name0 = "sklearn_linear_model"
 
-app_poly = "sklearn_poly"
-model_name1 = "sklearn_poly_model"
+app_poly = "PR"#     "sklearn_poly"
+#model_name1 = "sklearn_poly_model"
 
 app_knn = "sklearn_knn"
-model_name2 = "sklearn_knn_model"
+#model_name2 = "sklearn_knn_model"
 
 app_rbf = "sklearn_svr_rbf"
-model_name3 = "sklearn_svr_rbf_model"
+#model_name3 = "sklearn_svr_rbf_model"
 
 app_mllib = "mllib_regression"
-model_name4 = "mllib_lrm_SGD_model"
+#model_name4 = "mllib_lrm_SGD_model"
 
 app_gaussian = "sklearn_gaussian_process"
-model_name5 = "sklearn_gaussian_process_model"
+#model_name5 = "sklearn_gaussian_process_model"
 
 app_adaboost = "sklearn_adaboost"
-model_name6 = "sklearn_ensemble_adaboost_model"
+#model_name6 = "sklearn_ensemble_adaboost_model"
 
-app_boosting = "sklearn_gradient_tree_boosting"
-model_name7 = "sklearn_ensemble_gradient_tree_boosting_model"
+app_boosting = "GBoost"       #"sklearn_gradient_tree_boosting"
+#model_name7 = "sklearn_ensemble_gradient_tree_boosting_model"
 
-app_decision_tree = "sklearn_decision_tree"
-model_name8 = "sklearn_decision_tree_model"
+app_decision_tree = "DTR"          #"sklearn_decision_tree"
+#model_name8 = "sklearn_decision_tree_model"
 
-app_xgboost = "xgboost"
-model_name9 = "xgboost_model"
+app_xgboost = "XGboost"
+#model_name9 = "xgboost_model"
 
 app_pwlf = "piecewise linear"
 
