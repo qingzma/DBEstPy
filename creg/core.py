@@ -51,6 +51,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import AdaBoostRegressor
 from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
+from sklearn.model_selection import GridSearchCV
 # piecewise_linear_fit
 import pwlf
 
@@ -81,6 +82,8 @@ from matplotlib import gridspec
 
 from xgboost import XGBRegressor
 from xgboost import XGBClassifier
+from xgboost.sklearn import XGBRegressor as XGBRegressor_sklearn
+from xgboost.sklearn import XGBClassifier as XGBClassifier_sklearn
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import logging
@@ -109,7 +112,8 @@ markers_matplotlib = ['*', '1', 'v', 'o', 'h', 'x']
 class CRegression:
     def __init__(self, logger_object=None, base_models=None, ensemble_models=None,
                  classifier_type=tools.classifier_xgboost_name,
-                 b_show_plot=False, b_disorder=False, b_select_classifier=False):
+                 b_show_plot=False, b_disorder=False, b_select_classifier=False,
+                 b_cross_validation=True):
         """
 
         Parameters
@@ -172,6 +176,7 @@ class CRegression:
         self.optimal_error=None
 
         self.dataset_name = None
+        self.b_cross_validation=b_cross_validation
 
         # logging.basicConfig(level=logging.ERROR)
 
@@ -542,9 +547,18 @@ class CRegression:
             X = trainingData.features
             y = trainingData.labels
             start = datetime.now()
+            if self.b_cross_validation:
+                parameters = {'max_depth':[1,4,10],'loss':['ls'],'n_estimators':[100],'learning_rate':[0.1],\
+                'min_impurity_split':[1e-1],'learning_rate':[1e-1],'min_samples_split':[7],'verbose':[2],'min_samples_leaf':[1],'subsample':[1.0]}
+                clf = GridSearchCV(GradientBoostingRegressor(), parameters, n_jobs=4)
+                clf.fit(X, y)
+                reg=clf.best_estimator_
+            else:
+                reg = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=1, random_state=0, loss='ls')
+                reg.fit(X, y)
 
-            reg = GradientBoostingRegressor(n_estimators=100, learning_rate=0.1, max_depth=1, random_state=0, loss='ls')
-            reg.fit(X, y)
+
+
 
             end = datetime.now()
             time_train = (end - start).total_seconds()
@@ -566,8 +580,14 @@ class CRegression:
             X = trainingData.features
             y = trainingData.labels
             start = datetime.now()
-            reg = DecisionTreeRegressor(max_depth=4)
-            reg.fit(X, y)
+            if self.b_cross_validation:
+                parameters = {'max_depth':range(3,20)}
+                clf = GridSearchCV(DecisionTreeRegressor(), parameters, n_jobs=4)
+                clf.fit(X, y)
+                reg=clf.best_estimator_
+            else:
+                reg = DecisionTreeRegressor(max_depth=4)
+                reg.fit(X, y)
 
             end = datetime.now()
             time_train = (end - start).total_seconds()
@@ -588,8 +608,16 @@ class CRegression:
         X = trainingData.features
         y = trainingData.labels
         start = datetime.now()
-        reg = XGBRegressor()
-        reg.fit(X, y)
+        if self.b_cross_validation:
+            parameters = {'max_depth':[1,8,12]}
+            clf = GridSearchCV(XGBRegressor_sklearn(), parameters, n_jobs=4)
+            clf.fit(X, y)
+            reg=clf.best_estimator_
+        else:
+            reg = XGBRegressor(max_depth=4)
+            reg.fit(X, y)
+        # reg = XGBRegressor()
+        # reg.fit(X, y)
         end = datetime.now()
 
         time_train = (end - start).total_seconds()
@@ -837,8 +865,16 @@ class CRegression:
                 "Warning: Only one best model is found! New query will only go to this prediction model!")
             self.logger.warning("To use more models, please change the facotr of time term to be greater than 0.")
         else:
-            classifier = XGBClassifier()
-            classifier.fit(training_data_classifier.features, y_classifier)
+            if self.b_cross_validation:
+                parameters = {'max_depth':[1,4,8,12]}
+                clf = GridSearchCV(XGBClassifier_sklearn(), parameters, n_jobs=4)
+                clf.fit(training_data_classifier.features, y_classifier)
+                classifier=clf.best_estimator_
+            else:
+                classifier = XGBRegressor(max_depth=4)
+                classifier.fit(training_data_classifier.features, y_classifier)
+            # classifier = XGBClassifier()
+            # classifier.fit(training_data_classifier.features, y_classifier)
 
         end = datetime.now()
         self.logger.debug("Total time to train xgboost classifier is: %.4f s." % (end - start).total_seconds())
@@ -1905,6 +1941,9 @@ class CRegression:
 
         self.predictions_testing = answers_for_testing
 
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=1.0))
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=0.2))
+
         # self.matplotlib_plot_2D_all_models(predictions_classified,answers_for_testing)
         return statistics
 
@@ -2045,7 +2084,7 @@ class CRegression:
         # get cluster point
         print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=1.0))
         print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=0.2))
-        print(predictions_classified.NRMSE())
+        #print(predictions_classified.NRMSE())
         # vispy_plt.plot_classified_prediction_curves_2D(predictions_classified)
         # vispy_plt.matplotlib_plot_2D(predictions_classified, b_show_division_boundary=True, \
         #    b_show_god_classifier=True, y_classifier=y_classifier)
@@ -2220,6 +2259,12 @@ class CRegression:
         # client.matplotlib_plot_3D(predictions_classified)
         # client.matplotlib_plot_3D_decision_boundary(predictions_classified)
 
+
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=1.0))
+        print(self.get_NRMSE_for_clusters(answers_for_testing,y_classifier_testing,predictions_classified,top=0.2))
+
+
+
         self.predictions_testing = answers_for_testing
 
 
@@ -2388,7 +2433,7 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load3d(3)
+    data = dl.load3d(1)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2399,9 +2444,9 @@ if __name__ == "__main__":
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
     # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
-    cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],\
-        #tools.app_boosting,tools.app_xgboost],\
-        b_show_plot=True)
+    cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree,\
+        tools.app_boosting,tools.app_xgboost],\
+        b_show_plot=False)
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)

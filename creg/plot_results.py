@@ -8,8 +8,8 @@ def model_training_time_ensemble():
     G=[0.00834,0.01452,0.0636,0.58815,7.70868]
     C=[0.074486,0.322717,2.94475,31.227796,306.769922]
     plt.loglog(x,X,"x-",label="XGboost")
-    plt.loglog(x,G,"x-",label="GBoost")
-    plt.loglog(x,C,"x-",label="CRegression")
+    plt.loglog(x,G,"o-",label="GBoost")
+    plt.loglog(x,C,"v-",label="Qreg")
     plt.legend()
     plt.xlabel("Number of training points", fontsize=font_size)
     plt.ylabel("Training time (s)", fontsize=font_size)

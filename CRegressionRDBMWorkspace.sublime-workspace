@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"XGB",
+				"XGBClassifier_sklearn"
+			],
+			[
 				"error_",
 				"error_models"
 			],
@@ -510,20 +514,16 @@
 			[
 				"getEl",
 				"getElementById\t( elementId: DOMString ): Element Document"
-			],
-			[
-				"getE",
-				"getElementById\t( elementId: DOMString ): Element Document"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"contents": "model_training_time_ensemble(…)\nmodel_training_time_base_models(…)",
+			"contents": "CRegression:\n    __init__(…)\n    _test_deployed_model(…)\n    get_test_point(…)\n    get_prediction(…)\n    get_predictions(…)\n    get_predictions_from_models_for_testing(…)\n    get_predictions_from_models(…)\n    get_classified_predictions(…)\n    get_classified_prediction(…)\n    load_data(…)\n    deploy_model_sklearn_linear_regression(…)\n        train_sklearn_linear_regression(…)\n        sklearn_lr_predict_fn(…)\n    deploy_model_pwlf_regression(…)\n        train_pwlf_regression(…)\n        pwlf_model_wrapper:\n            __init__(…)\n            predict(…)\n    deploy_model_sklearn_poly_regression(…)\n        train_sklearn_poly_regression(…)\n        sklearn_poly_predict_fn(…)\n    deploy_model_sklearn_knn_regression(…)\n        train_sklearn_knn_regression(…)\n        sklearn_knn_predict_fn(…)\n    deploy_model_sklearn_svr_rbf_regression(…)\n        train_sklearn_rbf_regression(…)\n        sklearn_rbf_predict_fn(…)\n    deploy_model_sklearn_gaussion_process_regression(…)\n        train_sklearn_gp_regression(…)\n        sklearn_gp_predict_fn(…)\n    deploy_model_sklearn_ensemble_adaboost(…)\n        train_sklearn_ensemble_adaboost(…)\n        sklearn_ensemble_adaboost_predict_fn(…)\n    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)\n        train_sklearn_ensemble_gradient_tree_boosting(…)\n        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)\n    deploy_model_sklearn_decision_tree_regression(…)\n        train_sklearn_decision_tree_regression(…)\n        sklearn_decision_tree_predict_fn(…)\n    deploy_xgboost_regression(…)\n    deploy_all_models(…)\n    deploy_ensemble_methods(…)\n    set_app_names_deployed(…)\n    get_app_names_deployed(…)\n    get_predictions_to_build_classifier(…)\n    init_classifier_training_values(…)\n    build_classifier(…)\n            classifier1:\n                predict(…)\n    build_classifier_rbf(…)\n            classifier1:\n                predict(…)\n    build_classifier_xgboost(…)\n            classifier1:\n                predict(…)\n    get_cluster_points(…)\n    get_cluster_predictions_NRMSEs(…)\n    predict(…)\n    predicts(…)\n    fit(…)\n    select_classifiers(…)\n            classifier1:\n                predict(…)\n    plot_training_data_2d(…)\n    matplotlib_plot_2D(…)\n    matplotlib_plot_2D_single_regression(…)\n    matplotlib_plot_2D_confidence_interval(…)\n    matplotlib_plot_2D_prediction_interval(…)\n    matplotlib_plot_2D_all_models(…)\n    plot_classified_prediction_curves_2D(…)\n    plot_training_data_3d(…)\n    matplotlib_plot_3D(…)\n    matplotlib_plot_3D_decision_boundary(…)\n    matplotlib_plot_3D_distribution_of_best_model(…)\n    boxplot(…)\n        to_percent(…)\n    boxplot_with_hist_percent(…)\n        to_percent(…)\n    boxplot_with_barplot(…)\n        to_percent2(…)\n        to_percent1(…)\n        to_percent0(…)\n    run2d(…)\n    run3d(…)\n    run(…)\n    get_NRMSE_for_clusters(…)\n    CI(…)\n    PI(…)\n    WLOL_QLOL(…)\n    WLOL_QLOL_relative_error(…)",
 			"settings":
 			{
-				"buffer_size": 66,
+				"buffer_size": 2908,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -533,7 +533,7 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 110485,
+				"buffer_size": 112746,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -542,7 +542,7 @@
 			"file": "creg/plot_results.py",
 			"settings":
 			{
-				"buffer_size": 1568,
+				"buffer_size": 1561,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -722,10 +722,12 @@
 	[
 		"/disk/workspace/CRegressionRDBM",
 		"/disk/workspace/CRegressionRDBM/creg",
+		"/disk/workspace/CRegressionRDBM/results",
 		"/disk/workspace/CRegressionRDBM/tests"
 	],
 	"file_history":
 	[
+		"/disk/workspace/CRegressionRDBM/creg/1_ensem.ipynb",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
 		"/home/u1796377/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
 		"/disk/workspace/paper_git_backup/16127606tztmhbztpbrq/cikm18-optimalregression-sigconf.tex",
@@ -852,8 +854,7 @@
 		"/home/u1796377/.config/sublime-text-3/Packages/AdvancedNewFile/README.md",
 		"/home/u1796377/workspace/ant_trial/haha.java",
 		"/home/u1796377/Desktop/myWebSite/test.html",
-		"/var/www/html/index.html",
-		"/home/u1796377/Desktop/myWebSite/myScript.js"
+		"/var/www/html/index.html"
 	],
 	"find":
 	{
@@ -931,12 +932,16 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 66,
+						"buffer_size": 2908,
 						"regions":
 						{
 						},
 						"selection":
 						[
+							[
+								1202,
+								1202
+							]
 						],
 						"settings":
 						{
@@ -946,30 +951,475 @@
 							"SL.15.region_keys":
 							[
 							],
-							"current_file": "/disk/workspace/CRegressionRDBM/creg/plot_results.py",
+							"current_file": "/disk/workspace/CRegressionRDBM/creg/core.py",
 							"default_dir": "/disk/workspace/CRegressionRDBM",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
 								[
-									47,
-									82
+									3306,
+									3324
 								],
 								[
-									594,
-									632
+									3325,
+									3595
+								],
+								[
+									6368,
+									6425
+								],
+								[
+									6776,
+									6820
+								],
+								[
+									7284,
+									7319
+								],
+								[
+									7351,
+									7390
+								],
+								[
+									9365,
+									9434
+								],
+								[
+									9738,
+									9803
+								],
+								[
+									10021,
+									10078
+								],
+								[
+									13416,
+									13471
+								],
+								[
+									13848,
+									13876
+								],
+								[
+									14690,
+									14758
+								],
+								[
+									14759,
+									14817
+								],
+								[
+									15290,
+									15332
+								],
+								[
+									15547,
+									15623
+								],
+								[
+									15624,
+									15672
+								],
+								[
+									16165,
+									16198
+								],
+								[
+									16199,
+									16234
+								],
+								[
+									16266,
+									16298
+								],
+								[
+									16635,
+									16701
+								],
+								[
+									16702,
+									16758
+								],
+								[
+									17250,
+									17294
+								],
+								[
+									17499,
+									17564
+								],
+								[
+									17565,
+									17620
+								],
+								[
+									18218,
+									18261
+								],
+								[
+									18496,
+									18565
+								],
+								[
+									18566,
+									18621
+								],
+								[
+									19126,
+									19169
+								],
+								[
+									19370,
+									19448
+								],
+								[
+									19449,
+									19503
+								],
+								[
+									20202,
+									20244
+								],
+								[
+									20481,
+									20549
+								],
+								[
+									20550,
+									20608
+								],
+								[
+									21201,
+									21258
+								],
+								[
+									21481,
+									21563
+								],
+								[
+									21564,
+									21636
+								],
+								[
+									22665,
+									22736
+								],
+								[
+									23054,
+									23129
+								],
+								[
+									23130,
+									23195
+								],
+								[
+									23952,
+									24005
+								],
+								[
+									24401,
+									24455
+								],
+								[
+									25474,
+									25521
+								],
+								[
+									29400,
+									29453
+								],
+								[
+									30532,
+									30576
+								],
+								[
+									30638,
+									30675
+								],
+								[
+									30929,
+									31005
+								],
+								[
+									31312,
+									31409
+								],
+								[
+									33523,
+									33601
+								],
+								[
+									33721,
+									33751
+								],
+								[
+									33752,
+									33789
+								],
+								[
+									34498,
+									34578
+								],
+								[
+									34699,
+									34729
+								],
+								[
+									34730,
+									34767
+								],
+								[
+									35473,
+									35552
+								],
+								[
+									35672,
+									35702
+								],
+								[
+									35703,
+									35740
+								],
+								[
+									36926,
+									36995
+								],
+								[
+									37179,
+									37258
+								],
+								[
+									38569,
+									38594
+								],
+								[
+									38662,
+									38689
+								],
+								[
+									38771,
+									38850
+								],
+								[
+									40687,
+									40774
+								],
+								[
+									41210,
+									41240
+								],
+								[
+									41241,
+									41278
+								],
+								[
+									43653,
+									43689
+								],
+								[
+									43901,
+									44071
+								],
+								[
+									48039,
+									48117
+								],
+								[
+									49374,
+									49448
+								],
+								[
+									51937,
+									52011
+								],
+								[
+									54464,
+									54602
+								],
+								[
+									56591,
+									56672
+								],
+								[
+									57736,
+									57772
+								],
+								[
+									57989,
+									58047
+								],
+								[
+									59542,
+									59618
+								],
+								[
+									60586,
+									60685
+								],
+								[
+									61650,
+									61672
+								],
+								[
+									63579,
+									63615
+								],
+								[
+									64976,
+									65056
+								],
+								[
+									68181,
+									68217
+								],
+								[
+									69610,
+									69731
+								],
+								[
+									74431,
+									74468
+								],
+								[
+									74823,
+									74860
+								],
+								[
+									75215,
+									75252
+								],
+								[
+									78619,
+									78645
+								],
+								[
+									87522,
+									87548
+								],
+								[
+									95732,
+									95756
+								],
+								[
+									104699,
+									104805
+								],
+								[
+									107355,
+									107390
+								],
+								[
+									107705,
+									107740
+								],
+								[
+									108057,
+									108081
+								],
+								[
+									109313,
+									109352
 								]
 							],
 							"symlist":
 							[
-								"model_training_time_ensemble(…)",
-								"model_training_time_base_models(…)"
+								"CRegression:",
+								"    __init__(…)",
+								"    _test_deployed_model(…)",
+								"    get_test_point(…)",
+								"    get_prediction(…)",
+								"    get_predictions(…)",
+								"    get_predictions_from_models_for_testing(…)",
+								"    get_predictions_from_models(…)",
+								"    get_classified_predictions(…)",
+								"    get_classified_prediction(…)",
+								"    load_data(…)",
+								"    deploy_model_sklearn_linear_regression(…)",
+								"        train_sklearn_linear_regression(…)",
+								"        sklearn_lr_predict_fn(…)",
+								"    deploy_model_pwlf_regression(…)",
+								"        train_pwlf_regression(…)",
+								"        pwlf_model_wrapper:",
+								"            __init__(…)",
+								"            predict(…)",
+								"    deploy_model_sklearn_poly_regression(…)",
+								"        train_sklearn_poly_regression(…)",
+								"        sklearn_poly_predict_fn(…)",
+								"    deploy_model_sklearn_knn_regression(…)",
+								"        train_sklearn_knn_regression(…)",
+								"        sklearn_knn_predict_fn(…)",
+								"    deploy_model_sklearn_svr_rbf_regression(…)",
+								"        train_sklearn_rbf_regression(…)",
+								"        sklearn_rbf_predict_fn(…)",
+								"    deploy_model_sklearn_gaussion_process_regression(…)",
+								"        train_sklearn_gp_regression(…)",
+								"        sklearn_gp_predict_fn(…)",
+								"    deploy_model_sklearn_ensemble_adaboost(…)",
+								"        train_sklearn_ensemble_adaboost(…)",
+								"        sklearn_ensemble_adaboost_predict_fn(…)",
+								"    deploy_model_sklearn_ensemble_gradient_tree_boosting(…)",
+								"        train_sklearn_ensemble_gradient_tree_boosting(…)",
+								"        sklearn_ensemble_gradient_tree_boosting_predict_fn(…)",
+								"    deploy_model_sklearn_decision_tree_regression(…)",
+								"        train_sklearn_decision_tree_regression(…)",
+								"        sklearn_decision_tree_predict_fn(…)",
+								"    deploy_xgboost_regression(…)",
+								"    deploy_all_models(…)",
+								"    deploy_ensemble_methods(…)",
+								"    set_app_names_deployed(…)",
+								"    get_app_names_deployed(…)",
+								"    get_predictions_to_build_classifier(…)",
+								"    init_classifier_training_values(…)",
+								"    build_classifier(…)",
+								"            classifier1:",
+								"                predict(…)",
+								"    build_classifier_rbf(…)",
+								"            classifier1:",
+								"                predict(…)",
+								"    build_classifier_xgboost(…)",
+								"            classifier1:",
+								"                predict(…)",
+								"    get_cluster_points(…)",
+								"    get_cluster_predictions_NRMSEs(…)",
+								"    predict(…)",
+								"    predicts(…)",
+								"    fit(…)",
+								"    select_classifiers(…)",
+								"            classifier1:",
+								"                predict(…)",
+								"    plot_training_data_2d(…)",
+								"    matplotlib_plot_2D(…)",
+								"    matplotlib_plot_2D_single_regression(…)",
+								"    matplotlib_plot_2D_confidence_interval(…)",
+								"    matplotlib_plot_2D_prediction_interval(…)",
+								"    matplotlib_plot_2D_all_models(…)",
+								"    plot_classified_prediction_curves_2D(…)",
+								"    plot_training_data_3d(…)",
+								"    matplotlib_plot_3D(…)",
+								"    matplotlib_plot_3D_decision_boundary(…)",
+								"    matplotlib_plot_3D_distribution_of_best_model(…)",
+								"    boxplot(…)",
+								"        to_percent(…)",
+								"    boxplot_with_hist_percent(…)",
+								"        to_percent(…)",
+								"    boxplot_with_barplot(…)",
+								"        to_percent2(…)",
+								"        to_percent1(…)",
+								"        to_percent0(…)",
+								"    run2d(…)",
+								"    run3d(…)",
+								"    run(…)",
+								"    get_NRMSE_for_clusters(…)",
+								"    CI(…)",
+								"    PI(…)",
+								"    WLOL_QLOL(…)",
+								"    WLOL_QLOL_relative_error(…)"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 276.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 9,
@@ -978,7 +1428,7 @@
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
@@ -987,15 +1437,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 110485,
+						"buffer_size": 112746,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								58776,
-								58776
+								21432,
+								21432
 							]
 						],
 						"settings":
@@ -1065,6 +1515,14 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"complete_parameters": false,
@@ -1075,10 +1533,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 25475.0,
+						"translation.y": 10131.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
@@ -1087,19 +1545,22 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1568,
+						"buffer_size": 1561,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								189,
-								189
+								373,
+								373
 							]
 						],
 						"settings":
 						{
+							"SL.16.region_keys":
+							[
+							],
 							"SL.26.region_keys":
 							[
 							],
@@ -1116,13 +1577,14 @@
 							],
 							"git_gutter_is_enabled": true,
 							"open_with_edit": true,
+							"show_definitions": false,
 							"syntax": "Packages/Python/Python.sublime-syntax"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
@@ -1205,10 +1667,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 5009.0,
+						"translation.y": 4988.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1302,7 +1764,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1344,10 +1806,10 @@
 							"syntax": "Packages/SQL/SQL.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 411.0,
+						"translation.y": 390.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1421,10 +1883,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 285.0,
+						"translation.y": 1030.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1512,7 +1974,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1573,10 +2035,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1197.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				}
 			]
@@ -1640,7 +2102,7 @@
 	},
 	"output.exec":
 	{
-		"height": 242.0
+		"height": 221.0
 	},
 	"output.find_results":
 	{
