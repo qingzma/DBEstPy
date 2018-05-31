@@ -18,7 +18,7 @@ default_mass_query_number = 5
 logger_file = "../results/deletable.log"
 
 class Query_Engine_2d:
-    def __init__(self,dataID,b_allow_repeated_value=True,logger_file=logger_file):
+    def __init__(self,dataID,b_allow_repeated_value=True,logger_file=logger_file,num_of_points=None):
         self.logger = logs.QueryLogs(log=logger_file)
         self.logger.set_no_output()
         self.data = dl.load2d(dataID)
@@ -27,7 +27,10 @@ class Query_Engine_2d:
         self.cRegression = CRegression(logger_object=self.logger)
         self.cRegression.fit(self.data)
         self.logger.set_logging(file_name=logger_file)
-        self.qe = QueryEngine(self.cRegression, logger_object=self.logger)
+        if num_of_points is None:
+            self.qe = QueryEngine(self.cRegression, logger_object=self.logger)
+        else:
+            self.qe = QueryEngine(self.cRegression, logger_object=self.logger,num_training_points=num_of_points)
         self.qe.density_estimation()
         self.q_min = min(self.data.features)
         self.q_max = max(self.data.features)
@@ -55,7 +58,20 @@ class Query_Engine_2d:
     def query_2d_count(self,l=0,h=100):
         count,time = self.qe.approximate_count_from_to(l ,h, 0)
         return count, time
-    def mass_query_sum(self,percent=5,number=default_mass_query_number):
+    def query_2d_variance_x(self,l=0,h=100):
+        count,time = self.qe.approximate_variance_x_from_to(l ,h, 0)
+        return count, time
+    def query_2d_variance_y(self,l=0,h=100):
+        count,time = self.qe.approximate_variance_y_from_to(l ,h, 0)
+        return count, time
+    def query_2d_covariance(self,l=0,h=100):
+        count,time = self.qe.approximate_covar_from_to(l ,h, 0)
+        return count, time
+    def query_2d_correlation(self,l=0,h=100):
+        count,time = self.qe.approximate_corr_from_to(l ,h, 0)
+        return count, time
+
+    def mass_query_sum(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -69,9 +85,9 @@ class Query_Engine_2d:
             approx_result, approx_time = self.query_2d_sum(l=q_left,h=q_right)
             self.logger.logger.info(approx_result)
 
-            sqlStr = "SELECT SUM(y) FROM table" + str(self.dataID) +" WHERE  x BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            sqlStr = "SELECT SUM("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
-            exact_result, exact_time = self.query2hive(sql=sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
 
@@ -81,14 +97,14 @@ class Query_Engine_2d:
                 approx_results.append(approx_result)
                 approx_times.append(approx_time)
             else:
-                self.logger.logger.warning("HIVE returns None, so this record is ignored.")
-        self.logger.logger.warning("HIVE query results: " + str(exact_results))
-        self.logger.logger.warning("HIVE query time cost: " + str(exact_times))
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
         self.logger.logger.warning("Approximate query results: " + str(approx_results))
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_avg(self,percent=5,number=default_mass_query_number):
+    def mass_query_avg(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -103,9 +119,9 @@ class Query_Engine_2d:
             approx_result, approx_time = self.query_2d_avg(l=q_left,h=q_right)
             self.logger.logger.info(approx_result)
 
-            sqlStr = "SELECT AVG(y) FROM table" + str(self.dataID) +" WHERE  x BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            sqlStr = "SELECT AVG("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
-            exact_result, exact_time = self.query2hive(sql=sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
             if (exact_result is not None) and (exact_result is not 0):
@@ -114,14 +130,14 @@ class Query_Engine_2d:
                 approx_results.append(approx_result)
                 approx_times.append(approx_time)
             else:
-                self.logger.logger.warning("HIVE returns None, so this record is ignored.")
-        self.logger.logger.warning("HIVE query results: " + str(exact_results))
-        self.logger.logger.warning("HIVE query time cost: " + str(exact_times))
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
         self.logger.logger.warning("Approximate query results: " + str(approx_results))
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_count(self,percent=5,number=default_mass_query_number):
+    def mass_query_count(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -136,9 +152,9 @@ class Query_Engine_2d:
             approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)
             self.logger.logger.info(approx_result)
 
-            sqlStr = "SELECT COUNT(y) FROM table" + str(self.dataID) +" WHERE  x BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
-            exact_result, exact_time = self.query2hive(sql=sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
             if (exact_result is not None) and (exact_result is not 0):
@@ -147,9 +163,142 @@ class Query_Engine_2d:
                 approx_results.append(approx_result)
                 approx_times.append(approx_time)
             else:
-                self.logger.logger.warning("HIVE returns None, so this record is ignored.")
-        self.logger.logger.warning("HIVE query results: " + str(exact_results))
-        self.logger.logger.warning("HIVE query time cost: " + str(exact_times))
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
+        self.logger.logger.warning("Approximate query results: " + str(approx_results))
+        self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        return exact_results, approx_results, exact_times, approx_times
+
+    def mass_query_variance_x(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
+        random.seed(1.0)
+        exact_results = []
+        exact_times = []
+        approx_results = []
+        approx_times = []
+        for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
+            q_centre = random.uniform(self.q_min,self.q_max)
+            q_left = q_centre - q_range_half_length
+            q_right = q_centre + q_range_half_length
+            approx_result, approx_time = self.query_2d_variance_x(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
+
+            sqlStr = "SELECT VARIANCE("+x+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            self.logger.logger.info(sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
+
+            self.logger.logger.info(exact_result)
+            if (exact_result is not None) and (exact_result is not 0):
+                exact_results.append(exact_result)
+                exact_times.append(exact_time)
+                approx_results.append(approx_result)
+                approx_times.append(approx_time)
+            else:
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
+        self.logger.logger.warning("Approximate query results: " + str(approx_results))
+        self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        return exact_results, approx_results, exact_times, approx_times
+
+
+    def mass_query_variance_y(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
+        random.seed(1.0)
+        exact_results = []
+        exact_times = []
+        approx_results = []
+        approx_times = []
+        for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
+            q_centre = random.uniform(self.q_min,self.q_max)
+            q_left = q_centre - q_range_half_length
+            q_right = q_centre + q_range_half_length
+            approx_result, approx_time = self.query_2d_variance_y(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
+
+            sqlStr = "SELECT VARIANCE("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            self.logger.logger.info(sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
+
+            self.logger.logger.info(exact_result)
+            if (exact_result is not None) and (exact_result is not 0):
+                exact_results.append(exact_result)
+                exact_times.append(exact_time)
+                approx_results.append(approx_result)
+                approx_times.append(approx_time)
+            else:
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
+        self.logger.logger.warning("Approximate query results: " + str(approx_results))
+        self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        return exact_results, approx_results, exact_times, approx_times
+
+    def mass_query_covariance(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
+        random.seed(1.0)
+        exact_results = []
+        exact_times = []
+        approx_results = []
+        approx_times = []
+        for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
+            q_centre = random.uniform(self.q_min,self.q_max)
+            q_left = q_centre - q_range_half_length
+            q_right = q_centre + q_range_half_length
+            approx_result, approx_time = self.query_2d_covariance(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
+
+            sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            self.logger.logger.info(sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
+
+            self.logger.logger.info(exact_result)
+            if (exact_result is not None) and (exact_result is not 0):
+                exact_results.append(exact_result)
+                exact_times.append(exact_time)
+                approx_results.append(approx_result)
+                approx_times.append(approx_time)
+            else:
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
+        self.logger.logger.warning("Approximate query results: " + str(approx_results))
+        self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        return exact_results, approx_results, exact_times, approx_times
+
+    def mass_query_correlation(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
+        random.seed(1.0)
+        exact_results = []
+        exact_times = []
+        approx_results = []
+        approx_times = []
+        for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
+            q_centre = random.uniform(self.q_min,self.q_max)
+            q_left = q_centre - q_range_half_length
+            q_right = q_centre + q_range_half_length
+            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
+
+            sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            self.logger.logger.info(sqlStr)
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
+
+            self.logger.logger.info(exact_result)
+            if (exact_result is not None) and (exact_result is not 0):
+                exact_results.append(exact_result)
+                exact_times.append(exact_time)
+                approx_results.append(approx_result)
+                approx_times.append(approx_time)
+            else:
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
         self.logger.logger.warning("Approximate query results: " + str(approx_results))
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
@@ -169,16 +318,18 @@ class Query_Engine_2d:
 
 
 
+    def query2hive(self,sql="SHOW TABLES",use_server=True):
+        if use_server:
+            host = "137.205.118.65"
+        else:
+            host = "localhost"
 
 
-    def query2hive(self,sql="SHOW TABLES"):
-
-
-        with pyhs2.connect(host='localhost',
+        with pyhs2.connect(host=host,
                        port=10000,
                        authMechanism="PLAIN",
                        user='hiveuser',
-                       password='hivepassword',
+                       password='bayern',
                        database='default') as conn:
             with conn.cursor() as cur:
                 #Show databases
@@ -194,13 +345,18 @@ class Query_Engine_2d:
                 # print cur.getSchema()
 
                 #Fetch table results
+                self.logger.logger.info("Time spent for HIVE query: %.4fs." % time_cost)
                 for i in cur.fetch():
-                    self.logger.logger.info("Time spent for HIVE query: %.4fs." % time_cost)
-                    return i[0], time_cost
+                    self.logger.logger.info(i)
+        return i[0], time_cost
 
-    def query2mysql(self,sql="SHOW TABLES"):
+    def query2mysql(self,sql="SHOW TABLES",use_server=True):
         # Open database connection
-        db = MySQLdb.connect("127.0.0.1","hiveuser","hivepassword","hivedb" )
+        # db = MySQLdb.connect("127.0.0.1","hiveuser","bayern","hivedb" )
+        if use_server:
+            db = MySQLdb.connect("137.205.118.65","u1796377","bayern","hivedb",port=3306 )
+        else:
+            db = MySQLdb.connect("127.0.0.1","hiveuser","bayern","hivedb",port=3306 )
 
         # prepare a cursor object using cursor() method
         cursor = db.cursor()
@@ -209,25 +365,32 @@ class Query_Engine_2d:
         # cursor.execute("DROP TABLE IF EXISTS EMPLOYEE")
 
         # Create table as per requirement
-        sql = sql
-
+        # sql = sql
+        start = datetime.now()
         cursor.execute(sql)
         results = cursor.fetchall()
+
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        self.logger.logger.info("Time spent for MYSQL query: %.4fs." % time_cost)
         for row in results:
-            print row
+            self.logger.logger.info(row)
 
         # disconnect from server
         db.close()
+        return row[0], time_cost
 
 
 
 
 if __name__ == '__main__':
-    qe2d = Query_Engine_2d(5)
+    qe2d = Query_Engine_2d("10k",num_of_points=1000000)
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()
     #
-    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(number=1,percent=1)
-    # qe2d.relative_error(exact_results, approx_results)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(number=5,percent=1)
+    qe2d.relative_error(exact_results, approx_results)
     # qe2d.time_ratio(exact_times, approx_times)
-    qe2d.query2mysql("show columns from price_cost_sample_1000000");
+    # qe2d.query2mysql("show columns from price_cost_sample_1000000")
+    # qe2d.query2mysql(sql="select * from price_cost_1t_sample_1m limit 1")
+    # qe2d.query2hive()
 

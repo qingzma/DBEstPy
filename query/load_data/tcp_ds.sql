@@ -1,4 +1,4 @@
-CREATE EXTERNAL TABLE store_sales ( ss_sold_date_sk           INT,
+CREATE EXTERNAL TABLE store_sales_1t ( ss_sold_date_sk           INT,
 ss_sold_time_sk           INT,
 ss_item_sk                INT,
 ss_customer_sk            INT,
@@ -24,9 +24,11 @@ ss_net_profit             DECIMAL(7,2)
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
-LOCATION '/hive/data/store_sales.dat';
+LOCATION '/user/hive/warehouse/store_sales_1t.dat';
 
-LOAD DATA INPATH 'hdfs:/data/store_sales.dat' INTO TABLE store_sales;
+LOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;
+LOAD DATA INPATH 'hdfs:/data/1T.dat' INTO TABLE store_sales_1t;
+
 
 # select the x y columns
 CREATE TABLE xy AS SELECT ss_wholesale_cost,ss_list_price  FROM store_sales;
@@ -35,7 +37,7 @@ CREATE TABLE price_cost AS SELECT ss_list_price,ss_wholesale_cost FROM xy
     WHERE ss_list_price IS NOT NULL
     AND ss_wholesale_cost IS NOT NULL;
 # the two sql commands above could be merged to one:
-CREATE TABLE price_cost AS SELECT ss_list_price,ss_wholesale_cost FROM store_sales
+CREATE TABLE price_cost_1t AS SELECT ss_list_price,ss_wholesale_cost FROM store_sales_1t
     WHERE ss_list_price IS NOT NULL
     AND ss_wholesale_cost IS NOT NULL;
 
@@ -46,22 +48,38 @@ CREATE TABLE price_cost AS SELECT ss_list_price,ss_wholesale_cost FROM store_sal
 #hive -e 'select * from xy' | sed 's/[\t]/,/g'  > /home/u1796377/Desktop/xy_without_header.csv
 
 # export the table to csv file.
-INSERT OVERWRITE LOCAL DIRECTORY '/disk/hadoopDir/warehouse'
+INSERT OVERWRITE LOCAL DIRECTORY '1t'
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY ','
-select * from price_cost;
+select * from price_cost_1t;
 
 
 # load table to mysql
 # fisrt start the mysql server client
-create table price_cost_sample_1000000 (
+create table price_cost_1t_sample_5m (
 ss_list_price DOUBLE,
 ss_wholesale_cost DOUBLE
 );
 # copy the table to the directory to be submitted to mysql
 sudo cp /disk/hadoopDir/warehouse/sample.csv /var/lib/mysql-files/sample.csv
 # load the file;
-LOAD DATA INFILE "/var/lib/mysql-files/sample.csv"
-INTO TABLE price_cost_sample_1000000
+LOAD DATA INFILE "/var/lib/mysql-files/1t.csv"
+INTO TABLE price_cost_1t
 COLUMNS TERMINATED BY ','
 LINES TERMINATED BY '\n';
+
+
+
+
+
+
+CREATE EXTERNAL TABLE store_sales_5m (
+ss_list_price             DECIMAL(7,2),
+ss_wholesale_cost         DECIMAL(7,2)
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/user/hive/warehouse/price_cost_1t_sample_5m.dat';
+
+LOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;
+LOAD DATA INPATH 'hdfs:/data/5m.csv' INTO TABLE price_cost_1t_sample_5m;

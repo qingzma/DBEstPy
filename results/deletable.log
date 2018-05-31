@@ -1,220 +1,45 @@
-DEBUG - Sucessfully deployed GBoost
-DEBUG - Time cost to train the model is : 925.52358 s.
-DEBUG - Sucessfully deployed XGboost
-DEBUG - Time cost to train the model is : 203.61751 s.
-INFO - Start querying to GBoost.
-DEBUG - Finish 1392835 queries, average latency is 0.055291 ms. 
-INFO - Total time spent: 77.0110 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392835 queries, average latency is 0.198121 ms. 
-INFO - Total time spent: 275.9501 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [  98241 1294594].
-DEBUG - Total time to train xgboost classifier is: 189.7011 s.
-INFO - Start querying to GBoost.
-DEBUG - Finish 1392834 queries, average latency is 0.055969 ms. 
-INFO - Total time spent: 77.9552 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.198173 ms. 
-INFO - Total time spent: 276.0218 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to Classified Prediction System.
-INFO - Queries are classified into 2 categories:  
-INFO - Counts are: [      0 1392834].
-DEBUG - Finish 1392834 queries, average latency is 0.145946 ms. 
-DEBUG - Average time spent on the classifier is 0.092372 ms.
-DEBUG - Total time spent: 203.28 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Sucessfully deployed XGboost
-DEBUG - Time cost to train the model is : 128.40345 s.
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.196430 ms. 
-INFO - Total time spent: 273.5949 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [      0 1392834].
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Dataset: 7ethylene_methane_with_header.csv, classifier is: xgboost
-CRITICAL - Calculation Summary:
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Model: ['GBoost', 'XGboost', 'CRegression', 'XGboost']
-CRITICAL - NRMSE: [1.1475194020470787, 1.1471614230979084, 1.1471614230979084, 1.1471614230979084]
-CRITICAL - Normalised NRMSE: [1.0003120562999788, 1.0, 1.0, 1.0]
-CRITICAL - The lower boundary of the NRMSE is: 1.1471614230979084
-CRITICAL - 
-CRITICAL - Time cost (seconds) to train the models: [925.523584, 203.617515, 1679.837042, 128.403448]
-CRITICAL - Time cost (seconds) to train the linear classifier is: 189.701113
-CRITICAL - Classifier accuracy is 1.0
-CRITICAL - 
-CRITICAL - Average time cost(ms)  on the classifier is: 0.0923721663897
-CRITICAL - Average time (ms) to process the queries is: [0.05529083416197899, 0.19812118305470494, 0.1459460746937539, 0.1964303513555815]
-CRITICAL - Total time cost(s) to process queries of each model: [77.011009, 275.950118, 273.594872]
-CRITICAL - Number of instances in the testing dataset is 1392834
-CRITICAL - Number of instances in the dataset is 4178504
-CRITICAL - 
-CRITICAL - Program ended! Time cost is 2647 s.
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-INFO - **************************************************************
-INFO - [1298.5045917530747, 1297.9483795807687, 1297.9483795807687]
-512]
- - Sucessfully deployed GBoost
-DEBUG - Time cost to train the model is : 925.52358 s.
-DEBUG - Sucessfully deployed XGboost
-DEBUG - Time cost to train the model is : 203.61751 s.
-INFO - Start querying to GBoost.
-DEBUG - Finish 1392835 queries, average latency is 0.055291 ms. 
-INFO - Total time spent: 77.0110 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392835 queries, average latency is 0.198121 ms. 
-INFO - Total time spent: 275.9501 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [  98241 1294594].
-DEBUG - Total time to train xgboost classifier is: 189.7011 s.
-INFO - Start querying to GBoost.
-DEBUG - Finish 1392834 queries, average latency is 0.055969 ms. 
-INFO - Total time spent: 77.9552 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.198173 ms. 
-INFO - Total time spent: 276.0218 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to Classified Prediction System.
-INFO - Queries are classified into 2 categories:  
-INFO - Counts are: [      0 1392834].
-DEBUG - Finish 1392834 queries, average latency is 0.145946 ms. 
-DEBUG - Average time spent on the classifier is 0.092372 ms.
-DEBUG - Total time spent: 203.28 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Sucessfully deployed XGboost
-DEBUG - Time cost to train the model is : 128.40345 s.
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.196430 ms. 
-INFO - Total time spent: 273.5949 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [      0 1392834].
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Dataset: 7ethylene_methane_with_header.csv, classifier is: xgboost
-CRITICAL - Calculation Summary:
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Model: ['GBoost', 'XGboost', 'CRegression', 'XGboost']
-CRITICAL - NRMSE: [1.1475194020470787, 1.1471614230979084, 1.1471614230979084, 1.1471614230979084]
-CRITICAL - Normalised NRMSE: [1.0003120562999788, 1.0, 1.0, 1.0]
-CRITICAL - The lower boundary of the NRMSE is: 1.1471614230979084
-CRITICAL - 
-CRITICAL - Time cost (seconds) to train the models: [925.523584, 203.617515, 1679.837042, 128.403448]
-CRITICAL - Time cost (seconds) to train the linear classifier is: 189.701113
-CRITICAL - Classifier accuracy is 1.0
-CRITICAL - 
-CRITICAL - Average time cost(ms)  on the classifier is: 0.0923721663897
-CRITICAL - Average time (ms) to process the queries is: [0.05529083416197899, 0.19812118305470494, 0.1459460746937539, 0.1964303513555815]
-CRITICAL - Total time cost(s) to process queries of each model: [77.011009, 275.950118, 273.594872]
-CRITICAL - Number of instances in the testing dataset is 1392834
-CRITICAL - Number of instances in the dataset is 4178504
-CRITICAL - 
-CRITICAL - Program ended! Time cost is 2647 s.
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-INFO - **************************************************************
-INFO - [1298.5045917530747, 1297.9483795807687, 1297.9483795807687]
-512]
-FO - Start querying to GBoost.
-DEBUG - Finish 1392835 queries, average latency is 0.055291 ms. 
-INFO - Total time spent: 77.0110 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392835 queries, average latency is 0.198121 ms. 
-INFO - Total time spent: 275.9501 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [  98241 1294594].
-DEBUG - Total time to train xgboost classifier is: 189.7011 s.
-INFO - Start querying to GBoost.
-DEBUG - Finish 1392834 queries, average latency is 0.055969 ms. 
-INFO - Total time spent: 77.9552 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.198173 ms. 
-INFO - Total time spent: 276.0218 s.
-INFO - --------------------------------------------------------------------------------------------
-INFO - Start querying to Classified Prediction System.
-INFO - Queries are classified into 2 categories:  
-INFO - Counts are: [      0 1392834].
-DEBUG - Finish 1392834 queries, average latency is 0.145946 ms. 
-DEBUG - Average time spent on the classifier is 0.092372 ms.
-DEBUG - Total time spent: 203.28 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Sucessfully deployed XGboost
-DEBUG - Time cost to train the model is : 128.40345 s.
-INFO - Start querying to XGboost.
-DEBUG - Finish 1392834 queries, average latency is 0.196430 ms. 
-INFO - Total time spent: 273.5949 s.
-INFO - --------------------------------------------------------------------------------------------
-DEBUG - Queries are classified into 2 categories:  
-DEBUG - Counts are: [      0 1392834].
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Dataset: 7ethylene_methane_with_header.csv, classifier is: xgboost
-CRITICAL - Calculation Summary:
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - Model: ['GBoost', 'XGboost', 'CRegression', 'XGboost']
-CRITICAL - NRMSE: [1.1475194020470787, 1.1471614230979084, 1.1471614230979084, 1.1471614230979084]
-CRITICAL - Normalised NRMSE: [1.0003120562999788, 1.0, 1.0, 1.0]
-CRITICAL - The lower boundary of the NRMSE is: 1.1471614230979084
-CRITICAL - 
-CRITICAL - Time cost (seconds) to train the models: [925.523584, 203.617515, 1679.837042, 128.403448]
-CRITICAL - Time cost (seconds) to train the linear classifier is: 189.701113
-CRITICAL - Classifier accuracy is 1.0
-CRITICAL - 
-CRITICAL - Average time cost(ms)  on the classifier is: 0.0923721663897
-CRITICAL - Average time (ms) to process the queries is: [0.05529083416197899, 0.19812118305470494, 0.1459460746937539, 0.1964303513555815]
-CRITICAL - Total time cost(s) to process queries of each model: [77.011009, 275.950118, 273.594872]
-CRITICAL - Number of instances in the testing dataset is 1392834
-CRITICAL - Number of instances in the dataset is 4178504
-CRITICAL - 
-CRITICAL - Program ended! Time cost is 2647 s.
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-INFO - **************************************************************
-INFO - [1298.5045917530747, 1297.9483795807687, 1297.9483795807687]
-, 22.511810850985512]
-ogram ended! Time cost is 1827 s.
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - -----------------------------------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-INFO - **************************************************************
-INFO - [22.988483249290056, 23.205062775291932, 22.511810850985512]
----------------------------------------------------------------------------------
-CRITICAL - 
-CRITICAL - 
-CRITICAL - 
-INFO - **************************************************************
-INFO - [22.988483249290056, 23.205062775291932, 22.511810850985512]
+INFO - start query No.1 out of 5
+INFO - Approximate AVG: 19.3272.
+INFO - Time spent for approximate AVG: 0.0221s.
+INFO - 19.3272361755
+INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sample_1m WHERE  ss_list_price BETWEEN 26.64590642440486 AND 28.621406424404856
+INFO - Time spent for MYSQL query: 1.5971s.
+INFO - (19.98662324649313,)
+INFO - 19.9866232465
+INFO - start query No.2 out of 5
+INFO - Approximate AVG: 92.6627.
+INFO - Time spent for approximate AVG: 0.0578s.
+INFO - 92.662686645
+INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sample_1m WHERE  ss_list_price BETWEEN 167.5127847319503 AND 169.4882847319503
+INFO - Time spent for MYSQL query: 1.4811s.
+INFO - (91.85182666265409,)
+INFO - 91.8518266627
+INFO - start query No.3 out of 5
+INFO - Approximate AVG: 87.4150.
+INFO - Time spent for approximate AVG: 0.0559s.
+INFO - 87.4150390625
+INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sample_1m WHERE  ss_list_price BETWEEN 150.9859259788301 AND 152.9614259788301
+INFO - Time spent for MYSQL query: 1.4975s.
+INFO - (87.40121720506885,)
+INFO - 87.4012172051
+INFO - start query No.4 out of 5
+INFO - Approximate AVG: 37.1610.
+INFO - Time spent for approximate AVG: 0.0539s.
+INFO - 37.161022188
+INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sample_1m WHERE  ss_list_price BETWEEN 50.49113603482276 AND 52.466636034822756
+INFO - Time spent for MYSQL query: 1.6258s.
+INFO - (37.16966214265084,)
+INFO - 37.1696621427
+INFO - start query No.5 out of 5
+INFO - Approximate AVG: 70.4315.
+INFO - Time spent for approximate AVG: 0.0254s.
+INFO - 70.4315032959
+INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sample_1m WHERE  ss_list_price BETWEEN 97.97545145501293 AND 99.95095145501294
+INFO - Time spent for MYSQL query: 1.5689s.
+INFO - (71.52286997464685,)
+INFO - 71.5228699746
+WARNING - MYSQL query results: [19.98662324649313, 91.85182666265409, 87.40121720506885, 37.16966214265084, 71.52286997464685]
+WARNING - MYSQL query time cost: [1.597087, 1.481129, 1.497512, 1.625845, 1.568902]
+WARNING - Approximate query results: [19.327236175537113, 92.66268664504581, 87.41503906250001, 37.161022187961336, 70.43150329589845]
+WARNING - Approximate query time cost: [0.022115, 0.057808, 0.055922, 0.053912, 0.025449]
+INFO - Relative error is : 0.0114937821803

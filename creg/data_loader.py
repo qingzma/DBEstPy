@@ -11,6 +11,9 @@ file5 = "../data/5CCPP/5Folds5x2_pp.csv"
 file6 = "../data/6YearPredictionMSD_with_header.csv"
 file7 = "../data/7/7ethylene_methane_with_header.csv"
 file8 = "../data/8data.txt"
+file9 = "../data/1m.csv"
+file10 = "../data/5m.csv"
+file11 = "../data/10k.csv"
 
 def load2d(dataID):
     if dataID == 1:
@@ -104,6 +107,24 @@ def load2d(dataID):
         fields = ['timestamp', 'energy']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         data = tools.load_csv(file8, fields, y_column, sep=',')
+
+    if dataID == "1m":
+        fields = ['ss_list_price', 'ss_wholesale_cost']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(file9, fields, y_column, sep=',')
+
+
+
+    if dataID == "5m":
+        fields = ['ss_list_price', 'ss_wholesale_cost']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(file10, fields, y_column, sep=',')
+
+
+    if dataID == "10k":
+        fields = ['ss_list_price', 'ss_wholesale_cost']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(file11, fields, y_column, sep=',')
 
     return data
 

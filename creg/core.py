@@ -920,7 +920,7 @@ class CRegression:
         return [self.get_classified_prediction(self.classifier, x) for x in xs]
 
     def fit(self, training_data, testing_data=None, b_select_classifier=False):
-        self.dataset_name = data.file
+        #self.dataset_name = data.file
         training_data_model, training_data_classifier = tools.split_data_to_2(training_data)
 
         models, time_cost_to_train_base_models = self.deploy_all_models(training_data_model)

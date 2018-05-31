@@ -38,8 +38,11 @@ class QueryEngine:
         training_data (TYPE): Description
     """
 
-    def __init__(self, cregression, logger_object=None, b_print_time_cost=True):
-        self.num_training_points = cregression.num_total_training_points
+    def __init__(self, cregression, logger_object=None, b_print_time_cost=True,num_training_points=None):
+        if num_training_points is None:
+            self.num_training_points = cregression.num_total_training_points
+        else:
+            self.num_training_points = num_training_points
         self.log_dens = None
         self.training_data = cregression.training_data
         self.kde = None  # kernel density object
@@ -252,7 +255,7 @@ class QueryEngine:
         return int(result), time_cost
 
 
-    def approximate_variance_x_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+    def approximate_variance_x_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -296,7 +299,7 @@ class QueryEngine:
             self.logger.info("Time spent for approximate variance x: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_variance_y_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+    def approximate_variance_y_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -337,7 +340,7 @@ class QueryEngine:
             self.logger.info("Time spent for approximate variance y: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_covar_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -383,7 +386,7 @@ class QueryEngine:
             self.logger.info("Time spent for approximate COVAR: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_corr_from_to(self, x_columnID, x_min=-np.inf, x_max=np.inf):
+    def approximate_corr_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
         start = datetime.now()
         tmp_b = self.b_print_time_cost
         self.b_print_time_cost = False
@@ -434,7 +437,7 @@ if __name__ == "__main__":
 
     logger = logs.QueryLogs()
     logger.set_no_output()
-    data = dl.load2d(4)
+    data = dl.load2d(5)
     cRegression = CRegression(logger_object=logger)
     cRegression.fit(data)
     # cRegression.plot_training_data_3d()
