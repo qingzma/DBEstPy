@@ -308,11 +308,11 @@ class Query_Engine_2d:
         rel_errors = [abs(i - j)*1.0/i for i, j in zip(exact_results,approx_results) ]
         # abs_time_reduction = [(j - i) for i, j in zip(exact_times, approx_times) ]
         result = sum(rel_errors)/len(rel_errors)
-        self.logger.logger.info("Relative error is : " + str(result))
+        self.logger.logger.warning("Relative error is : " + str(result))
         return result
     def time_ratio(self,exact_times, approx_times):
         result = sum(approx_times)/sum(exact_times)
-        self.logger.logger.info("Time ratio is : " + str(result))
+        self.logger.logger.warning("Time ratio is : " + str(result))
         return result
 
 
@@ -384,10 +384,15 @@ class Query_Engine_2d:
 
 
 if __name__ == '__main__':
-    qe2d = Query_Engine_2d("10k",num_of_points=1000000)
+    qe2d = Query_Engine_2d("1m",num_of_points=1000000,logger_file="../results/1m.log")
+    qe2d.logger.set_level("WARNING")
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()
     #
     exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(number=5,percent=1)
+    qe2d.relative_error(exact_results, approx_results)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(number=5,percent=1)
+    qe2d.relative_error(exact_results, approx_results)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(number=5,percent=1)
     qe2d.relative_error(exact_results, approx_results)
     # qe2d.time_ratio(exact_times, approx_times)
     # qe2d.query2mysql("show columns from price_cost_sample_1000000")

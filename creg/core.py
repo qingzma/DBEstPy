@@ -639,7 +639,7 @@ class CRegression:
         if self.input_base_models is not None:
             self.input_base_models = list(self.input_base_models)
         else:
-            self.input_base_models = [tools.app_linear, tools.app_xgboost]
+            self.input_base_models = [tools.app_boosting, tools.app_xgboost]
 
         if self.input_ensemble_models is not None:
             self.input_ensemble_models = list(self.input_ensemble_models)
