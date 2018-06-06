@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"contents": "",
+			"contents": "QueryEngine:\n    __init__(…)\n    density_estimation(…)\n    desngity_estimation_plt2d(…)\n    desngity_estimation_plt3d(…)\n    approximate_avg_from_to(…)\n            f_pRx(…)\n            f_p(…)\n            f_p(…)\n            f_pRx(…)\n    approximate_sum_from_to(…)\n            f_pRx(…)\n            f_pRx(…)\n    approximate_count_from_to(…)\n            f_p(…)\n            f_p(…)\n    approximate_variance_x_from_to(…)\n            f_p(…)\n            f_x2Px(…)\n            f_xPx(…)\n            f_xRxPx(…)\n    approximate_variance_y_from_to(…)\n            f_p(…)\n            f_R2Px(…)\n            f_RxPx(…)\n    approximate_covar_from_to(…)\n            f_p(…)\n            f_px(…)\n            f_pRx(…)\n            f_xRxPx(…)\n    approximate_corr_from_to(…)",
 			"settings":
 			{
-				"buffer_size": 0,
+				"buffer_size": 747,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -564,13 +564,10 @@
 			}
 		},
 		{
-			"contents": "#!/usr/bin/env python\n# coding=utf-8\nfrom core import CRegression\nimport data_loader as dl\nfrom query_engine import QueryEngine\nimport logs\nimport random\nimport commands\n# from pyhive import hive\n# import subprocess\nimport os\nimport pyhs2\nimport MySQLdb\n\nfrom datetime import datetime\n\ndefault_mass_query_number = 5\nlogger_file = \"../results/deletable.log\"\n\nclass Query_Engine_2d:\n    def __init__(self,dataID,b_allow_repeated_value=True,logger_file=logger_file,num_of_points=None):\n        self.logger = logs.QueryLogs(log=logger_file)\n        self.logger.set_no_output()\n        self.data = dl.load2d(dataID)\n        if not b_allow_repeated_value:\n            self.data.remove_repeated_x_1d()\n        self.cRegression = CRegression(logger_object=self.logger)\n        self.cRegression.fit(self.data)\n        self.logger.set_logging(file_name=logger_file)\n        if num_of_points is None:\n            self.qe = QueryEngine(self.cRegression, logger_object=self.logger)\n        else:\n            self.qe = QueryEngine(self.cRegression, logger_object=self.logger,num_training_points=num_of_points)\n        self.qe.density_estimation()\n        self.q_min = min(self.data.features)\n        self.q_max = max(self.data.features)\n        self.dataID = dataID\n\n    def query_2d_avg(self,l=0,h=100):\n        \"\"\"query to 2d data sets.\n\n        Args:\n            l (int, optional): query lower boundary\n            h (int, optional): query higher boundary\n        \"\"\"\n        avgs,time = self.qe.approximate_avg_from_to(l ,h, 0)  #0.05E8,0.1E8,\n        return avgs, time\n\n    def query_2d_sum(self,l=0,h=100):\n        \"\"\"query to 2d data sets.\n\n        Args:\n            l (int, optional): query lower boundary\n            h (int, optional): query higher boundary\n        \"\"\"\n        sums,time = self.qe.approximate_sum_from_to(l ,h, 0)\n        return sums, time\n    def query_2d_count(self,l=0,h=100):\n        count,time = self.qe.approximate_count_from_to(l ,h, 0)\n        return count, time\n    def query_2d_variance_x(self,l=0,h=100):\n        count,time = self.qe.approximate_variance_x_from_to(l ,h, 0)\n        return count, time\n    def query_2d_variance_y(self,l=0,h=100):\n        count,time = self.qe.approximate_variance_y_from_to(l ,h, 0)\n        return count, time\n    def query_2d_covariance(self,l=0,h=100):\n        count,time = self.qe.approximate_covar_from_to(l ,h, 0)\n        return count, time\n    def query_2d_correlation(self,l=0,h=100):\n        count,time = self.qe.approximate_corr_from_to(l ,h, 0)\n        return count, time\n\n    def mass_query_sum(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_sum(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT SUM(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_avg(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_avg(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT AVG(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_count(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT COUNT(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_variance_x(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_variance_x(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT VARIANCE(\"+x+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n\n    def mass_query_variance_y(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_variance_y(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT VARIANCE(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_covariance(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_covariance(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT COUNT(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_correlation(self,table=\"price_cost_1t_sample_1m\",x=\"ss_list_price\",y=\"ss_wholesale_cost\",percent=5,number=default_mass_query_number):\n        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\"start query No.\"+str(i+1) +\" out of \"+str(number))\n            q_centre = random.uniform(self.q_min,self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)\n            self.logger.logger.info(approx_result)\n\n            sqlStr = \"SELECT COUNT(\"+y+\") FROM \" + str(table) +\" WHERE  \"+x+\" BETWEEN \" + str(q_left[0]) +\" AND \" +str(q_right[0])\n            self.logger.logger.info(sqlStr)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def relative_error(self,exact_results, approx_results):\n        # abs_errors = [abs(i - j) for i, j in zip(exact_results,approx_results) ]\n        rel_errors = [abs(i - j)*1.0/i for i, j in zip(exact_results,approx_results) ]\n        # abs_time_reduction = [(j - i) for i, j in zip(exact_times, approx_times) ]\n        result = sum(rel_errors)/len(rel_errors)\n        self.logger.logger.warning(\"Relative error is : \" + str(result))\n        return result\n    def time_ratio(self,exact_times, approx_times):\n        result = sum(approx_times)/sum(exact_times)\n        self.logger.logger.warning(\"Time ratio is : \" + str(result))\n        return result\n\n\n\n\n    def query2hive(self,sql=\"SHOW TABLES\",use_server=True):\n        if use_server:\n            host = \"137.205.118.65\"\n        else:\n            host = \"localhost\"\n\n\n        with pyhs2.connect(host=host,\n                       port=10000,\n                       authMechanism=\"PLAIN\",\n                       user='hiveuser',\n                       password='bayern',\n                       database='default') as conn:\n            with conn.cursor() as cur:\n                #Show databases\n                # print cur.getDatabases()\n\n                #Execute query\n                # cur.execute(\"select * from src\")\n                start = datetime.now()\n                cur.execute(sql)\n                end = datetime.now()\n                time_cost =  (end - start).total_seconds()\n                #Return column info from query\n                # print cur.getSchema()\n\n                #Fetch table results\n                self.logger.logger.info(\"Time spent for HIVE query: %.4fs.\" % time_cost)\n                for i in cur.fetch():\n                    self.logger.logger.info(i)\n        return i[0], time_cost\n\n    def query2mysql(self,sql=\"SHOW TABLES\",use_server=True):\n        # Open database connection\n        # db = MySQLdb.connect(\"127.0.0.1\",\"hiveuser\",\"bayern\",\"hivedb\" )\n        if use_server:\n            db = MySQLdb.connect(\"137.205.118.65\",\"u1796377\",\"bayern\",\"hivedb\",port=3306 )\n        else:\n            db = MySQLdb.connect(\"127.0.0.1\",\"hiveuser\",\"bayern\",\"hivedb\",port=3306 )\n\n        # prepare a cursor object using cursor() method\n        cursor = db.cursor()\n\n        # Drop table if it already exist using execute() method.\n        # cursor.execute(\"DROP TABLE IF EXISTS EMPLOYEE\")\n\n        # Create table as per requirement\n        # sql = sql\n        start = datetime.now()\n        cursor.execute(sql)\n        results = cursor.fetchall()\n\n        end = datetime.now()\n        time_cost =  (end - start).total_seconds()\n        self.logger.logger.info(\"Time spent for MYSQL query: %.4fs.\" % time_cost)\n        for row in results:\n            self.logger.logger.info(row)\n\n        # disconnect from server\n        db.close()\n        return row[0], time_cost\n\n\n\n\nif __name__ == '__main__':\n    qe2d = Query_Engine_2d(\"1m\",num_of_points=1000000,logger_file=\"../results/1m.log\")\n    qe2d.logger.set_level(\"WARNING\")\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()\n    #\n    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(number=5,percent=1)\n    qe2d.relative_error(exact_results, approx_results)\n    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(number=5,percent=1)\n    qe2d.relative_error(exact_results, approx_results)\n    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(number=5,percent=1)\n    qe2d.relative_error(exact_results, approx_results)\n    # qe2d.time_ratio(exact_times, approx_times)\n    # qe2d.query2mysql(\"show columns from price_cost_sample_1000000\")\n    # qe2d.query2mysql(sql=\"select * from price_cost_1t_sample_1m limit 1\")\n    # qe2d.query2hive()\n\n",
 			"file": "creg/evaluate2d.py",
-			"file_size": 19261,
-			"file_write_time": 131725819732204974,
 			"settings":
 			{
-				"buffer_size": 19349,
+				"buffer_size": 19261,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -580,15 +577,6 @@
 			"settings":
 			{
 				"buffer_size": 31472,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "query/load_data/tcp_ds.sql",
-			"settings":
-			{
-				"buffer_size": 2774,
-				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -729,6 +717,15 @@
 	],
 	"file_history":
 	[
+		"/disk/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
+		"/tmp/rsub-_p58bu/gol_sort.sh",
+		"/home/u1796377/Desktop/gol_sort.sh",
+		"/tmp/rsub-3rbue5/mysqld.cnf",
+		"/tmp/rsub-a7qo__/hive-site.xml",
+		"/tmp/rsub-i91cw6/hive-env.sh",
+		"/tmp/rsub-l6cn8u/hive-env.sh",
+		"/tmp/rsub-g8cbqm/hive-site.xml",
+		"/tmp/rsub-hwkrye/.bashrc",
 		"/home/u1796377/Desktop/adsfa/index.html",
 		"/tmp/rsub-lyiznp/generate_sample.sh",
 		"/tmp/rsub-0ql_bx/generate_sample.sh",
@@ -847,20 +844,11 @@
 		"/disk/workspace/Cregression/tests/test_basic.py",
 		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-default.xml.template",
 		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-site.xml",
-		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh",
-		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath._hbase",
-		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath",
-		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/.classpath._hbase",
-		"/home/u1796377/Program/blinkdb_eclipse/blinkdb/conf/blinkdb-env.sh",
-		"/home/u1796377/Program/blinkdb/hive_blinkdb/ql/src/test/queries/clientpositive/date_3.q",
-		"/home/u1796377/Program/blinkdb/bin/dev/run-tests-from-scratch",
-		"/home/u1796377/Program/blinkdb/hive_blinkdb/build.xml",
-		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmpBusinessLogic.java",
-		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmployeeDetails.java"
+		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh"
 	],
 	"find":
 	{
-		"height": 28.0
+		"height": 40.0
 	},
 	"find_in_files":
 	{
@@ -874,6 +862,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"extra_sort_flags",
 			"get_NRMSE_for_clusters",
 			"get_cluster_points",
 			"num_of_plot",
@@ -934,7 +923,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 0,
+						"buffer_size": 747,
 						"regions":
 						{
 						},
@@ -949,15 +938,170 @@
 							"SL.15.region_keys":
 							[
 							],
-							"current_file": "/disk/workspace/CRegressionRDBM/results/5m.log",
+							"current_file": "/disk/workspace/CRegressionRDBM/creg/query_engine.py",
 							"default_dir": "/disk/workspace/CRegressionRDBM",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
+								[
+									733,
+									751
+								],
+								[
+									1066,
+									1171
+								],
+								[
+									1786,
+									1832
+								],
+								[
+									2287,
+									2327
+								],
+								[
+									3045,
+									3085
+								],
+								[
+									4445,
+									4509
+								],
+								[
+									4874,
+									4899
+								],
+								[
+									5038,
+									5061
+								],
+								[
+									6115,
+									6142
+								],
+								[
+									6315,
+									6344
+								],
+								[
+									7008,
+									7072
+								],
+								[
+									7213,
+									7242
+								],
+								[
+									8269,
+									8298
+								],
+								[
+									8835,
+									8901
+								],
+								[
+									9042,
+									9069
+								],
+								[
+									10030,
+									10057
+								],
+								[
+									10538,
+									10626
+								],
+								[
+									10767,
+									10794
+								],
+								[
+									10880,
+									10910
+								],
+								[
+									11019,
+									11048
+								],
+								[
+									11154,
+									11185
+								],
+								[
+									13046,
+									13134
+								],
+								[
+									13275,
+									13302
+								],
+								[
+									13388,
+									13418
+								],
+								[
+									13551,
+									13581
+								],
+								[
+									15402,
+									15485
+								],
+								[
+									15626,
+									15653
+								],
+								[
+									15739,
+									15767
+								],
+								[
+									15871,
+									15900
+								],
+								[
+									16050,
+									16081
+								],
+								[
+									18026,
+									18108
+								]
 							],
 							"symlist":
 							[
+								"QueryEngine:",
+								"    __init__(…)",
+								"    density_estimation(…)",
+								"    desngity_estimation_plt2d(…)",
+								"    desngity_estimation_plt3d(…)",
+								"    approximate_avg_from_to(…)",
+								"            f_pRx(…)",
+								"            f_p(…)",
+								"            f_p(…)",
+								"            f_pRx(…)",
+								"    approximate_sum_from_to(…)",
+								"            f_pRx(…)",
+								"            f_pRx(…)",
+								"    approximate_count_from_to(…)",
+								"            f_p(…)",
+								"            f_p(…)",
+								"    approximate_variance_x_from_to(…)",
+								"            f_p(…)",
+								"            f_x2Px(…)",
+								"            f_xPx(…)",
+								"            f_xRxPx(…)",
+								"    approximate_variance_y_from_to(…)",
+								"            f_p(…)",
+								"            f_R2Px(…)",
+								"            f_RxPx(…)",
+								"    approximate_covar_from_to(…)",
+								"            f_p(…)",
+								"            f_px(…)",
+								"            f_pRx(…)",
+								"            f_xRxPx(…)",
+								"    approximate_corr_from_to(…)"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage",
 							"tab_size": 4,
@@ -967,13 +1111,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 8,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 2,
+			"selected": 6,
 			"sheets":
 			[
 				{
@@ -1096,7 +1240,7 @@
 						"translation.y": 1881.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1118,6 +1262,9 @@
 						],
 						"settings":
 						{
+							"SL.16.region_keys":
+							[
+							],
 							"git_gutter_is_enabled": true,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
@@ -1125,7 +1272,7 @@
 						"translation.y": 36289.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1141,20 +1288,23 @@
 						"selection":
 						[
 							[
-								157368,
-								157368
+								158393,
+								158393
 							]
 						],
 						"settings":
 						{
+							"SL.17.region_keys":
+							[
+							],
 							"git_gutter_is_enabled": true,
 							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 70827.0,
+						"translation.y": 70903.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1215,7 +1365,7 @@
 						"translation.y": 4992.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1224,7 +1374,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 19349,
+						"buffer_size": 19261,
 						"regions":
 						{
 						},
@@ -1317,7 +1467,7 @@
 						"translation.y": 1184.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1339,6 +1489,9 @@
 						],
 						"settings":
 						{
+							"SL.20.region_keys":
+							[
+							],
 							"SL.32.region_keys":
 							[
 							],
@@ -1362,59 +1515,11 @@
 						"translation.y": 1653.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
 					"buffer": 7,
-					"file": "query/load_data/tcp_ds.sql",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2774,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2774,
-								2774
-							]
-						],
-						"settings":
-						{
-							"SL.18.region_keys":
-							[
-							],
-							"SL.19.region_keys":
-							[
-							],
-							"SL.20.region_keys":
-							[
-							],
-							"SL.21.region_keys":
-							[
-							],
-							"SL.25.region_keys":
-							[
-							],
-							"SL.29.region_keys":
-							[
-							],
-							"git_gutter_is_enabled": true,
-							"open_with_edit": true,
-							"syntax": "Packages/SQL/SQL.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 1229.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 8,
-					"type": "text"
-				},
-				{
-					"buffer": 8,
 					"file": "creg/query_engine.py",
 					"semi_transient": false,
 					"settings":
@@ -1509,11 +1614,11 @@
 						"translation.y": 4281.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 8,
 					"file": "creg/logs.py",
 					"semi_transient": false,
 					"settings":
@@ -1573,7 +1678,7 @@
 						"translation.y": 741.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]

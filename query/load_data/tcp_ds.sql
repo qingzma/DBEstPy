@@ -83,3 +83,40 @@ LOCATION '/user/hive/warehouse/price_cost_1t_sample_5m.dat';
 
 LOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;
 LOAD DATA INPATH 'hdfs:/data/5m.csv' INTO TABLE price_cost_1t_sample_5m;
+
+
+#
+# create the sorted dataset
+CREATE TABLE price_cost_1t_sorted
+AS SELECT * FROM price_cost_1t
+ORDER BY ss_list_price;
+
+sort --parallel=8 -g  -o  1t_sorted.csv 1t.csv
+sort -k 1,1 -g  -o  1t_sorted.csv 1t.csv
+
+# export the table to csv file.
+INSERT OVERWRITE LOCAL DIRECTORY '1t_sorted'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+select * from price_cost_1t_sorted;
+
+
+# copy the file to csv, and load the data
+# fisrt start the mysql server client
+create table price_cost_1t_sorted (
+ss_list_price DOUBLE,
+ss_wholesale_cost DOUBLE
+);
+# copy the table to the directory to be submitted to mysql
+sudo cp /disk/hadoopDir/warehouse/price_cost_1t_sorted.csv /var/lib/mysql-files/price_cost_1t_sorted.csv
+# load the file;
+LOAD DATA INFILE "/var/lib/mysql-files/price_cost_1t_sorted.csv"
+INTO TABLE price_cost_1t_sorted
+COLUMNS TERMINATED BY ','
+LINES TERMINATED BY '\n';
+
+
+
+# Create the index
+CREATE INDEX idx_ss_list_price
+ON price_cost_1t_sorted(ss_list_price);

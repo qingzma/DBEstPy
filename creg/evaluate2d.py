@@ -71,7 +71,7 @@ class Query_Engine_2d:
         count,time = self.qe.approximate_corr_from_to(l ,h, 0)
         return count, time
 
-    def mass_query_sum(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_sum(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -104,7 +104,7 @@ class Query_Engine_2d:
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_avg(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_avg(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -137,7 +137,7 @@ class Query_Engine_2d:
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_count(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_count(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -170,7 +170,7 @@ class Query_Engine_2d:
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_variance_x(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_variance_x(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -204,7 +204,7 @@ class Query_Engine_2d:
         return exact_results, approx_results, exact_times, approx_times
 
 
-    def mass_query_variance_y(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_variance_y(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -237,7 +237,7 @@ class Query_Engine_2d:
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_covariance(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_covariance(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -270,7 +270,7 @@ class Query_Engine_2d:
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_correlation(self,table="price_cost_1t_sample_1m",x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+    def mass_query_correlation(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
         random.seed(1.0)
         exact_results = []
@@ -388,11 +388,11 @@ if __name__ == '__main__':
     qe2d.logger.set_level("WARNING")
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()
     #
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(number=5,percent=1)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(table="price_cost_1t_sorted",number=5,percent=1)
     qe2d.relative_error(exact_results, approx_results)
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(number=5,percent=1)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(table="price_cost_1t_sorted",number=5,percent=1)
     qe2d.relative_error(exact_results, approx_results)
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(number=5,percent=1)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(table="price_cost_1t_sorted",number=5,percent=1)
     qe2d.relative_error(exact_results, approx_results)
     # qe2d.time_ratio(exact_times, approx_times)
     # qe2d.query2mysql("show columns from price_cost_sample_1000000")
