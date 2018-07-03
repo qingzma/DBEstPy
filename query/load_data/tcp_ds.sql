@@ -103,15 +103,15 @@ select * from price_cost_1t_sorted;
 
 # copy the file to csv, and load the data
 # fisrt start the mysql server client
-create table price_cost_1t_sorted (
+create table price_cost_100k (
 ss_list_price DOUBLE,
 ss_wholesale_cost DOUBLE
 );
 # copy the table to the directory to be submitted to mysql
 sudo cp /disk/hadoopDir/warehouse/price_cost_1t_sorted.csv /var/lib/mysql-files/price_cost_1t_sorted.csv
 # load the file;
-LOAD DATA INFILE "/var/lib/mysql-files/price_cost_1t_sorted.csv"
-INTO TABLE price_cost_1t_sorted
+LOAD DATA INFILE "/var/lib/mysql-files/100k.csv"
+INTO TABLE price_cost_100k
 COLUMNS TERMINATED BY ','
 LINES TERMINATED BY '\n';
 
@@ -120,3 +120,45 @@ LINES TERMINATED BY '\n';
 # Create the index
 CREATE INDEX idx_ss_list_price
 ON price_cost_1t_sorted(ss_list_price);
+
+sed -i '1s/^/ss_list_price,ss_wholesale_cost\n/' 100k.csv
+
+
+
+
+CREATE EXTERNAL TABLE store_sales_1t ( ss_sold_date_sk           INT,
+ss_sold_time_sk           INT,
+ss_item_sk                INT,
+ss_customer_sk            INT,
+ss_cdemo_sk               INT,
+ss_hdemo_sk               INT,
+ss_addr_sk                INT,
+ss_store_sk               INT,
+ss_promo_sk               INT,
+ss_ticket_number          INT,
+ss_quantity               INT,
+ss_wholesale_cost         DOUBLE,
+ss_list_price             DOUBLE,
+ss_sales_price            DOUBLE,
+ss_ext_discount_amt       DOUBLE,
+ss_ext_sales_price        DOUBLE,
+ss_ext_wholesale_cost     DOUBLE,
+ss_ext_list_price         DOUBLE,
+ss_ext_tax                DOUBLE,
+ss_coupon_amt             DOUBLE,
+ss_net_paid               DOUBLE,
+ss_net_paid_inc_tax       DOUBLE,
+ss_net_profit             DOUBLE
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/user/hive/warehouse/store_sales_1t.dat/1T.dat';
+
+
+LOAD DATA INPATH 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
+LOAD DATA INPATH 'hdfs:/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
+-- LOAD DATA INPATH '/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
+-- LOAD DATA  INPATH '/disk/dataset/hadoop/store_sales.dat' INTO TABLE store_sales_1t;
+
+CREATE TABLE store_sales_sample_1_percent AS SELECT * FROM store_sales SAMPLEWITH 0.01;
+CREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales SAMPLEWITH 0.01;

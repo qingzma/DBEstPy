@@ -14,6 +14,7 @@ file8 = "../data/8data.txt"
 file9 = "../data/1m.csv"
 file10 = "../data/5m.csv"
 file11 = "../data/10k.csv"
+file12 = "../data/100k.csv"
 
 def load2d(dataID):
     if dataID == 1:
@@ -125,6 +126,11 @@ def load2d(dataID):
         fields = ['ss_list_price', 'ss_wholesale_cost']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         data = tools.load_csv(file11, fields, y_column, sep=',')
+
+    if dataID == "100k":
+        fields = ['ss_list_price', 'ss_wholesale_cost']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(file12, fields, y_column, sep=',')
 
     return data
 

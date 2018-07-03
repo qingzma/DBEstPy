@@ -178,6 +178,9 @@ class CRegression:
         self.dataset_name = None
         self.b_cross_validation=b_cross_validation
 
+
+        warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+
         # logging.basicConfig(level=logging.ERROR)
 
     def _test_deployed_model(self, model, training_data):
@@ -920,10 +923,11 @@ class CRegression:
         return [self.get_classified_prediction(self.classifier, x) for x in xs]
 
     def fit(self, training_data, testing_data=None, b_select_classifier=False):
+        time_program_start = datetime.now()
         #self.dataset_name = data.file
         training_data_model, training_data_classifier = tools.split_data_to_2(training_data)
 
-        models, time_cost_to_train_base_models = self.deploy_all_models(training_data_model)
+        models = self.deploy_all_models(training_data_model)
 
         # get predictions to build the classifier
         answers_for_classifier = self.get_predictions_to_build_classifier(training_data_classifier)
@@ -955,6 +959,8 @@ class CRegression:
 
         #self.averageX_training_points_model =
         self.training_data = training_data
+        time_program_end = datetime.now()
+        self.logger.info("Time to fit the model is "+str((time_program_end - time_program_start).seconds))
 
     def select_classifiers(self, training_data_classifier, y_classifier, testing_data):
         # global classifier_names_candidate
@@ -2433,7 +2439,8 @@ class CRegression:
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
     import data_loader as dl
-    data = dl.load3d(1)
+    from pympler import asizeof
+    data = dl.load3d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2447,6 +2454,8 @@ if __name__ == "__main__":
     cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree,\
         tools.app_boosting,tools.app_xgboost],\
         b_show_plot=False)
+    cr.fit(data)
+    print(asizeof.asizeof(cr))
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
@@ -2461,7 +2470,7 @@ if __name__ == "__main__":
     # # print(predictions0)
     #
 
-    cr.run3d(data)
+    # cr.run3d(data)
     # cr.WLOL_QLOL()
     # cr.WLOL_QLOL_relative_error()
     #

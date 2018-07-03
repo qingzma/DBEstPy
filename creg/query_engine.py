@@ -54,6 +54,8 @@ class QueryEngine:
             self.logger = logs.QueryLogs().logger
         self.b_print_time_cost = b_print_time_cost
 
+        warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+
 
     def density_estimation(self, kernel=None):
         """Estimate the density of points.

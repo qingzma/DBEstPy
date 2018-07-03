@@ -13,6 +13,7 @@ import pyhs2
 import MySQLdb
 
 from datetime import datetime
+import warnings
 
 default_mass_query_number = 5
 logger_file = "../results/deletable.log"
@@ -20,13 +21,13 @@ logger_file = "../results/deletable.log"
 class Query_Engine_2d:
     def __init__(self,dataID,b_allow_repeated_value=True,logger_file=logger_file,num_of_points=None):
         self.logger = logs.QueryLogs(log=logger_file)
-        self.logger.set_no_output()
+        # self.logger.set_no_output()
         self.data = dl.load2d(dataID)
         if not b_allow_repeated_value:
             self.data.remove_repeated_x_1d()
         self.cRegression = CRegression(logger_object=self.logger)
         self.cRegression.fit(self.data)
-        self.logger.set_logging(file_name=logger_file)
+        # self.logger.set_logging(file_name=logger_file)
         if num_of_points is None:
             self.qe = QueryEngine(self.cRegression, logger_object=self.logger)
         else:
@@ -35,6 +36,8 @@ class Query_Engine_2d:
         self.q_min = min(self.data.features)
         self.q_max = max(self.data.features)
         self.dataID = dataID
+
+        #warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
     def query_2d_avg(self,l=0,h=100):
         """query to 2d data sets.
