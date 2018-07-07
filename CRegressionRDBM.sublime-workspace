@@ -4,174 +4,6 @@
 		"selected_items":
 		[
 			[
-				"sca",
-				"scala-2.10.7\t(blinkdb-env.sh)"
-			],
-			[
-				"set",
-				"set_level\tfunction"
-			],
-			[
-				"query_2d_varianc",
-				"query_2d_variance_y"
-			],
-			[
-				"query_2d_va",
-				"query_2d_variance_x"
-			],
-			[
-				"approximate_variance",
-				"approximate_variance_x_from_to\t(query_engine.py)"
-			],
-			[
-				"num_",
-				"num_of_points"
-			],
-			[
-				"XGB",
-				"XGBClassifier_sklearn"
-			],
-			[
-				"error_",
-				"error_models"
-			],
-			[
-				"answers_for",
-				"answers_for_classifier"
-			],
-			[
-				"predictions",
-				"predictions\tstatement"
-			],
-			[
-				"cluster_pre",
-				"cluster_prediction_summary"
-			],
-			[
-				"Predi",
-				"PredictionSummary\tclass"
-			],
-			[
-				"cluster",
-				"cluster_points"
-			],
-			[
-				"testing",
-				"testing_data"
-			],
-			[
-				"y_cla",
-				"y_classifier"
-			],
-			[
-				"optimal",
-				"optimal_error"
-			],
-			[
-				"erro",
-				"errors_ideal"
-			],
-			[
-				"WLE",
-				"WLE_optimal"
-			],
-			[
-				"predi",
-				"predictions_classified"
-			],
-			[
-				"y",
-				"y_limit"
-			],
-			[
-				"b_show",
-				"b_show_rest"
-			],
-			[
-				"cu",
-				"cumulative"
-			],
-			[
-				"set_",
-				"set_xticklabels"
-			],
-			[
-				"xti",
-				"xticks_ax2"
-			],
-			[
-				"bar_",
-				"bar_width\tparam"
-			],
-			[
-				"num",
-				"num_of_regressions"
-			],
-			[
-				"num_of",
-				"num_of_bins"
-			],
-			[
-				"re_",
-				"re_plot_range"
-			],
-			[
-				"bin",
-				"bin_num"
-			],
-			[
-				"set_x",
-				"set_xlim"
-			],
-			[
-				"app",
-				"append\tfunction"
-			],
-			[
-				"INP",
-				"INPUT_STRING"
-			],
-			[
-				"to",
-				"tools"
-			],
-			[
-				"mat",
-				"matplotlib_plot_2D_single_regression"
-			],
-			[
-				"datase",
-				"dataset_name"
-			],
-			[
-				"file",
-				"file_name"
-			],
-			[
-				"datas",
-				"dataset_name"
-			],
-			[
-				"data_to_",
-				"data_to_plot_without_outliers"
-			],
-			[
-				"box",
-				"boxplot"
-			],
-			[
-				"b_",
-				"b_show_plot"
-			],
-			[
-				"b",
-				"bin_percent"
-			],
-			[
-				"app_",
-				"app_boosting\tstatement"
-			],
-			[
 				"prop",
 				"proportion_to_show"
 			],
@@ -188,16 +20,36 @@
 				"DataSource\tclass"
 			],
 			[
+				"datas",
+				"data_source\t(tools.py)"
+			],
+			[
 				"min",
 				"min_xvalue"
+			],
+			[
+				"mat",
+				"matplotlib_plot_2D_confidence_interval\tfunction"
+			],
+			[
+				"num_of",
+				"num_of_plot"
 			],
 			[
 				"tree",
 				"app_decision_tree"
 			],
 			[
+				"app",
+				"app_linear"
+			],
+			[
 				"da",
 				"data"
+			],
+			[
+				"num",
+				"num_training_points_model\tstatement"
 			],
 			[
 				"varian",
@@ -312,6 +164,10 @@
 				"remove_repeated_x_1d\tfunction"
 			],
 			[
+				"to",
+				"to_csv\tfunction"
+			],
+			[
 				"l",
 				"labels\tstatement"
 			],
@@ -336,6 +192,10 @@
 				"num_training_points\tstatement"
 			],
 			[
+				"set",
+				"set_logging\tfunction"
+			],
+			[
 				"plot",
 				"plot_training_data_3d\tfunction"
 			],
@@ -358,6 +218,10 @@
 			[
 				"inte",
 				"integrate\tmodule"
+			],
+			[
+				"set_x",
+				"set_xlabel"
 			],
 			[
 				"mesh",
@@ -434,6 +298,10 @@
 			[
 				"training_dat",
 				"training_data_model"
+			],
+			[
+				"num_",
+				"num_total_training_points\tstatement"
 			],
 			[
 				"C",
@@ -514,6 +382,106 @@
 			[
 				"buil",
 				"build.dir"
+			],
+			[
+				"bui",
+				"build.dir"
+			],
+			[
+				"pa",
+				"path"
+			],
+			[
+				"onmouseo",
+				"onmouseover\tAttr"
+			],
+			[
+				"getEl",
+				"getElementById\t( elementId: DOMString ): Element Document"
+			],
+			[
+				"getE",
+				"getElementById\t( elementId: DOMString ): Element Document"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"s",
+				"style"
+			],
+			[
+				"d",
+				"demo"
+			],
+			[
+				"in",
+				"innerHTML"
+			],
+			[
+				"get",
+				"getElementById"
+			],
+			[
+				"t",
+				"type\tAttr"
+			],
+			[
+				"action",
+				"action_page"
+			],
+			[
+				"col",
+				"color"
+			],
+			[
+				"my",
+				"myFunction"
+			],
+			[
+				"co",
+				"color"
+			],
+			[
+				"back",
+				"background-color"
+			],
+			[
+				"list",
+				"list-style-type"
+			],
+			[
+				"he",
+				"head2"
+			],
+			[
+				"head",
+				"head1"
+			],
+			[
+				"font",
+				"font-size"
+			],
+			[
+				"ba",
+				"background-color"
+			],
+			[
+				"rgb",
+				"rgba()"
+			],
+			[
+				"bo",
+				"border"
+			],
+			[
+				"text",
+				"text-align"
+			],
+			[
+				"fon",
+				"font-family"
 			]
 		]
 	},
@@ -532,8 +500,24 @@
 		"selected_items":
 		[
 			[
-				"outline",
+				"out",
 				"Browse Mode: Outline (Right)"
+			],
+			[
+				"in",
+				"Package Control: Install Package"
+			],
+			[
+				"re",
+				"Package Control: Remove Package"
+			],
+			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
+				"ins",
+				"Package Control: Install Package"
 			],
 			[
 				"doc",
@@ -542,14 +526,6 @@
 			[
 				"do",
 				"AutoDocstring: Current"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
-			],
-			[
-				"out",
-				"Browse Mode: Outline (Right)"
 			],
 			[
 				"au",
@@ -615,95 +591,26 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/home/u1796377/workspace/CRegressionRDBM"
+	],
 	"file_history":
 	[
-		"/tmp/rsub-eihq3o/hive_job_log_blinkdb_201807021551_1869163645.txt",
-		"/tmp/rsub-xwsk9u/blinkdb-env.sh",
-		"/tmp/rsub-ddg5eh/blinkdb-env.sh",
-		"/tmp/rsub-cyf1to/.bashrc",
-		"/tmp/rsub-jjyxm8/blinkdb-env.sh",
-		"/tmp/rsub-gfax5r/blinkdb-env.sh",
-		"/tmp/rsub-01z_ux/blinkdb-env.sh",
-		"/tmp/rsub-izatw9/blinkdb-env.sh",
-		"/tmp/rsub-hzleig/blinkdb-env.sh",
-		"/tmp/rsub-ult3wy/.bashrc",
-		"/tmp/rsub-si909e/.bashrc",
-		"/tmp/rsub-4nnaqk/blinkdb-env.sh",
-		"/tmp/rsub-omdc6d/blinkdb-env.sh",
-		"/tmp/rsub-64lyeb/hive_job_log_blinkdb_201806261701_969073991.txt",
-		"/tmp/rsub-s08b6l/.bashrc",
-		"/tmp/rsub-eu0oig/sbt.list",
-		"/disk/workspace/CRegressionRDBM/creg/logs.py",
-		"/disk/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
-		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
-		"/disk/workspace/CRegressionRDBM/creg/data_loader.py",
-		"/disk/workspace/CRegressionRDBM/creg/evaluate2d.py",
-		"/disk/workspace/CRegressionRDBM/creg/evaluation.py",
-		"/disk/workspace/CRegressionRDBM/results/5m.log",
-		"/disk/workspace/CRegressionRDBM/results/100k_0_5.log",
-		"/disk/workspace/CRegressionRDBM/results/100k_1.log",
-		"/disk/workspace/CRegressionRDBM/results/1m.log",
-		"/disk/workspace/CRegressionRDBM/results/1m_0_5.log",
-		"/disk/workspace/CRegressionRDBM/results/1m_1.log",
-		"/disk/workspace/CRegressionRDBM/creg/core.py",
-		"/tmp/rsub-6dj3ju/.bashrc",
-		"/tmp/rsub-dyxf1e/.bashrc",
-		"/tmp/rsub-kv1c_i/blinkdb-env.sh",
-		"/tmp/rsub-eyqn3d/blinkdb-env.sh",
-		"/tmp/rsub-geut1w/blinkdb-env.sh",
-		"/tmp/rsub-8mcbht/plugins.sbt",
-		"/tmp/rsub-30vprk/plugins.sbt",
-		"/tmp/rsub-onj2wr/blinkdb-env.sh",
-		"/tmp/rsub-f67_7y/hive_job_log_blinkdb_201806221620_422072744.txt",
-		"/tmp/rsub-9iww1k/blinkdb-env.sh",
-		"/tmp/rsub-ga1ehe/plugins.sbt",
-		"/tmp/rsub-rdxsln/sbt",
-		"/tmp/rsub-ubd10u/.bashrc",
-		"/tmp/rsub-uarkj3/.bashrc",
-		"/tmp/rsub-_o99m2/blinkdb-env.sh_backup",
-		"/tmp/rsub-m6uvgv/blinkdb-env.sh",
-		"/tmp/rsub-tn2it5/blinkdb-env.sh",
-		"/tmp/rsub-cbskvp/plugins.sbt",
-		"/tmp/rsub-wspx0i/.bashrc",
-		"/tmp/rsub-bw9ta6/.bashrc",
-		"/tmp/rsub-kaldev/.bashrc",
-		"/tmp/rsub-qa1q88/.bashrc",
-		"/tmp/rsub-8kx_hc/.bashrc",
-		"/home/u1796377/.ssh/config",
-		"/tmp/rsub-hxi54_/generate_sample.sh",
-		"/tmp/rsub-tou82q/generate_sample.sh",
-		"/tmp/rsub-buy_2u/gol_sort.sh",
-		"/tmp/rsub-_p58bu/gol_sort.sh",
-		"/home/u1796377/Desktop/gol_sort.sh",
-		"/tmp/rsub-3rbue5/mysqld.cnf",
-		"/tmp/rsub-a7qo__/hive-site.xml",
-		"/tmp/rsub-i91cw6/hive-env.sh",
-		"/tmp/rsub-l6cn8u/hive-env.sh",
-		"/tmp/rsub-g8cbqm/hive-site.xml",
-		"/tmp/rsub-hwkrye/.bashrc",
-		"/home/u1796377/Desktop/adsfa/index.html",
-		"/tmp/rsub-lyiznp/generate_sample.sh",
-		"/tmp/rsub-0ql_bx/generate_sample.sh",
-		"/tmp/rsub-atnulu/generate_sample.sh",
-		"/tmp/rsub-ruhe7k/mysqld.cnf",
-		"/tmp/rsub-w8rldd/my.cnf",
-		"/tmp/rsub-pmcmv9/mysql.cnf",
-		"/disk/workspace/CRegressionRDBM/creg/tools.py",
-		"/tmp/rsub-nwuq68/generate_sample.sh",
-		"/tmp/rsub-pfeg3p/generate_sample.sh",
-		"/tmp/rsub-9fecjy/hive-site.xml",
-		"/disk/workspace/CRegressionRDBM/creg/plot_results.py",
-		"/disk/workspace/CRegressionRDBM/.gitignore",
-		"/disk/workspace/CRegressionRDBM/creg/1_ensem.ipynb",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
-		"/home/u1796377/.config/sublime-text-3/Packages/Anaconda/Anaconda.sublime-settings",
-		"/disk/workspace/paper_git_backup/16127606tztmhbztpbrq/cikm18-optimalregression-sigconf.tex",
-		"/disk/workspace/CRegressionRDBM/results/deletable.log",
-		"/disk/workspace/CRegressionRDBM/setup.py",
-		"/home/u1796377/workspace/shells/while.sh",
-		"/disk/workspace/CRegressionRDBM/sdfs",
-		"/home/u1796377/workspace/shells/fisrt.sh",
-		"/disk/workspace/CRegressionRDBM/requirements.txt",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/tools.py",
+		"/home/u1796377/workspace/CRegressionRDBM/requirements.txt",
+		"/home/u1796377/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/core.py",
+		"/home/u1796377/Desktop/1m_1.log",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/python3_user.sublime-build",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/python2_user.sublime-build",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+		"/home/u1796377/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/logs.py",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/query_engine.py",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/evaluate2d.py",
+		"/home/u1796377/workspace/CRegressionRDBM/creg/evaluation.py",
+		"/home/u1796377/workspace/CRegressionRDBM/results/deletable.log",
 		"/disk/workspace/CRegressionRDBM/results/6_AVG_0.5.txt",
 		"/disk/workspace/CRegressionRDBM/creg/cli.py",
 		"/disk/workspace/CRegressionRDBM/results/6_SUM_5.txt",
@@ -719,11 +626,13 @@
 		"/disk/workspace/CRegressionRDBM/results/6.txt",
 		"/home/u1796377/.bashrc",
 		"/home/u1796377/Program/hadoop/hadoop-2.7.4/etc/hadoop/core-site.xml",
+		"/disk/workspace/CRegressionRDBM/results/deletable.log",
+		"/disk/workspace/CRegressionRDBM/requirements.txt",
+		"/disk/workspace/CRegressionRDBM/creg/data_loader.py",
 		"/disk/TPC/TPC-DS/tools/makefile",
 		"/disk/workspace/CRegressionRDBM/query/load_data/file1.sql",
 		"/home/u1796377/Program/apache-hive-2.3.3-bin/conf/hive-site.xml",
 		"/home/u1796377/Documents/CV/CV_latex/CV_Qingzhi_Ma.tex",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/disk/workspace/CRegressionRDBM/CRegressionRDBMWorkspace.sublime-project",
 		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file5_u.q",
 		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file6_u.q",
@@ -744,7 +653,78 @@
 		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file8.q",
 		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file7.q",
 		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file6.q",
-		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file5.q"
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file5.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file4.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file3.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file2.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/query/file1.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file8.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file7.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file6.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file5.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file4.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file3.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file2.q",
+		"/disk/workspace/CRegressionRDBM/blinkDB_query/load_data/file1.q",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/2d.py",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/context.py",
+		"/disk/workspace/CRegressionRDBM.",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation/__init__.py",
+		"/disk/workspace/CRegressionRDBM/creg/logs.py",
+		"/disk/workspace/CRegressionRDBM/.gitignore",
+		"/home/u1796377/.config/sublime-text-3/Packages/AutoPEP8/Default.sublime-keymap",
+		"/disk/workspace/CRegressionRDBM/creg/query_engine.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Default (Linux).sublime-keymap",
+		"/home/u1796377/.config/sublime-text-3/Packages/TrailingSpaces/README.md",
+		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/sublime_jedi.sublime-settings",
+		"/home/u1796377/.config/sublime-text-3/Packages/Jedi - Python autocompletion/Default.sublime-mousemap",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Default.sublime-keymap",
+		"/disk/workspace/CRegressionRDBM/tests/test_query_engine.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Python.sublime-settings",
+		"/disk/workspace/CRegressionRDBM/tests/test_core.py",
+		"/disk/workspace/CRegressionRDBM/creg/evaluation.py",
+		"/disk/workspace/CRegressionRDBM/creg/tools.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/sublime_jedi.sublime-settings",
+		"/disk/workspace/CRegressionRDBM/creg/__init__.py",
+		"/disk/workspace/CRegressionRDBM/tests/context.py",
+		"/disk/workspace/CRegressionRDBM/creg/cli/client.py",
+		"/disk/workspace/CRegressionRDBM/creg/cli/__init__.py",
+		"/disk/workspace/CRegressionRDBM/tests/test_ClientClass.py",
+		"/disk/workspace/CRegressionRDBM/tests/test_advanced.py",
+		"/disk/workspace/CRegressionRDBM/tests/test_basic.py",
+		"/disk/workspace/CRegressionRDBM/creg/Data.py",
+		"/disk/workspace/CRegressionRDBM/creg/run_code.py",
+		"/disk/workspace/CRegressionRDBM/setup.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/All Autocomplete.sublime-settings",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/python_anaconda.sublime-build",
+		"/disk/workspace/CRegressionRDBM.sublime-project",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Preferences.sublime-settings",
+		"/disk/workspace/CRegressionRDBM/cpm/ClientClass.py",
+		"/disk/workspace/CRegressionRDBM/cpm/Data.py",
+		"/home/u1796377/.config/sublime-text-3/Packages/Fold Python/Default (Linux).sublime-keymap",
+		"/disk/workspace/CRegressionRDBM/cpm/helpers.py",
+		"/disk/workspace/CRegressionRDBM/cpm/core.py",
+		"/disk/workspace/CRegressionRDBM/cpm/__init__.py",
+		"/disk/workspace/Cregression/tests/context.py",
+		"/disk/workspace/Cregression/cpm/run_code.py",
+		"/disk/workspace/Cregression/tests/test_basic.py",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-default.xml.template",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/conf/hive-site.xml",
+		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath._hbase",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/eclipse-templates/.classpath",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb_initial_repository/blinkdb/hive_blinkdb/.classpath._hbase",
+		"/home/u1796377/Program/blinkdb_eclipse/blinkdb/conf/blinkdb-env.sh",
+		"/home/u1796377/Program/blinkdb/hive_blinkdb/ql/src/test/queries/clientpositive/date_3.q",
+		"/home/u1796377/Program/blinkdb/bin/dev/run-tests-from-scratch",
+		"/home/u1796377/Program/blinkdb/hive_blinkdb/build.xml",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmpBusinessLogic.java",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmployeeDetails.java",
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/MessageUtil.java",
+		"/home/u1796377/workspace/ant_trial/build.xml",
+		"/home/u1796377/workspace/ant_trial/src/test/TestRunner.java",
+		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.java",
+		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.class"
 	],
 	"find":
 	{
@@ -815,16 +795,12 @@
 		]
 	},
 	"menu_visible": true,
-	"output.SublimeLinter":
-	{
-		"height": 0.0
-	},
 	"output.find_results":
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Anaconda Python Builder",
-	"project": "setup.sublime-project",
+	"pinned_build_system": "Packages/User/python3_user.sublime-build",
+	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
 		"height": 52.0
@@ -845,12 +821,12 @@
 	},
 	"select_project":
 	{
-		"height": 0.0,
+		"height": 500.0,
 		"last_filter": "",
 		"selected_items":
 		[
 		],
-		"width": 0.0
+		"width": 380.0
 	},
 	"select_symbol":
 	{
@@ -866,10 +842,10 @@
 	{
 	},
 	"show_minimap": true,
-	"show_open_files": false,
+	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 376.0,
+	"side_bar_width": 213.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
