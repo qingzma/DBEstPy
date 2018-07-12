@@ -26,7 +26,7 @@ from sklearn.svm import SVC
 # findspark.init()
 #import pyspark
 
-import subprocess32 as subprocess
+import subprocess as subprocess
 import pprint
 
 # from pyspark.mllib.classification import LogisticRegressionWithSGD
@@ -75,8 +75,8 @@ from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
 
-import vispy.plot as vp
-from vispy.color import ColorArray
+# import vispy.plot as vp
+# from vispy.color import ColorArray
 from mpl_toolkits.mplot3d import axes3d
 from matplotlib import gridspec
 
@@ -97,9 +97,7 @@ import warnings
 
 
 
-r = ColorArray('red')
-g = ColorArray((0, 1, 0, 1))
-blue = ColorArray('blue')
+
 color1 = (0.1, 0.3, 0.1)
 color2 = (0.4, 0.4, 0.3)
 color3 = (0.6, 0.7, 0.5)

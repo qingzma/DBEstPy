@@ -5,12 +5,15 @@ import data_loader as dl
 from query_engine import QueryEngine
 import logs
 import random
-import commands
+import subprocess
 # from pyhive import hive
 # import subprocess
 import os
 import pyhs2
-import MySQLdb
+# import MySQLdb
+import pymysql
+pymysql.install_as_MySQLdb()
+
 
 from datetime import datetime
 import warnings

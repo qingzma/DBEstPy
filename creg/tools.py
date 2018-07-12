@@ -17,12 +17,12 @@ from sklearn import preprocessing
 ##findspark.init()
 import logging
 
-from vispy.color import ColorArray
+# from vispy.color import ColorArray
 
 # ----------------------------------------------------------------------------------------------------------------#
-r = ColorArray('red')
-g = ColorArray((0, 1, 0, 1))
-blue = ColorArray('blue')
+# r = ColorArray('red')
+# g = ColorArray((0, 1, 0, 1))
+# blue = ColorArray('blue')
 color1 = (0.1, 0.3, 0.1)
 color2 = (0.4, 0.4, 0.3)
 color3 = (0.6, 0.7, 0.5)

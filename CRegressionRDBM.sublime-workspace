@@ -487,6 +487,43 @@
 	},
 	"buffers":
 	[
+		{
+			"file": "creg/tools.py",
+			"settings":
+			{
+				"buffer_size": 33971,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/core.py",
+			"settings":
+			{
+				"buffer_size": 112998,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/query_engine.py",
+			"settings":
+			{
+				"buffer_size": 21414,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
+			"settings":
+			{
+				"buffer_size": 160,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "untitled.sublime-build"
+			}
+		}
 	],
 	"build_system": "",
 	"build_system_choices":
@@ -500,6 +537,10 @@
 		"selected_items":
 		[
 			[
+				"install",
+				"Package Control: Install Package"
+			],
+			[
 				"out",
 				"Browse Mode: Outline (Right)"
 			],
@@ -510,10 +551,6 @@
 			[
 				"re",
 				"Package Control: Remove Package"
-			],
-			[
-				"install",
-				"Package Control: Install Package"
 			],
 			[
 				"ins",
@@ -593,10 +630,14 @@
 	},
 	"expanded_folders":
 	[
-		"/home/u1796377/workspace/CRegressionRDBM"
+		"/home/u1796377/Workspace/CRegressionRDBM",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data"
 	],
 	"file_history":
 	[
+		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/home/u1796377/workspace/CRegressionRDBM/creg/tools.py",
 		"/home/u1796377/workspace/CRegressionRDBM/requirements.txt",
 		"/home/u1796377/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
@@ -604,7 +645,6 @@
 		"/home/u1796377/Desktop/1m_1.log",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/python3_user.sublime-build",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/python2_user.sublime-build",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
 		"/home/u1796377/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
 		"/home/u1796377/workspace/CRegressionRDBM/creg/logs.py",
 		"/home/u1796377/workspace/CRegressionRDBM/creg/query_engine.py",
@@ -759,8 +799,127 @@
 	"groups":
 	[
 		{
+			"selected": 2,
 			"sheets":
 			[
+				{
+					"buffer": 0,
+					"file": "creg/tools.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 33971,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								603,
+								603
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 524.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "creg/core.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 112998,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3533,
+								3533
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1710.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "creg/query_engine.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 21414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1864,
+								1864
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 684.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 160,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								50,
+								50
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				}
 			]
 		}
 	],
@@ -795,11 +954,15 @@
 		]
 	},
 	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 592.0
+	},
 	"output.find_results":
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Packages/User/python3_user.sublime-build",
+	"pinned_build_system": "Packages/User/python3.sublime-build",
 	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
