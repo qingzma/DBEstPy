@@ -13,6 +13,7 @@ import pyhs2
 # import MySQLdb
 import pymysql
 pymysql.install_as_MySQLdb()
+import generate_random
 
 
 from datetime import datetime
@@ -65,17 +66,20 @@ class Query_Engine_2d:
         count,time = self.qe.approximate_count_from_to(l ,h, 0)
         return count, time
     def query_2d_variance_x(self,l=0,h=100):
-        count,time = self.qe.approximate_variance_x_from_to(l ,h, 0)
-        return count, time
+        variance_x,time = self.qe.approximate_variance_x_from_to(l ,h, 0)
+        return variance_x, time
     def query_2d_variance_y(self,l=0,h=100):
-        count,time = self.qe.approximate_variance_y_from_to(l ,h, 0)
-        return count, time
+        variance_y,time = self.qe.approximate_variance_y_from_to(l ,h, 0)
+        return variance_y, time
     def query_2d_covariance(self,l=0,h=100):
-        count,time = self.qe.approximate_covar_from_to(l ,h, 0)
-        return count, time
+        covariance,time = self.qe.approximate_covar_from_to(l ,h, 0)
+        return covariance, time
     def query_2d_correlation(self,l=0,h=100):
-        count,time = self.qe.approximate_corr_from_to(l ,h, 0)
-        return count, time
+        correlation,time = self.qe.approximate_corr_from_to(l ,h, 0)
+        return correlation, time
+    def query_2d_percentile(self, p):
+        percentile,time = self.qe.approximate_percentile_from_to(p, self.q_min, self.q_max)
+        return percentile, time
 
     def mass_query_sum(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
@@ -85,14 +89,17 @@ class Query_Engine_2d:
         approx_results = []
         approx_times = []
         for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
             q_centre = random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_sum(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
             sqlStr = "SELECT SUM("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+            approx_result, approx_time = self.query_2d_sum(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -122,11 +129,14 @@ class Query_Engine_2d:
             q_centre = random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_avg(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
             sqlStr = "SELECT AVG("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+
+            approx_result, approx_time = self.query_2d_avg(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -155,11 +165,13 @@ class Query_Engine_2d:
             q_centre = random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
             sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -178,21 +190,26 @@ class Query_Engine_2d:
 
     def mass_query_variance_x(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
-        random.seed(1.0)
+        # random.seed(1.0)
+        random_left_boundary = self.q_min + q_range_half_length
+        random_right_boundary = self.q_max - q_range_half_length
+        query_centres = generate_random.make_user_distribution(self.qe.kde, 30, 100,n=number)
         exact_results = []
         exact_times = []
         approx_results = []
         approx_times = []
         for i in range(number):
             self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
-            q_centre = random.uniform(self.q_min,self.q_max)
+            q_centre = query_centres[i] #random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_variance_x(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
             sqlStr = "SELECT VARIANCE("+x+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+            approx_result, approx_time = self.query_2d_variance_x(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -212,21 +229,26 @@ class Query_Engine_2d:
 
     def mass_query_variance_y(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
-        random.seed(1.0)
+        # random.seed(1.0)
+        random_left_boundary = self.q_min + q_range_half_length
+        random_right_boundary = self.q_max - q_range_half_length
+        query_centres = generate_random.make_user_distribution(self.qe.kde, 30, 100,n=number)
         exact_results = []
         exact_times = []
         approx_results = []
         approx_times = []
         for i in range(number):
             self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
-            q_centre = random.uniform(self.q_min,self.q_max)
+            q_centre = query_centres[i] #random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_variance_y(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
             sqlStr = "SELECT VARIANCE("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+            approx_result, approx_time = self.query_2d_variance_y(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -245,21 +267,26 @@ class Query_Engine_2d:
 
     def mass_query_covariance(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
-        random.seed(1.0)
+        # random.seed(1.0)
+        random_left_boundary = self.q_min + q_range_half_length
+        random_right_boundary = self.q_max - q_range_half_length
+        query_centres = generate_random.make_user_distribution(self.qe.kde, 30, 100,n=number)
         exact_results = []
         exact_times = []
         approx_results = []
         approx_times = []
         for i in range(number):
             self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
-            q_centre = random.uniform(self.q_min,self.q_max)
+            q_centre = query_centres[i] #random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
+            
+
+            sqlStr = "SELECT COVARIANCE("+x+", "+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            self.logger.logger.info(sqlStr)
+
             approx_result, approx_time = self.query_2d_covariance(l=q_left,h=q_right)
             self.logger.logger.info(approx_result)
-
-            sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
-            self.logger.logger.info(sqlStr)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -278,21 +305,26 @@ class Query_Engine_2d:
 
     def mass_query_correlation(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
         q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
-        random.seed(1.0)
+        # random.seed(1.0)
+        random_left_boundary = self.q_min + q_range_half_length
+        random_right_boundary = self.q_max - q_range_half_length
+        query_centres = generate_random.make_user_distribution(self.qe.kde, 30, 100,n=number)
         exact_results = []
         exact_times = []
         approx_results = []
         approx_times = []
         for i in range(number):
             self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
-            q_centre = random.uniform(self.q_min,self.q_max)
+            q_centre = query_centres[i] #random.uniform(self.q_min,self.q_max)
             q_left = q_centre - q_range_half_length
             q_right = q_centre + q_range_half_length
-            approx_result, approx_time = self.query_2d_count(l=q_left,h=q_right)
-            self.logger.logger.info(approx_result)
+            
 
-            sqlStr = "SELECT COUNT("+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
+            sqlStr = "SELECT CORR("+x+", "+y+") FROM " + str(table) +" WHERE  "+x+" BETWEEN " + str(q_left[0]) +" AND " +str(q_right[0])
             self.logger.logger.info(sqlStr)
+
+            approx_result, approx_time = self.query_2d_correlation(l=q_left,h=q_right)
+            self.logger.logger.info(approx_result)
             exact_result, exact_time = self.query2mysql(sql=sqlStr)
 
             self.logger.logger.info(exact_result)
@@ -307,6 +339,44 @@ class Query_Engine_2d:
         self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
         self.logger.logger.warning("Approximate query results: " + str(approx_results))
         self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        self.logger.logger.info("")
+        return exact_results, approx_results, exact_times, approx_times
+
+    def mass_query_percentile(self,table,x="ss_list_price",y="ss_wholesale_cost",percent=5,number=default_mass_query_number):
+        q_range_half_length = (self.q_max-self.q_min)*percent/100.0/2.0
+        random.seed(1.0)
+        
+        exact_results = []
+        exact_times = []
+        approx_results = []
+        approx_times = []
+        for i in range(number):
+            self.logger.logger.info("start query No."+str(i+1) +" out of "+str(number))
+            q_centre = random.uniform(0,1)
+            sqlStr = "SELECT percentile_cont("+x+", "+str(q_centre)+") FROM " + str(table)
+            self.logger.logger.info(sqlStr)
+
+            
+            
+            approx_result, approx_time = self.query_2d_percentile(q_centre)
+            self.logger.logger.info(approx_result)
+
+            
+            exact_result, exact_time = self.query2mysql(sql=sqlStr)
+
+            self.logger.logger.info(exact_result)
+            if (exact_result is not None) and (exact_result is not 0):
+                exact_results.append(exact_result)
+                exact_times.append(exact_time)
+                approx_results.append(approx_result)
+                approx_times.append(approx_time)
+            else:
+                self.logger.logger.warning("MYSQL returns None, so this record is ignored.")
+        self.logger.logger.warning("MYSQL query results: " + str(exact_results))
+        self.logger.logger.warning("MYSQL query time cost: " + str(exact_times))
+        self.logger.logger.warning("Approximate query results: " + str(approx_results))
+        self.logger.logger.warning("Approximate query time cost: " + str(approx_times))
+        self.logger.logger.info("")
         return exact_results, approx_results, exact_times, approx_times
 
     def relative_error(self,exact_results, approx_results):
@@ -360,9 +430,9 @@ class Query_Engine_2d:
         # Open database connection
         # db = MySQLdb.connect("127.0.0.1","hiveuser","bayern","hivedb" )
         if use_server:
-            db = MySQLdb.connect("137.205.118.65","u1796377","bayern","hivedb",port=3306 )
+            db = pymysql.connect("137.205.118.65","u1796377","bayern","hivedb",port=3306 )
         else:
-            db = MySQLdb.connect("127.0.0.1","hiveuser","bayern","hivedb",port=3306 )
+            db = pymysql.connect("127.0.0.1","hiveuser","bayern","hivedb",port=3306 )
 
         # prepare a cursor object using cursor() method
         cursor = db.cursor()
@@ -390,18 +460,22 @@ class Query_Engine_2d:
 
 
 if __name__ == '__main__':
-    qe2d = Query_Engine_2d("1m",num_of_points=1000000,logger_file="../results/1m.log")
+
+    
+    qe2d = Query_Engine_2d("100k",num_of_points=100000,logger_file="../results/1m.log")
     qe2d.logger.set_level("WARNING")
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()
     #
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(table="price_cost_1t_sorted",number=5,percent=1)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(table="price_cost_1t_sorted",number=5,percent=1)
+    # qe2d.relative_error(exact_results, approx_results)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(table="price_cost_1t_sorted",number=5,percent=1)
+    # qe2d.relative_error(exact_results, approx_results)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(table="price_cost_1t_sorted",number=5,percent=1)
+    # qe2d.relative_error(exact_results, approx_results)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_variance_x(table="price_cost_100k",number=5,percent=1)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_variance_y(table="price_cost_100k",number=5,percent=1)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_covariance(table="price_cost_100k",number=5,percent=1)
+    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_correlation(table="price_cost_100k",number=5,percent=1)
+    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_percentile(table="price_cost_100k",number=5,percent=1)
     qe2d.relative_error(exact_results, approx_results)
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(table="price_cost_1t_sorted",number=5,percent=1)
-    qe2d.relative_error(exact_results, approx_results)
-    exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(table="price_cost_1t_sorted",number=5,percent=1)
-    qe2d.relative_error(exact_results, approx_results)
-    # qe2d.time_ratio(exact_times, approx_times)
-    # qe2d.query2mysql("show columns from price_cost_sample_1000000")
-    # qe2d.query2mysql(sql="select * from price_cost_1t_sample_1m limit 1")
-    # qe2d.query2hive()
-
+    
