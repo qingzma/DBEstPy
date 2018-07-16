@@ -393,15 +393,24 @@ class QueryEngine:
         tmp_b = self.b_print_time_cost
         self.b_print_time_cost = False
         if self.dimension is 1:
-            var_x,_ = self.approximate_variance_x_from_to(1, x_min=x_min, x_max=x_max)
-            var_y,_ = self.approximate_variance_y_from_to(1,x_min=x_min, x_max=x_max)
+            var_x,_ = self.approximate_variance_x_from_to( x_min=x_min, x_max=x_max,x_columnID=1)
+            var_y,_ = self.approximate_variance_y_from_to(x_min=x_min, x_max=x_max,x_columnID=1)
             if (var_x>=0) and (var_y>=0):
                 var_x = var_x**0.5
                 var_y = var_y**0.5
+                result = self.approximate_covar_from_to( x_min=x_min, x_max=x_max, x_columnID=1)[0]/var_x/var_y
+                self.logger.info("Approximate CORR: %.4f." % result)
             else:
                 result = None
                 self.logger.warning("Cant be divided by zero! see Function approximate_corr_from_to()")
-        result = self.approximate_covar_from_to(1, x_min=x_min, x_max=x_max)[0]/var_x/var_y
+        
+        end = datetime.now()
+        time_cost =  (end - start).total_seconds()
+        self.b_print_time_cost = tmp_b
+        if self.b_print_time_cost:
+            self.logger.info("Time spent for approximate CORR: %.4fs." % time_cost)
+        return result, time_cost
+        
 
 
         # if self.dimension > 1:
@@ -422,13 +431,7 @@ class QueryEngine:
         #     def f_p(*args):
         #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
-        end = datetime.now()
-        time_cost =  (end - start).total_seconds()
-        self.b_print_time_cost = tmp_b
-        if self.b_print_time_cost:
-            self.logger.info("Approximate CORR: %.4f." % result)
-            self.logger.info("Time spent for approximate CORR: %.4fs." % time_cost)
-        return result, time_cost
+        
 
 
 
@@ -442,13 +445,15 @@ if __name__ == "__main__":
     data = dl.load2d(5)
     cRegression = CRegression(logger_object=logger)
     cRegression.fit(data)
-    # cRegression.plot_training_data_3d()
-    # exit(1)
+
     cRegression.plot_training_data_2d()
     logger.set_logging()
     qe = QueryEngine(cRegression, logger_object=logger)
     qe.density_estimation()
     qe.desngity_estimation_plt2d()
+
+
+
     # qe.desngity_estimation_plt3d()
     # qe.approximate_avg_from_to(70, 80, 0)[0]
     # qe.approximate_sum_from_to(70, 80, 0)[0]
@@ -463,6 +468,6 @@ if __name__ == "__main__":
     # qe.approximate_variance_x_from_to(0.6, 0.8, 0)[0]
     # qe.approximate_variance_y_from_to(0.6, 0.8, 0)[0]
     # qe.approximate_covar_from_to(0.6, 0.8, 0)[0]
-    qe.approximate_corr_from_to(0.6, 0.8, 0)[0]
+    qe.approximate_corr_from_to(50, 70, 0)[0]
 
     # qe.desngity_estimation_plt2d()

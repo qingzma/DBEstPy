@@ -488,19 +488,20 @@
 	"buffers":
 	[
 		{
+			"contents": "QueryEngine:\n    __init__(…)\n    density_estimation(…)\n    desngity_estimation_plt2d(…)\n    desngity_estimation_plt3d(…)\n    approximate_avg_from_to(…)\n            f_pRx(…)\n            f_p(…)\n            f_p(…)\n            f_pRx(…)\n    approximate_sum_from_to(…)\n            f_pRx(…)\n            f_pRx(…)\n    approximate_count_from_to(…)\n            f_p(…)\n            f_p(…)\n    approximate_variance_x_from_to(…)\n            f_p(…)\n            f_x2Px(…)\n            f_xPx(…)\n            f_xRxPx(…)\n    approximate_variance_y_from_to(…)\n            f_p(…)\n            f_R2Px(…)\n            f_RxPx(…)\n    approximate_covar_from_to(…)\n            f_p(…)\n            f_px(…)\n            f_pRx(…)\n            f_xRxPx(…)\n    approximate_corr_from_to(…)",
+			"settings":
+			{
+				"buffer_size": 747,
+				"line_ending": "Unix",
+				"name": "𝌆 Outline",
+				"scratch": true
+			}
+		},
+		{
 			"file": "creg/tools.py",
 			"settings":
 			{
 				"buffer_size": 33971,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "creg/core.py",
-			"settings":
-			{
-				"buffer_size": 112998,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -515,13 +516,20 @@
 			}
 		},
 		{
-			"file": "/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
+			"file": "creg/evaluate2d.py",
 			"settings":
 			{
-				"buffer_size": 160,
+				"buffer_size": 19315,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/core.py",
+			"settings":
+			{
+				"buffer_size": 112998,
 				"encoding": "UTF-8",
-				"line_ending": "Unix",
-				"name": "untitled.sublime-build"
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -536,6 +544,10 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"outlien",
+				"Browse Mode: Outline (Right)"
+			],
 			[
 				"install",
 				"Package Control: Install Package"
@@ -637,7 +649,11 @@
 	],
 	"file_history":
 	[
+		"/usr/share/gnome-background-properties/bionic-wallpapers.xml",
+		"/usr/share/gnome-shell/theme/ubuntu.css",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/python3_qz.sublime-build",
 		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
+		"/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
 		"/home/u1796377/workspace/CRegressionRDBM/creg/tools.py",
 		"/home/u1796377/workspace/CRegressionRDBM/requirements.txt",
 		"/home/u1796377/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
@@ -760,11 +776,7 @@
 		"/home/u1796377/Program/blinkdb/hive_blinkdb/build.xml",
 		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmpBusinessLogic.java",
 		"/home/u1796377/workspace/ant_trial/src/qingzhi/EmployeeDetails.java",
-		"/home/u1796377/workspace/ant_trial/src/qingzhi/MessageUtil.java",
-		"/home/u1796377/workspace/ant_trial/build.xml",
-		"/home/u1796377/workspace/ant_trial/src/test/TestRunner.java",
-		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.java",
-		"/home/u1796377/workspace/ant_trial/src/test/TestJunit1.class"
+		"/home/u1796377/workspace/ant_trial/src/qingzhi/MessageUtil.java"
 	],
 	"find":
 	{
@@ -782,6 +794,10 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"jdk1.8.0_171",
+			"jdk-10.0.1",
+			"jdk-10.0.1_linux-x64_bin",
+			"jdk1.8.0"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -789,6 +805,10 @@
 		"regex": false,
 		"replace_history":
 		[
+			"jdk1.7.0_80",
+			"jdk1.8.0_171",
+			"jdk-10.0.1",
+			"jdk-10.0.1_linux-x64_bin"
 		],
 		"reverse": false,
 		"show_context": true,
@@ -799,11 +819,207 @@
 	"groups":
 	[
 		{
-			"selected": 2,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 747,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								321,
+								321
+							]
+						],
+						"settings":
+						{
+							"current_file": "/home/u1796377/Workspace/CRegressionRDBM/creg/query_engine.py",
+							"outline_rename_mode": false,
+							"symkeys":
+							[
+								[
+									733,
+									751
+								],
+								[
+									1066,
+									1171
+								],
+								[
+									1865,
+									1911
+								],
+								[
+									2366,
+									2406
+								],
+								[
+									3124,
+									3164
+								],
+								[
+									4524,
+									4588
+								],
+								[
+									4953,
+									4978
+								],
+								[
+									5117,
+									5140
+								],
+								[
+									6194,
+									6221
+								],
+								[
+									6394,
+									6423
+								],
+								[
+									7087,
+									7151
+								],
+								[
+									7292,
+									7321
+								],
+								[
+									8348,
+									8377
+								],
+								[
+									8914,
+									8980
+								],
+								[
+									9121,
+									9148
+								],
+								[
+									10109,
+									10136
+								],
+								[
+									10617,
+									10705
+								],
+								[
+									10846,
+									10873
+								],
+								[
+									10959,
+									10989
+								],
+								[
+									11098,
+									11127
+								],
+								[
+									11233,
+									11264
+								],
+								[
+									13125,
+									13213
+								],
+								[
+									13354,
+									13381
+								],
+								[
+									13467,
+									13497
+								],
+								[
+									13630,
+									13660
+								],
+								[
+									15481,
+									15564
+								],
+								[
+									15705,
+									15732
+								],
+								[
+									15818,
+									15846
+								],
+								[
+									15950,
+									15979
+								],
+								[
+									16129,
+									16160
+								],
+								[
+									18105,
+									18187
+								]
+							],
+							"symlist":
+							[
+								"QueryEngine:",
+								"    __init__(…)",
+								"    density_estimation(…)",
+								"    desngity_estimation_plt2d(…)",
+								"    desngity_estimation_plt3d(…)",
+								"    approximate_avg_from_to(…)",
+								"            f_pRx(…)",
+								"            f_p(…)",
+								"            f_p(…)",
+								"            f_pRx(…)",
+								"    approximate_sum_from_to(…)",
+								"            f_pRx(…)",
+								"            f_pRx(…)",
+								"    approximate_count_from_to(…)",
+								"            f_p(…)",
+								"            f_p(…)",
+								"    approximate_variance_x_from_to(…)",
+								"            f_p(…)",
+								"            f_x2Px(…)",
+								"            f_xPx(…)",
+								"            f_xRxPx(…)",
+								"    approximate_variance_y_from_to(…)",
+								"            f_p(…)",
+								"            f_R2Px(…)",
+								"            f_RxPx(…)",
+								"    approximate_covar_from_to(…)",
+								"            f_p(…)",
+								"            f_px(…)",
+								"            f_pRx(…)",
+								"            f_xRxPx(…)",
+								"    approximate_corr_from_to(…)"
+							],
+							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 1,
 					"file": "creg/tools.py",
 					"semi_transient": false,
 					"settings":
@@ -815,8 +1031,8 @@
 						"selection":
 						[
 							[
-								603,
-								603
+								2790,
+								2790
 							]
 						],
 						"settings":
@@ -826,14 +1042,74 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 524.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 1,
+					"buffer": 2,
+					"file": "creg/query_engine.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 21414,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								21413,
+								21413
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 8115.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "creg/evaluate2d.py",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 19315,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								302,
+								302
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 912.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
 					"file": "creg/core.py",
 					"semi_transient": false,
 					"settings":
@@ -845,8 +1121,8 @@
 						"selection":
 						[
 							[
-								3533,
-								3533
+								3791,
+								3791
 							]
 						],
 						"settings":
@@ -856,65 +1132,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1710.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "creg/query_engine.py",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 21414,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1864,
-								1864
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 684.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 160,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								50,
-								50
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JSON.sublime-syntax"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1910.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
@@ -936,33 +1154,42 @@
 		"cells":
 		[
 			[
+				2,
+				0,
+				3,
+				2
+			],
+			[
 				0,
 				0,
-				1,
-				1
+				2,
+				2
 			]
 		],
 		"cols":
 		[
 			0.0,
+			0.2,
+			0.7921986017,
 			1.0
 		],
 		"rows":
 		[
 			0.0,
+			0.5,
 			1.0
 		]
 	},
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 592.0
+		"height": 248.0
 	},
 	"output.find_results":
 	{
 		"height": 0.0
 	},
-	"pinned_build_system": "Packages/User/python3.sublime-build",
+	"pinned_build_system": "Packages/User/python3_qz.sublime-build",
 	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
@@ -1000,7 +1227,7 @@
 		],
 		"width": 0.0
 	},
-	"selected_group": 0,
+	"selected_group": 1,
 	"settings":
 	{
 	},
@@ -1008,7 +1235,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 213.0,
+	"side_bar_width": 243.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{
