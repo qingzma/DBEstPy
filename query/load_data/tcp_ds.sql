@@ -126,7 +126,7 @@ sed -i '1s/^/ss_list_price,ss_wholesale_cost\n/' 100k.csv
 
 
 
-CREATE EXTERNAL TABLE store_sales_1t ( ss_sold_date_sk           INT,
+CREATE  TABLE store_sales ( ss_sold_date_sk           INT,
 ss_sold_time_sk           INT,
 ss_item_sk                INT,
 ss_customer_sk            INT,
@@ -152,13 +152,47 @@ ss_net_profit             DOUBLE
 )
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
-LOCATION '/user/hive/warehouse/store_sales_1t.dat/1T.dat';
+LOCATION '/user/hive/warehouse/store_sales';
 
+
+LOAD DATA INPATH '/data/tcp/tcp-ds/1t/store_sales.dat' INTO TABLE store_sales;
 
 LOAD DATA INPATH 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
 LOAD DATA INPATH 'hdfs:/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
 -- LOAD DATA INPATH '/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;
 -- LOAD DATA  INPATH '/disk/dataset/hadoop/store_sales.dat' INTO TABLE store_sales_1t;
 
+ALTER TABLE store_sales SET LOCATION "/data/tcp/tcp-ds/1t/store_sales.dat";
+-- ALTER TABLE store_sales_1t SET LOCATION 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales/1T.dat';
+ALTER TABLE store_sales_1t SET LOCATION 'hdfs://guest-wl-65.dcs.warwick.ac.uk:9000/user/hive/warehouse/store_sales/1T.dat';
+
+
 CREATE TABLE store_sales_sample_1_percent AS SELECT * FROM store_sales SAMPLEWITH 0.01;
-CREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales SAMPLEWITH 0.01;
+CREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales_sample_1_percent;
+
+set blinkdb.sample.size=28794695;
+set blinkdb.dataset.size=2685596178;
+
+cat 1m_1.log | grep "^INFO - SELECT" >1m_1.hiveql
+./bin/blinkdb -i ~/results/1m_1.hiveql > ~/results/1m_1.log
+# append ; to the end  of each line
+sed -e 's/$/;/' -i 1m_1.hiveql
+
+# fetch the results from the file
+ cat 1m_1.log | grep '(99% Confidence)' > results.log
+
+
+
+
+
+#################################################################################
+#create a new sample in blinkdb, the size is 1 million.
+CREATE TABLE store_sales_sample_1m_cached AS SELECT * FROM store_sales_sample_1_percent SAMPLEWITH 0.034728619;
+set blinkdb.sample.size=999173;
+set blinkdb.dataset.size=2685596178;
+
+
+
+
+
+awk 'FNR % 7 == 4' max >> max_qreg

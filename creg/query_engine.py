@@ -39,7 +39,7 @@ class QueryEngine:
         training_data (TYPE): Description
     """
 
-    def __init__(self, cregression, logger_object=None, b_print_time_cost=True,num_training_points=None):
+    def __init__(self, cregression, logger_object=None, b_print_time_cost=True, num_training_points=None):
         if num_training_points is None:
             self.num_training_points = cregression.num_total_training_points
         else:
@@ -56,7 +56,6 @@ class QueryEngine:
         self.b_print_time_cost = b_print_time_cost
 
         warnings.filterwarnings(action='ignore', category=DeprecationWarning)
-
 
     def density_estimation(self, kernel=None):
         """Estimate the density of points.
@@ -102,8 +101,8 @@ class QueryEngine:
             self.training_data.features[:, 1]), mesh_grid_num)
         X, Y = np.meshgrid(x, y)
 
-        X1d = X.reshape(mesh_grid_num*mesh_grid_num)
-        Y1d = Y.reshape(mesh_grid_num*mesh_grid_num)
+        X1d = X.reshape(mesh_grid_num * mesh_grid_num)
+        Y1d = Y.reshape(mesh_grid_num * mesh_grid_num)
         Z1d = [[X1d[i], Y1d[i]] for i in range(len(X1d))]
         Z = self.kde.score_samples(Z1d)
         Z_plot = Z.reshape((mesh_grid_num, mesh_grid_num))
@@ -140,22 +139,25 @@ class QueryEngine:
         if self.dimension is 1:
             def f_pRx(x):
                 # print(self.cregression.predict(x))
-                return np.exp(self.kde.score_samples(x))*self.cregression.predict(x)
+                return np.exp(self.kde.score_samples(x)) * self.cregression.predict(x)
+
             def f_p(x):
                 return np.exp(self.kde.score_samples(x))
-            a = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            b = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
+            a = integrate.quad(f_pRx, x_min, x_max,
+                               epsabs=epsabs, epsrel=epsrel)[0]
+            b = integrate.quad(f_p, x_min, x_max,
+                               epsabs=epsabs, epsrel=epsrel)[0]
 
-            if  b:
-                result = a/b
+            if b:
+                result = a / b
             else:
-                result =  None
+                result = None
 
         if self.dimension > 1:
-            data_range_length_half = [(max(self.training_data.features[:, i])-min(
-                self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
-            data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-                self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+            data_range_length_half = [(max(self.training_data.features[:, i]) - min(
+                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]
+            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(
+                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]
 
             # generate the integral bounds
             bounds = []
@@ -163,7 +165,7 @@ class QueryEngine:
                 bounds.append(data_range[i])
             bounds.append([x_min, x_max])
             # print(bounds)
-            for i in range(x_columnID+1, self.dimension):
+            for i in range(x_columnID + 1, self.dimension):
                 bounds.append(data_range[i])
 
             def f_p(*args):
@@ -176,15 +178,16 @@ class QueryEngine:
             a = integrate.nquad(f_pRx, bounds, opts=opts)[0]
             b = integrate.nquad(f_p, bounds, opts=opts)[0]
 
-            if  b:
-                result = a/b
+            if b:
+                result = a / b
             else:
-                result =  None
+                result = None
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
             self.logger.info("Approximate AVG: %.4f." % result)
-            self.logger.info("Time spent for approximate AVG: %.4fs." % time_cost)
+            self.logger.info(
+                "Time spent for approximate AVG: %.4fs." % time_cost)
         return result, time_cost
 
     def approximate_sum_from_to(self, x_min, x_max, x_columnID):
@@ -194,14 +197,15 @@ class QueryEngine:
             def f_pRx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args))
-            result = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
+                0] * self.num_training_points
             # return result
 
         if self.dimension > 1:
-            data_range_length_half = [(max(self.training_data.features[:, i])-min(
-                self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
-            data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-                self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+            data_range_length_half = [(max(self.training_data.features[:, i]) - min(
+                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]
+            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(
+                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]
 
             # generate the integral bounds
             bounds = []
@@ -209,18 +213,20 @@ class QueryEngine:
                 bounds.append(data_range[i])
             bounds.append([x_min, x_max])
             # print(bounds)
-            for i in range(x_columnID+1, self.dimension):
+            for i in range(x_columnID + 1, self.dimension):
                 bounds.append(data_range[i])
 
             def f_pRx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args))
-            result = integrate.nquad(f_pRx, bounds, opts=opts)[0]*self.num_training_points
+            result = integrate.nquad(f_pRx, bounds, opts=opts)[
+                0] * self.num_training_points
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
             self.logger.info("Approximate SUM: %.4f." % result)
-            self.logger.info("Time spent for approximate SUM: %.4fs." % time_cost)
+            self.logger.info(
+                "Time spent for approximate SUM: %.4fs." % time_cost)
         return result, time_cost
 
     def approximate_count_from_to(self, x_min, x_max, x_columnID):
@@ -229,14 +235,15 @@ class QueryEngine:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
-            result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
+            result = integrate.quad(f_p, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
+                0] * self.num_training_points
             # return result
 
         if self.dimension > 1:
-            data_range_length_half = [(max(self.training_data.features[:, i])-min(
-                self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
-            data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-                self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+            data_range_length_half = [(max(self.training_data.features[:, i]) - min(
+                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]
+            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(
+                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]
 
             # generate the integral bounds
             bounds = []
@@ -244,19 +251,20 @@ class QueryEngine:
                 bounds.append(data_range[i])
             bounds.append([x_min, x_max])
             # print(bounds)
-            for i in range(x_columnID+1, self.dimension):
+            for i in range(x_columnID + 1, self.dimension):
                 bounds.append(data_range[i])
 
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
-            result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
+            result = integrate.nquad(f_p, bounds, opts=opts)[
+                0] * self.num_training_points
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
             self.logger.info("Approximate count: %.4f." % result)
-            self.logger.info("Time spent for approximate COUNT: %.4fs." % time_cost)
+            self.logger.info(
+                "Time spent for approximate COUNT: %.4fs." % time_cost)
         return int(result), time_cost
-
 
     def approximate_variance_x_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
         start = datetime.now()
@@ -264,24 +272,31 @@ class QueryEngine:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+
             def f_x2Px(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]**2
+
             def f_xPx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]
+
             def f_xRxPx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args)) * np.array(args)[0]
             # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
-            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            Ex2 = integrate.quad(f_x2Px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            Ex_2 = integrate.quad(f_xPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0] **2
-            result = Ex2 / Ep - Ex_2 / Ep /Ep
+            Ep = integrate.quad(f_p, x_min, x_max,
+                                epsabs=epsabs, epsrel=epsrel)[0]
+            Ex2 = integrate.quad(f_x2Px, x_min, x_max,
+                                 epsabs=epsabs, epsrel=epsrel)[0]
+            Ex_2 = integrate.quad(f_xPx, x_min, x_max,
+                                  epsabs=epsabs, epsrel=epsrel)[0] ** 2
+            result = Ex2 / Ep - Ex_2 / Ep / Ep
 
         # if self.dimension > 1:
         #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
         #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
         #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+        # self.training_data.features[:, i])+data_range_length_half[i]] for i
+        # in range(self.dimension)]
 
         #     # generate the integral bounds
         #     bounds = []
@@ -296,10 +311,11 @@ class QueryEngine:
         #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
             self.logger.info("Approximate variance x: %.4f." % result)
-            self.logger.info("Time spent for approximate variance x: %.4fs." % time_cost)
+            self.logger.info(
+                "Time spent for approximate variance x: %.4fs." % time_cost)
         return result, time_cost
 
     def approximate_variance_y_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
@@ -308,21 +324,27 @@ class QueryEngine:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+
             def f_R2Px(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))**2
+
             def f_RxPx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))
             # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
-            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            Ey2 = integrate.quad(f_R2Px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            Ey_2 = integrate.quad(f_RxPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0] **2
-            result = Ey2 / Ep - Ey_2 / Ep /Ep
+            Ep = integrate.quad(f_p, x_min, x_max,
+                                epsabs=epsabs, epsrel=epsrel)[0]
+            Ey2 = integrate.quad(f_R2Px, x_min, x_max,
+                                 epsabs=epsabs, epsrel=epsrel)[0]
+            Ey_2 = integrate.quad(f_RxPx, x_min, x_max,
+                                  epsabs=epsabs, epsrel=epsrel)[0] ** 2
+            result = Ey2 / Ep - Ey_2 / Ep / Ep
 
         # if self.dimension > 1:
         #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
         #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
         #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+        # self.training_data.features[:, i])+data_range_length_half[i]] for i
+        # in range(self.dimension)]
 
         #     # generate the integral bounds
         #     bounds = []
@@ -337,12 +359,14 @@ class QueryEngine:
         #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
             self.logger.info("Approximate variance y: %.4f." % result)
-            self.logger.info("Time spent for approximate variance y: %.4fs." % time_cost)
-            if result <0:
-                self.logger.warning("Negtive approximate variance y: %.4f. is predicted..." % result)
+            self.logger.info(
+                "Time spent for approximate variance y: %.4fs." % time_cost)
+            if result < 0:
+                self.logger.warning(
+                    "Negtive approximate variance y: %.4f. is predicted..." % result)
         return result, time_cost
 
     def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
@@ -351,26 +375,34 @@ class QueryEngine:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
+
             def f_px(*args):
-                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))*np.array(args)[0]
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]
+
             def f_pRx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args))
+
             def f_xRxPx(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args)) * np.array(args)[0]
             # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points
-            Ep = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            ExPx = integrate.quad(f_px,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            ERxPx = integrate.quad(f_pRx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            ExRxPx = integrate.quad(f_xRxPx,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]
-            result = ExRxPx / Ep - ExPx*ERxPx / Ep /Ep
+            Ep = integrate.quad(f_p, x_min, x_max,
+                                epsabs=epsabs, epsrel=epsrel)[0]
+            ExPx = integrate.quad(f_px, x_min, x_max,
+                                  epsabs=epsabs, epsrel=epsrel)[0]
+            ERxPx = integrate.quad(f_pRx, x_min, x_max,
+                                   epsabs=epsabs, epsrel=epsrel)[0]
+            ExRxPx = integrate.quad(
+                f_xRxPx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0]
+            result = ExRxPx / Ep - ExPx * ERxPx / Ep / Ep
 
         # if self.dimension > 1:
         #     data_range_length_half = [(max(self.training_data.features[:, i])-min(
         #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]
         #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(
-        #         self.training_data.features[:, i])+data_range_length_half[i]] for i in range(self.dimension)]
+        # self.training_data.features[:, i])+data_range_length_half[i]] for i
+        # in range(self.dimension)]
 
         #     # generate the integral bounds
         #     bounds = []
@@ -385,10 +417,11 @@ class QueryEngine:
         #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
-            self.logger.info("Approximate COVAR: %.4fs." % result)
-            self.logger.info("Time spent for approximate COVAR: %.4fs." % time_cost)
+            self.logger.info("Approximate COVAR: %.4f." % result)
+            self.logger.info(
+                "Time spent for approximate COVAR: %.4fs." % time_cost)
         return result, time_cost
 
     def approximate_corr_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
@@ -396,42 +429,107 @@ class QueryEngine:
         tmp_b = self.b_print_time_cost
         self.b_print_time_cost = False
         if self.dimension is 1:
-            var_x,_ = self.approximate_variance_x_from_to( x_min=x_min, x_max=x_max,x_columnID=1)
-            var_y,_ = self.approximate_variance_y_from_to(x_min=x_min, x_max=x_max,x_columnID=1)
-            if (var_x>=0) and (var_y>=0):
+            var_x, _ = self.approximate_variance_x_from_to(
+                x_min=x_min, x_max=x_max, x_columnID=1)
+            var_y, _ = self.approximate_variance_y_from_to(
+                x_min=x_min, x_max=x_max, x_columnID=1)
+            if (var_x >= 0) and (var_y >= 0):
                 var_x = var_x**0.5
                 var_y = var_y**0.5
-                result = self.approximate_covar_from_to( x_min=x_min, x_max=x_max, x_columnID=1)[0]/var_x/var_y
+                result = self.approximate_covar_from_to(
+                    x_min=x_min, x_max=x_max, x_columnID=1)[0] / var_x / var_y
                 self.logger.info("Approximate CORR: %.4f." % result)
             else:
                 result = None
-                self.logger.warning("Cant be divided by zero! see Function approximate_corr_from_to()")
-        
+                self.logger.warning(
+                    "Cant be divided by zero! see Function approximate_corr_from_to()")
+
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         self.b_print_time_cost = tmp_b
         if self.b_print_time_cost:
-            self.logger.info("Time spent for approximate CORR: %.4fs." % time_cost)
+            self.logger.info(
+                "Time spent for approximate CORR: %.4fs." % time_cost)
         return result, time_cost
 
     def approximate_percentile_from_to(self, p, q_min_boundary, q_max_boundary, x_columnID=0):
         start = datetime.now()
-        result = generate_random.percentile(p, self.kde, q_min_boundary, q_max_boundary, steps=1000, n_bisect=50)
+        result = generate_random.percentile(
+            p, self.kde, q_min_boundary, q_max_boundary, steps=500, n_bisect=20)
         end = datetime.now()
-        time_cost =  (end - start).total_seconds()
+        time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
-            self.logger.info("Time spent for approximate CORR: %.4fs." % time_cost)
-        return result, time_cost
+            self.logger.info(
+                "Time spent for approximate CORR: %.4fs." % time_cost)
+        return result[0], time_cost
 
+    def approximate_min_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,ci=True):
+        """Summary
         
+        Args:
+            q_min_boundary (TYPE): Description
+            q_max_boundary (TYPE): Description
+            x_columnID (int, optional): Description
+            steps (int, optional): The number of divisions in the mesh
+        
+        Returns:
+            TYPE: Description
+        """
+        start = datetime.now()
+        step = (q_max_boundary - q_min_boundary)/steps
+        predictions = []
+        for i in range(steps + 1):
+            if ci:
+                var= self.cregression.CI( np.array(q_min_boundary + i * step))
+                # print(var)
+                predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step))
+                    - var)
+            else:
+                predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step)))
+        # print(predictions)
+        end = datetime.now()
+        time_cost = (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info(
+                "Time spent for approximate MIN: %.4fs." % time_cost)
+        return min(predictions), time_cost
 
+    def approximate_max_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,ci=True):
+        """Summary
+        
+        Args:
+            q_min_boundary (TYPE): Description
+            q_max_boundary (TYPE): Description
+            x_columnID (int, optional): Description
+            steps (int, optional): The number of divisions in the mesh
+        
+        Returns:
+            TYPE: Description
+        """
+        start = datetime.now()
+        step = (q_max_boundary - q_min_boundary)/steps
+        predictions = []
+        for i in range(steps + 1):
+            if ci:
+                var= self.cregression.CI( np.array(q_min_boundary + i * step))
+                # print(var)
+                predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step))
+                    + var )
+            else:
+                predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step)))
 
+        # print(predictions)
+        end = datetime.now()
+        time_cost = (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info(
+                "Time spent for approximate MAX: %.4fs." % time_cost)
+        return max(predictions), time_cost
 
 
 if __name__ == "__main__":
     import generate_random
     warnings.filterwarnings(action='ignore', category=DeprecationWarning)
-
 
     logger = logs.QueryLogs()
     logger.set_no_output()
@@ -445,15 +543,11 @@ if __name__ == "__main__":
     qe.density_estimation()
     # qe.desngity_estimation_plt2d()
 
-
-    r = generate_random.percentile(0.9, qe.kde, 30, 100, steps=200, n_bisect=100)
-    print(r)
+    # r = generate_random.percentile(
+    #     0.9, qe.kde, 30, 100, steps=200, n_bisect=100)
+    # print(r)
     # plt.plot(r)
     # plt.show()
-
-
-
-
 
     # qe.desngity_estimation_plt3d()
     # qe.approximate_avg_from_to(70, 80, 0)[0]
@@ -469,6 +563,6 @@ if __name__ == "__main__":
     # qe.approximate_variance_x_from_to(0.6, 0.8, 0)[0]
     # qe.approximate_variance_y_from_to(0.6, 0.8, 0)[0]
     # qe.approximate_covar_from_to(0.6, 0.8, 0)[0]
-    qe.approximate_corr_from_to(50, 70, 0)[0]
+    print(qe.approximate_max_from_to(50, 70, 0)[0])
 
     # qe.desngity_estimation_plt2d()

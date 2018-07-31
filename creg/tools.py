@@ -14,7 +14,7 @@ from sklearn import preprocessing
 # from pyspark.mllib.regression import LabeledPoint
 
 ##import findspark
-##findspark.init()
+# findspark.init()
 import logging
 
 # from vispy.color import ColorArray
@@ -28,9 +28,9 @@ color2 = (0.4, 0.4, 0.3)
 color3 = (0.6, 0.7, 0.5)
 color4 = (0.8, 0.9, 0.7)
 color5 = (0.9, 0.1, 0.2)
-colors_matploblib = [ 'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
-                      'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
-                      'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y']
+colors_matploblib = ['g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
+                     'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y',
+                     'g', 'r', 'b', 'c', 'm', 'y', 'b', 'g', 'r', 'c', 'm', 'y']
 
 markers_matplotlib = ['*', '1', 'v', 'o', 'h', '.', ',', '^', '<', '>', '2', '3', '4', '8', 's', 'p', 'H', '+', 'D',
                       'd', '|', '_',
@@ -39,10 +39,10 @@ markers_matplotlib = ['*', '1', 'v', 'o', 'h', '.', ',', '^', '<', '>', '2', '3'
                       'H', '+', 'D', 'd', '|', '_']
 # ----------------------------------------------------------------------------------------------------------------#
 # parameters for the ClientClass
-app_linear = "LR" #"sklearn_linear"
+app_linear = "LR"  # "sklearn_linear"
 #model_name0 = "sklearn_linear_model"
 
-app_poly = "PR"#     "sklearn_poly"
+app_poly = "PR"  # "sklearn_poly"
 #model_name1 = "sklearn_poly_model"
 
 app_knn = "sklearn_knn"
@@ -60,10 +60,10 @@ app_gaussian = "sklearn_gaussian_process"
 app_adaboost = "sklearn_adaboost"
 #model_name6 = "sklearn_ensemble_adaboost_model"
 
-app_boosting = "GBoost"       #"sklearn_gradient_tree_boosting"
+app_boosting = "GBoost"  # "sklearn_gradient_tree_boosting"
 #model_name7 = "sklearn_ensemble_gradient_tree_boosting_model"
 
-app_decision_tree = "DTR"          #"sklearn_decision_tree"
+app_decision_tree = "DTR"  # "sklearn_decision_tree"
 #model_name8 = "sklearn_decision_tree_model"
 
 app_xgboost = "XGboost"
@@ -82,7 +82,6 @@ classifier_rbf_name = 'rbf'
 classifier_xgboost_name = 'xgboost'
 
 
-
 # logger_name = '../results/result.log'
 # ----------------------------------------------------------------------------------------------------------------#
 class CPMstatistics:
@@ -91,7 +90,8 @@ class CPMstatistics:
     def __init__(self, logger_name=None):
         self.file_name = None
         self.s_model_headers = []
-        self.s_training_time_all_models = []  # include training time for both base models and ensemble methods
+        # include training time for both base models and ensemble methods
+        self.s_training_time_all_models = []
         # self.model_names_deployed = []
         self.model_names_for_classifier = []
         self.NRMSE = []
@@ -105,7 +105,8 @@ class CPMstatistics:
         # self.time_training_models = None
         self.time_training_ensemble_models = None
         self.time_training_classifiers = "None! The classifier selection process is not enabled! "
-        self.time_training_classifier = "None! The classifier selection process is not enabled! "  # time cost of the best classifier
+        # time cost of the best classifier
+        self.time_training_classifier = "None! The classifier selection process is not enabled! "
         self.time_query_execution_on_classifier = []
         self.time_query_processing_all_models = []
         self.time_average_query_processing_of_all_models = []
@@ -136,27 +137,32 @@ class CPMstatistics:
                 '-----------------------------------------------------------------------------------------------------------')
             self.logger.critical(
                 "-----------------------------------------------------------------------------------------------------------")
-            self.logger.critical("Dataset: " + self.file_name + ", classifier is: " + self.classifier_name)
+            self.logger.critical(
+                "Dataset: " + self.file_name + ", classifier is: " + self.classifier_name)
             self.logger.critical('Calculation Summary:')
             self.logger.critical(
                 "-----------------------------------------------------------------------------------------------------------")
             self.logger.critical("Model: " + str(self.s_model_headers))
             self.logger.critical("NRMSE: " + str(self.NRMSE))
             self.logger.critical("Normalised NRMSE: " + str(self.ratio()))
-            self.logger.critical("The lower boundary of the NRMSE is: " + str(self.NRMSE_ideal))
+            self.logger.critical(
+                "The lower boundary of the NRMSE is: " + str(self.NRMSE_ideal))
             self.logger.critical("")
 
-            self.logger.critical("Time cost (seconds) to train the models: " + str(self.s_training_time_all_models))
+            self.logger.critical(
+                "Time cost (seconds) to train the models: " + str(self.s_training_time_all_models))
             if self.time_training_classifiers != "None! The classifier selection process is not enabled! ":
                 self.logger.critical(
                     "Time cost (seconds) to train the classifiers: " + str(self.time_training_classifiers))
-                self.logger.critical("The best classifier is: " + self.classifier_name)
+                self.logger.critical(
+                    "The best classifier is: " + self.classifier_name)
                 self.logger.critical(
                     "Time cost (seconds) to train the best classifier is: " + str(self.time_training_classifier))
             else:
                 self.logger.critical(
                     "Time cost (seconds) to train the linear classifier is: " + str(self.time_training_classifier))
-                self.logger.critical("Classifier accuracy is " + str(self.classifier_accuracy))
+                self.logger.critical(
+                    "Classifier accuracy is " + str(self.classifier_accuracy))
                 self.logger.critical("")
 
             self.logger.critical(
@@ -167,10 +173,12 @@ class CPMstatistics:
                 "Total time cost(s) to process queries of each model: " + str(self.time_query_processing_all_models))
             self.logger.critical(
                 "Number of instances in the testing dataset is " + str(self.num_of_instances_in_testing_dataset))
-            self.logger.critical("Number of instances in the dataset is " + str(self.num_of_instances))
+            self.logger.critical(
+                "Number of instances in the dataset is " + str(self.num_of_instances))
             self.logger.critical("")
 
-            self.logger.critical("Program ended! Time cost is " + str(self.time_program) + " s.")
+            self.logger.critical(
+                "Program ended! Time cost is " + str(self.time_program) + " s.")
             self.logger.critical(
                 "-----------------------------------------------------------------------------------------------------------")
             self.logger.critical(
@@ -183,7 +191,8 @@ class CPMstatistics:
                 "-----------------------------------------------------------------------------------------------------------")
             print(
                 "-----------------------------------------------------------------------------------------------------------")
-            print("Dataset: " + self.file_name + ", classifier is: " + self.classifier_name)
+            print("Dataset: " + self.file_name +
+                  ", classifier is: " + self.classifier_name)
             print('Calculation Summary:')
             print(
                 "-----------------------------------------------------------------------------------------------------------")
@@ -193,25 +202,34 @@ class CPMstatistics:
             print("The lower boundary of the NRMSE is: " + str(self.NRMSE_ideal))
             print()
 
-            print("Time cost (seconds) to train the models: " + str(self.s_training_time_all_models))
+            print("Time cost (seconds) to train the models: " +
+                  str(self.s_training_time_all_models))
             if self.time_training_classifiers != "None! The classifier selection process is not enabled! ":
-                print("Time cost (seconds) to train the classifiers: " + str(self.time_training_classifiers))
+                print("Time cost (seconds) to train the classifiers: " +
+                      str(self.time_training_classifiers))
                 print("The best classifier is: " + self.classifier_name)
-                print("Time cost (seconds) to train the best classifier is: " + str(self.time_training_classifier))
+                print("Time cost (seconds) to train the best classifier is: " +
+                      str(self.time_training_classifier))
             else:
-                print("Time cost (seconds) to train the linear classifier is: " + str(self.time_training_classifier))
+                print("Time cost (seconds) to train the linear classifier is: " +
+                      str(self.time_training_classifier))
             print("Classifier accuracy is " + str(self.classifier_accuracy))
             print()
 
-            print("Average time cost(ms)  on the classifier is: " + str(self.time_query_execution_on_classifier))
+            print("Average time cost(ms)  on the classifier is: " +
+                  str(self.time_query_execution_on_classifier))
             print(
                 "Average time (ms) to process the queries is: " + str(self.time_average_query_processing_of_all_models))
-            print("Total time cost(s) to process queries of each model: " + str(self.time_query_processing_all_models))
-            print("Number of instances in the testing dataset is " + str(self.num_of_instances_in_testing_dataset))
-            print("Number of instances in the dataset is " + str(self.num_of_instances))
+            print("Total time cost(s) to process queries of each model: " +
+                  str(self.time_query_processing_all_models))
+            print("Number of instances in the testing dataset is " +
+                  str(self.num_of_instances_in_testing_dataset))
+            print("Number of instances in the dataset is " +
+                  str(self.num_of_instances))
             print()
 
-            print("Program ended! Time cost is " + str(self.time_program) + " s.")
+            print("Program ended! Time cost is " +
+                  str(self.time_program) + " s.")
             print(
                 "-----------------------------------------------------------------------------------------------------------")
             print(
@@ -302,7 +320,8 @@ class PredictionSummary:
         plt.plot(self.predictions, "r.", self.labels, "g.")
         plt.xlabel('Query ID')
         plt.ylabel('Predictions')
-        plt.title('Real values (green) VS predictions (red) - %s.' % (self.model_name))
+        plt.title('Real values (green) VS predictions (red) - %s.' %
+                  (self.model_name))
         plt.show()
 
     def predict_precision(self, labs):
@@ -502,7 +521,7 @@ class DataSource:
         import random
         l = range(len(self.labels))
         random.shuffle(l)
-        features = [self.features[i,:] for i in l]
+        features = [self.features[i, :] for i in l]
         labels = [self.labels[i] for i in l]
         features = np.asarray(features).reshape(-1, 1)
         labels = np.asarray(labels)  # .reshape(-1, 1)
@@ -522,52 +541,67 @@ class DataSource:
         import random
         l = range(len(self.labels))
         random.shuffle(l)
-        features = [self.features[i,:] for i in l]
+        features = [self.features[i, :] for i in l]
         labels = [self.labels[i] for i in l]
-        features = np.asarray(features)#.reshape(1, -1)
+        features = np.asarray(features)  # .reshape(1, -1)
         labels = np.asarray(labels)  # .reshape(-1, 1)
         self.features = features
         self.labels = labels
 
 
 class Evaluation:
-    def __init__(self,clients,logger_name):
-        self.clients=clients
+
+    def __init__(self, clients, logger_name):
+        self.clients = clients
         if logger_name is not None:
             self.logger = logging.getLogger(logger_name)
+
     def print_evaluation_normalised_NRMSE(self):
         self.logger.critical('')
-        self.logger.critical("----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
         self.logger.critical("Normalised NRMSE:")
         for client in self.clients:
-            self.logger.critical(np.array2string(np.array(client.summary.ratio()),separator=',',formatter={'float_kind':lambda x: "%.4f" % x}).replace('[','').replace(']','')+', '+str(client.summary.num_of_instances))
+            self.logger.critical(np.array2string(np.array(client.summary.ratio()), separator=',', formatter={
+                                 'float_kind': lambda x: "%.4f" % x}).replace('[', '').replace(']', '') + ', ' + str(client.summary.num_of_instances))
+
     def print_NRMSE(self):
         self.logger.critical('')
-        self.logger.critical("----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
         self.logger.critical("NRMSE:")
         for client in self.clients:
-            self.logger.critical(np.array2string(np.array(client.summary.NRMSE),separator=',',formatter={'float_kind':lambda x: "%.4f" % x}).replace('[','').replace(']','')+', '+str(client.summary.NRMSE_ideal)+', '+str(client.summary.classifier_accuracy))
+            self.logger.critical(np.array2string(np.array(client.summary.NRMSE), separator=',', formatter={'float_kind': lambda x: "%.4f" % x}).replace(
+                '[', '').replace(']', '') + ', ' + str(client.summary.NRMSE_ideal) + ', ' + str(client.summary.classifier_accuracy))
+
     def print_time_train_models(self):
         self.logger.critical('')
-        self.logger.critical("----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
         self.logger.critical("Time to train base models (s):")
         for client in self.clients:
             self.logger.critical(
-            np.array2string(np.array(client.summary.s_training_time_all_models), separator=',',formatter={'float_kind':lambda x: "%.4f" % x}).replace('[', '').replace(']', '')+', '+str(client.summary.time_training_classifier))
+                np.array2string(np.array(client.summary.s_training_time_all_models), separator=',', formatter={'float_kind': lambda x: "%.4f" % x}).replace('[', '').replace(']', '') + ', ' + str(client.summary.time_training_classifier))
+
     def print_query_execution_time(self):
         self.logger.critical('')
-        self.logger.critical("----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
         self.logger.critical("Average query execution time (ms):")
         for client in self.clients:
             self.logger.critical(
-            np.array2string(np.array(client.summary.time_average_query_processing_of_all_models), separator=',',formatter={'float_kind':lambda x: "%.4f" % x}).replace('[', '').replace(']', '')+', '+str(client.summary.time_query_execution_on_classifier))
+                np.array2string(np.array(client.summary.time_average_query_processing_of_all_models), separator=',', formatter={'float_kind': lambda x: "%.4f" % x}).replace('[', '').replace(']', '') + ', ' + str(client.summary.time_query_execution_on_classifier))
+
     def print_summary(self):
         self.print_evaluation_normalised_NRMSE()
         self.print_NRMSE()
         self.print_time_train_models()
         self.print_query_execution_time()
-        self.logger.critical("----------------------------------------------------------------------------------------")
-        self.logger.critical("----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
+        self.logger.critical(
+            "----------------------------------------------------------------------------------------")
+
 
 def NRMSE(xs, labels):
     """
@@ -590,8 +624,10 @@ def NRMSE(xs, labels):
     return result / (np.amax(labels) - np.amin(labels))
 
     # return result
-def NRMSE_with_range(errors,ranges):
-    if len(errors)==0:
+
+
+def NRMSE_with_range(errors, ranges):
+    if len(errors) == 0:
         return []
     else:
         result = 0.0
@@ -600,7 +636,6 @@ def NRMSE_with_range(errors,ranges):
         result = result / len(errors)
         result = np.sqrt(result)
         return result / ranges
-
 
 
 def split_data(data_source):
@@ -620,8 +655,8 @@ def split_data(data_source):
     testing_data.headers = data_source.headers
 
     if len(training_data_model.features) == len(training_data_model.labels) and \
-                    len(training_data_classifier.features) == len(training_data_classifier.labels) and \
-                    len(testing_data.features) == len(testing_data.labels):
+            len(training_data_classifier.features) == len(training_data_classifier.labels) and \
+            len(testing_data.features) == len(testing_data.labels):
         return training_data_model, training_data_classifier, testing_data
     else:
         print("Error splitting the data, split size mismatch! Size: ")
@@ -643,7 +678,6 @@ def split_data_to_2(data_source, weights_=0.5):
     # print("cut_index is: ")
     # print(cut_index)
 
-
     training_data_model.features, training_data_classifier.features \
         = np.array_split(data_source.features, [cut_index])
 
@@ -654,7 +688,7 @@ def split_data_to_2(data_source, weights_=0.5):
     training_data_classifier.headers = data_source.headers
 
     if len(training_data_model.features) == len(training_data_model.labels) and \
-                    len(training_data_classifier.features) == len(training_data_classifier.labels):
+            len(training_data_classifier.features) == len(training_data_classifier.labels):
         return training_data_model, training_data_classifier
     else:
         print("Error splitting the data, split size mismatch! Size: ")
@@ -667,7 +701,8 @@ def split_data_to_2(data_source, weights_=0.5):
 
 def load_csv(filename, fields=None, y_column=None, sep=','):
     """ Read the csv file."""
-    input = pd.read_csv(filename, skipinitialspace=True, usecols=fields, sep=sep)
+    input = pd.read_csv(filename, skipinitialspace=True,
+                        usecols=fields, sep=sep)
     input_data = input.values
     data = DataSource()
 
@@ -677,7 +712,8 @@ def load_csv(filename, fields=None, y_column=None, sep=','):
         data.headers = input.keys()
 
     else:
-        data.features = np.delete(input_data, [y_column], axis=1)  # input_data[:, :-1]
+        data.features = np.delete(
+            input_data, [y_column], axis=1)  # input_data[:, :-1]
         data.labels = input_data[:, y_column]
         headers = np.array(input.keys())
         data.headers = list(np.delete(headers, [y_column]))
@@ -757,7 +793,7 @@ def mix_gaussian(n, k=3, weight=None, b_show_hist=False):
         n samples.
     """
 
-    from  sklearn.mixture import GMM
+    from sklearn.mixture import GMM
     np.random.seed(1)
     gmm = GMM(k)
     means = np.array([[-1 + (i + 1) * 2.0 / (k + 1)] for i in range(k)])
@@ -825,14 +861,15 @@ def prepare_data8():
               'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
     # fields = ['Date',  'Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity',
     #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
-    y_column = 0  # should be the order in the input file, not in the "fields" order.
-    data = load_csv("../data/8household_power_consumption.csv", fields, y_column, sep=';')
+    # should be the order in the input file, not in the "fields" order.
+    y_column = 0
+    data = load_csv("../data/8household_power_consumption.csv",
+                    fields, y_column, sep=';')
 
     # print(data.features)
     # print(data.features.shape)
     # print(data.labels)
     # print(data.labels.shape)
-
 
     # '''
 
@@ -845,8 +882,10 @@ def prepare_data8():
     # print(aa)
     fields = ['Date', 'Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity',
               'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
-    y_column = 0  # should be the order in the input file, not in the "fields" order.
-    data1 = load_csv("../data/8household_power_consumption.csv", fields, y_column, sep=';')
+    # should be the order in the input file, not in the "fields" order.
+    y_column = 0
+    data1 = load_csv("../data/8household_power_consumption.csv",
+                     fields, y_column, sep=';')
     data1.str2float()
     consumptions = np.asarray(data1.features[:, 0]) * (1000.0 / 60.0) - np.asarray(data1.features[:, 4]) - np.array(
         data1.features[:, 5]) - np.array(data1.features[:, 6])
@@ -856,9 +895,11 @@ def prepare_data8():
         f.write(
             'timestamp,Global_active_power,Global_reactive_power,Voltage,Global_intensity,Sub_metering_1,Sub_metering_2,Sub_metering_3,energy\n')
         for t1, y0, y1, y2, y3, y4, y5, y6, t2 in zip(ts, data1.features[:, 0], data1.features[:, 1],
-                                                      data1.features[:, 2], data1.features[:, 3], data1.features[:, 4],
+                                                      data1.features[:, 2], data1.features[
+                                                          :, 3], data1.features[:, 4],
                                                       data1.features[:, 5], data1.features[:, 6], consumptions):
-            f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(t1, y0, y1, y2, y3, y4, y5, y6, t2))
+            f.write("{0},{1},{2},{3},{4},{5},{6},{7},{8}\n".format(
+                t1, y0, y1, y2, y3, y4, y5, y6, t2))
 
 
 # http://erikerlandson.github.io/blog/2015/11/20/very-fast-reservoir-sampling/
@@ -878,7 +919,7 @@ def fast_reservoir_sampling(file_handle, N=1000000, callable=None):
             p = N / n
             g = np.random.geometric(p)
             j = j + g
-            replace = random.randint(0, N-1)
+            replace = random.randint(0, N - 1)
             sample[replace] = callable(line)
 
     return sample
@@ -893,14 +934,14 @@ def reservoir_sampling(file_handle, N=1000000, callable=None):
     for n, line in enumerate(file_handle):
         if n < N:
             sample.append(callable(line))
-        elif n >= N and random.random() < N/float(n+1):
-            replace = random.randint(0,len(sample)-1)
+        elif n >= N and random.random() < N / float(n + 1):
+            replace = random.randint(0, len(sample) - 1)
             sample[replace] = callable(line)
     return sample
 
+
 def t_distribution(region=0.95):
     return stats.t.ppf(region, 5)
-
 
 
 if __name__ == "__main__":
