@@ -30,7 +30,7 @@ def bisect(target, f, lo, hi, n=30):
     return (hi + lo) / 2.0
 
 
-def make_user_distribution(f, lo, hi, steps=100, n=10):
+def make_user_distribution(f, lo, hi, steps=50, n=15):
     def linear(x):
         return np.exp(f.score_samples(np.array(x).reshape(1, -1)))
 
