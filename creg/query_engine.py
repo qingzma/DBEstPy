@@ -448,6 +448,7 @@ class QueryEngine:
         time_cost = (end - start).total_seconds()
         self.b_print_time_cost = tmp_b
         if self.b_print_time_cost:
+            self.logger.info("Approximate CORR: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate CORR: %.4fs." % time_cost)
         return result, time_cost
@@ -459,11 +460,13 @@ class QueryEngine:
         end = datetime.now()
         time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
+            self.logger.info("Approximate PERCENTILE: %.4f." % result[0])
             self.logger.info(
-                "Time spent for approximate CORR: %.4fs." % time_cost)
+                "Time spent for approximate PERCENTILE: %.4fs." % time_cost)
         return result[0], time_cost
 
-    def approximate_min_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,ci=True):
+    def approximate_min_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,
+        ci=True,confidence=0.95):
         """Summary
         
         Args:
@@ -480,7 +483,7 @@ class QueryEngine:
         predictions = []
         for i in range(steps + 1):
             if ci:
-                var= self.cregression.CI( np.array(q_min_boundary + i * step))
+                var= self.cregression.CI( np.array(q_min_boundary + i * step),confidence=confidence)
                 # print(var)
                 predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step))
                     - var)
@@ -490,11 +493,13 @@ class QueryEngine:
         end = datetime.now()
         time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
+            self.logger.info("Approximate MIN: %.4f." % min(predictions))
             self.logger.info(
                 "Time spent for approximate MIN: %.4fs." % time_cost)
         return min(predictions), time_cost
 
-    def approximate_max_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,ci=True):
+    def approximate_max_from_to(self,  q_min_boundary, q_max_boundary, x_columnID=0,steps=100,
+        ci=True,confidence=0.95):
         """Summary
         
         Args:
@@ -511,7 +516,7 @@ class QueryEngine:
         predictions = []
         for i in range(steps + 1):
             if ci:
-                var= self.cregression.CI( np.array(q_min_boundary + i * step))
+                var= self.cregression.CI( np.array(q_min_boundary + i * step),confidence=confidence)
                 # print(var)
                 predictions.append(self.cregression.predict(np.array(q_min_boundary + i * step))
                     + var )
@@ -522,6 +527,7 @@ class QueryEngine:
         end = datetime.now()
         time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:
+            self.logger.info("Approximate MAX: %.4f." % max(predictions))
             self.logger.info(
                 "Time spent for approximate MAX: %.4fs." % time_cost)
         return max(predictions), time_cost

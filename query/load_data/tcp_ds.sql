@@ -167,7 +167,7 @@ ALTER TABLE store_sales SET LOCATION "/data/tcp/tcp-ds/1t/store_sales.dat";
 ALTER TABLE store_sales_1t SET LOCATION 'hdfs://guest-wl-65.dcs.warwick.ac.uk:9000/user/hive/warehouse/store_sales/1T.dat';
 
 
-CREATE TABLE store_sales_sample_1_percent AS SELECT * FROM store_sales SAMPLEWITH 0.01;
+CREATE TABLE store_sales_sample_1_percent1 AS SELECT * FROM store_sales SAMPLEWITH 0.01;
 CREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales_sample_1_percent;
 
 set blinkdb.sample.size=28794695;

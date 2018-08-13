@@ -5,7 +5,27 @@
 		[
 			[
 				"mass",
-				"mass_query\tfunction"
+				"mass_query2mysql\tfunction"
+			],
+			[
+				"file",
+				"file_name_hiveql\tstatement"
+			],
+			[
+				"qre",
+				"qregStr\tstatement"
+			],
+			[
+				"gene",
+				"generate_queries"
+			],
+			[
+				"query_2d_co",
+				"query_2d_covariance\tfunction"
+			],
+			[
+				"var",
+				"variance_x"
 			],
 			[
 				"resu",
@@ -500,53 +520,40 @@
 	"buffers":
 	[
 		{
-			"contents": "xy\nprice_cost\nprice_cost_1t\nprice_cost_1t_sample_5m\nprice_cost_1t_sorted\nprice_cost_100k\nidx_ss_list_price\nstore_sales\nstore_sales_sample_1_percent\nstore_sales_sample_1_percent_cached\nstore_sales_sample_1m_cached",
+			"contents": "xy\nprice_cost\nprice_cost_1t\nprice_cost_1t_sample_5m\nprice_cost_1t_sorted\nprice_cost_100k\nidx_ss_list_price\nstore_sales\nstore_sales_sample_1_percent1\nstore_sales_sample_1_percent_cached\nstore_sales_sample_1m_cached",
 			"settings":
 			{
-				"buffer_size": 212,
+				"buffer_size": 213,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
 			}
 		},
 		{
-			"file": "creg/tools.py",
-			"settings":
-			{
-				"buffer_size": 34640,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "creg/generate_random.py",
 			"settings":
 			{
-				"buffer_size": 1544,
+				"buffer_size": 1543,
 				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "from __future__ import division"
 			}
 		},
 		{
-			"contents": "#!/usr/bin/env python\n# coding=utf-8\nfrom __future__ import print_function, division\nfrom core import CRegression\nimport tools\nimport numpy as np\nfrom scipy.stats import norm\nimport matplotlib.pyplot as plt\nfrom sklearn.neighbors import KernelDensity\nimport evaluation\nimport logs\nimport data_loader as dl\nfrom scipy import integrate\nfrom datetime import datetime\nimport warnings\nimport generate_random\n\nepsabs = 1E-01\nepsrel = 1E-03\nmesh_grid_num = 30\nopts = {'epsabs': epsabs, 'epsrel': epsrel, 'limit': 100}\n# opts = {'epsabs': 1.49e-03, 'epsrel': 1.49e-03, 'limit': 100}\n\n# variable_names=[a1,b1,c1,d1,e1,f1,g1,h1,i1,j1,k1,l1,m1,n1,o1,p1,q1,r1,s1,t1,u1,v1,w1,x1,y1,z1,\n# a2,b2,c2,d2,e2,f2,g2,h2,i2,j2,k2,l2,m2,n2,o2,p2,q2,r2,s2,t2,u2,v2,w2,x2,y2,z2]\n\n\nclass QueryEngine:\n\n    \"\"\"Summary\n\n    Attributes:\n        cregression (TYPE): Description\n        dimension (TYPE): Description\n        kde (TYPE): Description\n        log_dens (TYPE): Description\n        logger (TYPE): Description\n        num_training_points (TYPE): Description\n        training_data (TYPE): Description\n    \"\"\"\n\n    def __init__(self, cregression, logger_object=None, b_print_time_cost=True, num_training_points=None):\n        if num_training_points is None:\n            self.num_training_points = cregression.num_total_training_points\n        else:\n            self.num_training_points = num_training_points\n        self.log_dens = None\n        self.training_data = cregression.training_data\n        self.kde = None  # kernel density object\n        self.dimension = self.training_data.features.shape[1]\n        self.cregression = cregression\n        if logger_object:\n            self.logger = logger_object.logger\n        else:\n            self.logger = logs.QueryLogs().logger\n        self.b_print_time_cost = b_print_time_cost\n\n        warnings.filterwarnings(action='ignore', category=DeprecationWarning)\n\n    def density_estimation(self, kernel=None):\n        \"\"\"Estimate the density of points.\n\n        Args:\n            kernel (None, optional): Should be one of [‘gaussian’,’tophat’,’epanechnikov’,’exponential’,’linear’,’cosine’]\n            Default is ‘gaussian’.\n\n        Returns:\n            TYPE: Description\n        \"\"\"\n        if kernel is None:\n            kernel = 'gaussian'\n        self.kde = KernelDensity(kernel=kernel).fit(\n            self.training_data.features)\n        return self.kde\n\n    def desngity_estimation_plt2d(self):\n        \"\"\" plot the density distribution\n\n        Returns:\n            TYPE: Ture if the plot is shown\n        \"\"\"\n        X_plot = np.linspace(min(self.training_data.features), max(\n            self.training_data.features), mesh_grid_num)[:, np.newaxis]\n        self.log_dens = self.kde.score_samples(X_plot)\n\n        ax = plt.subplot(111)\n\n        ax.plot(X_plot[:, 0], np.exp(self.log_dens), '-')\n        ax.plot(self.training_data.features, -0.001 - 0.001 *\n                np.random.random(self.training_data.features.shape[0]), '+k')\n        ax.set_xlabel(self.training_data.headers[0])\n        ax.set_ylabel(\"Probability\")\n        ax.set_title(\"2D Density Estimation\")\n        plt.show()\n        return True\n\n    def desngity_estimation_plt3d(self):\n        x = np.linspace(min(self.training_data.features[:, 0]), max(\n            self.training_data.features[:, 0]), mesh_grid_num)\n        y = np.linspace(min(self.training_data.features[:, 1]), max(\n            self.training_data.features[:, 1]), mesh_grid_num)\n        X, Y = np.meshgrid(x, y)\n\n        X1d = X.reshape(mesh_grid_num * mesh_grid_num)\n        Y1d = Y.reshape(mesh_grid_num * mesh_grid_num)\n        Z1d = [[X1d[i], Y1d[i]] for i in range(len(X1d))]\n        Z = self.kde.score_samples(Z1d)\n        Z_plot = Z.reshape((mesh_grid_num, mesh_grid_num))\n        # print(Z_plot)\n\n        self.log_dens = Z_plot\n\n        ax = plt.axes(projection='3d')\n\n        ax.plot_surface(X, Y, np.exp(Z_plot), rstride=1, cstride=1,\n                        cmap='viridis', edgecolor='none', alpha=0.8)\n        # ax.plot(self.training_data.features,-0.001- 0.001 * np.random.random(self.training_data.features.shape[0]), '+k')\n        ax.scatter(self.training_data.features[:, 0], self.training_data.features[:, 1], -0.0005 -\n                   0.0001 * np.random.random(self.training_data.features[:, 0].shape[0]), '+k', alpha=0.8, s=1)\n        ax.set_title(\"3D Density Estimation\")\n        ax.set_xlabel(self.training_data.headers[0])\n        ax.set_ylabel(self.training_data.headers[1])\n        ax.set_zlabel(\"Probability\")\n        plt.show()\n        return True\n\n    def approximate_avg_from_to(self, x_min, x_max, x_columnID):\n        \"\"\" calculate the approximate average value between x_min and x_max\n\n        Args:\n            x_min (TYPE): lower bound\n            x_max (TYPE): upper bound\n            x_columnID (TYPE): the index of the x to be interated\n\n        Returns:\n            TYPE: the integeral value\n        \"\"\"\n        start = datetime.now()\n        if self.dimension is 1:\n            def f_pRx(x):\n                # print(self.cregression.predict(x))\n                return np.exp(self.kde.score_samples(x)) * self.cregression.predict(x)\n\n            def f_p(x):\n                return np.exp(self.kde.score_samples(x))\n            a = integrate.quad(f_pRx, x_min, x_max,\n                               epsabs=epsabs, epsrel=epsrel)[0]\n            b = integrate.quad(f_p, x_min, x_max,\n                               epsabs=epsabs, epsrel=epsrel)[0]\n\n            if b:\n                result = a / b\n            else:\n                result = None\n\n        if self.dimension > 1:\n            data_range_length_half = [(max(self.training_data.features[:, i]) - min(\n                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]\n            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(\n                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]\n\n            # generate the integral bounds\n            bounds = []\n            for i in range(x_columnID):\n                bounds.append(data_range[i])\n            bounds.append([x_min, x_max])\n            # print(bounds)\n            for i in range(x_columnID + 1, self.dimension):\n                bounds.append(data_range[i])\n\n            def f_p(*args):\n                # print(np.exp(self.kde.score_samples(np.array(args).reshape(1,-1))))\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n\n            def f_pRx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args))\n            a = integrate.nquad(f_pRx, bounds, opts=opts)[0]\n            b = integrate.nquad(f_p, bounds, opts=opts)[0]\n\n            if b:\n                result = a / b\n            else:\n                result = None\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate AVG: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate AVG: %.4fs.\" % time_cost)\n        return result, time_cost\n\n    def approximate_sum_from_to(self, x_min, x_max, x_columnID):\n        start = datetime.now()\n        if self.dimension is 1:\n            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)\n            def f_pRx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args))\n            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[\n                0] * self.num_training_points\n            # return result\n\n        if self.dimension > 1:\n            data_range_length_half = [(max(self.training_data.features[:, i]) - min(\n                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]\n            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(\n                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]\n\n            # generate the integral bounds\n            bounds = []\n            for i in range(x_columnID):\n                bounds.append(data_range[i])\n            bounds.append([x_min, x_max])\n            # print(bounds)\n            for i in range(x_columnID + 1, self.dimension):\n                bounds.append(data_range[i])\n\n            def f_pRx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args))\n            result = integrate.nquad(f_pRx, bounds, opts=opts)[\n                0] * self.num_training_points\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate SUM: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate SUM: %.4fs.\" % time_cost)\n        return result, time_cost\n\n    def approximate_count_from_to(self, x_min, x_max, x_columnID):\n        start = datetime.now()\n        if self.dimension is 1:\n            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)\n            def f_p(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n            result = integrate.quad(f_p, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[\n                0] * self.num_training_points\n            # return result\n\n        if self.dimension > 1:\n            data_range_length_half = [(max(self.training_data.features[:, i]) - min(\n                self.training_data.features[:, i])) * 0.5 for i in range(self.dimension)]\n            data_range = [[min(self.training_data.features[:, i]) - data_range_length_half[i], max(\n                self.training_data.features[:, i]) + data_range_length_half[i]] for i in range(self.dimension)]\n\n            # generate the integral bounds\n            bounds = []\n            for i in range(x_columnID):\n                bounds.append(data_range[i])\n            bounds.append([x_min, x_max])\n            # print(bounds)\n            for i in range(x_columnID + 1, self.dimension):\n                bounds.append(data_range[i])\n\n            def f_p(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n            result = integrate.nquad(f_p, bounds, opts=opts)[\n                0] * self.num_training_points\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate count: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate COUNT: %.4fs.\" % time_cost)\n        return int(result), time_cost\n\n    def approximate_variance_x_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):\n        start = datetime.now()\n        if self.dimension is 1:\n            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)\n            def f_p(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n\n            def f_x2Px(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]**2\n\n            def f_xPx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]\n\n            def f_xRxPx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args)) * np.array(args)[0]\n            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points\n            Ep = integrate.quad(f_p, x_min, x_max,\n                                epsabs=epsabs, epsrel=epsrel)[0]\n            Ex2 = integrate.quad(f_x2Px, x_min, x_max,\n                                 epsabs=epsabs, epsrel=epsrel)[0]\n            Ex_2 = integrate.quad(f_xPx, x_min, x_max,\n                                  epsabs=epsabs, epsrel=epsrel)[0] ** 2\n            result = Ex2 / Ep - Ex_2 / Ep / Ep\n\n        # if self.dimension > 1:\n        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(\n        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]\n        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(\n        # self.training_data.features[:, i])+data_range_length_half[i]] for i\n        # in range(self.dimension)]\n\n        #     # generate the integral bounds\n        #     bounds = []\n        #     for i in range(x_columnID):\n        #         bounds.append(data_range[i])\n        #     bounds.append([x_min, x_max])\n        #     # print(bounds)\n        #     for i in range(x_columnID+1, self.dimension):\n        #         bounds.append(data_range[i])\n\n        #     def f_p(*args):\n        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate variance x: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate variance x: %.4fs.\" % time_cost)\n        return result, time_cost\n\n    def approximate_variance_y_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):\n        start = datetime.now()\n        if self.dimension is 1:\n            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)\n            def f_p(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n\n            def f_R2Px(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))**2\n\n            def f_RxPx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))\n            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points\n            Ep = integrate.quad(f_p, x_min, x_max,\n                                epsabs=epsabs, epsrel=epsrel)[0]\n            Ey2 = integrate.quad(f_R2Px, x_min, x_max,\n                                 epsabs=epsabs, epsrel=epsrel)[0]\n            Ey_2 = integrate.quad(f_RxPx, x_min, x_max,\n                                  epsabs=epsabs, epsrel=epsrel)[0] ** 2\n            result = Ey2 / Ep - Ey_2 / Ep / Ep\n\n        # if self.dimension > 1:\n        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(\n        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]\n        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(\n        # self.training_data.features[:, i])+data_range_length_half[i]] for i\n        # in range(self.dimension)]\n\n        #     # generate the integral bounds\n        #     bounds = []\n        #     for i in range(x_columnID):\n        #         bounds.append(data_range[i])\n        #     bounds.append([x_min, x_max])\n        #     # print(bounds)\n        #     for i in range(x_columnID+1, self.dimension):\n        #         bounds.append(data_range[i])\n\n        #     def f_p(*args):\n        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate variance y: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate variance y: %.4fs.\" % time_cost)\n            if result < 0:\n                self.logger.warning(\n                    \"Negtive approximate variance y: %.4f. is predicted...\" % result)\n        return result, time_cost\n\n    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):\n        start = datetime.now()\n        if self.dimension is 1:\n            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)\n            def f_p(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n\n            def f_px(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * np.array(args)[0]\n\n            def f_pRx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args))\n\n            def f_xRxPx(*args):\n                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\\\n                    * self.cregression.predict(np.array(args)) * np.array(args)[0]\n            # result = integrate.quad(f_p,x_min,x_max,epsabs=epsabs,epsrel=epsrel)[0]*self.num_training_points\n            Ep = integrate.quad(f_p, x_min, x_max,\n                                epsabs=epsabs, epsrel=epsrel)[0]\n            ExPx = integrate.quad(f_px, x_min, x_max,\n                                  epsabs=epsabs, epsrel=epsrel)[0]\n            ERxPx = integrate.quad(f_pRx, x_min, x_max,\n                                   epsabs=epsabs, epsrel=epsrel)[0]\n            ExRxPx = integrate.quad(\n                f_xRxPx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0]\n            result = ExRxPx / Ep - ExPx * ERxPx / Ep / Ep\n\n        # if self.dimension > 1:\n        #     data_range_length_half = [(max(self.training_data.features[:, i])-min(\n        #         self.training_data.features[:, i]))*0.5 for i in range(self.dimension)]\n        #     data_range = [[min(self.training_data.features[:, i])-data_range_length_half[i], max(\n        # self.training_data.features[:, i])+data_range_length_half[i]] for i\n        # in range(self.dimension)]\n\n        #     # generate the integral bounds\n        #     bounds = []\n        #     for i in range(x_columnID):\n        #         bounds.append(data_range[i])\n        #     bounds.append([x_min, x_max])\n        #     # print(bounds)\n        #     for i in range(x_columnID+1, self.dimension):\n        #         bounds.append(data_range[i])\n\n        #     def f_p(*args):\n        #         return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\n        #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\"Approximate COVAR: %.4f.\" % result)\n            self.logger.info(\n                \"Time spent for approximate COVAR: %.4fs.\" % time_cost)\n        return result, time_cost\n\n    def approximate_corr_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):\n        start = datetime.now()\n        tmp_b = self.b_print_time_cost\n        self.b_print_time_cost = False\n        if self.dimension is 1:\n            var_x, _ = self.approximate_variance_x_from_to(\n                x_min=x_min, x_max=x_max, x_columnID=1)\n            var_y, _ = self.approximate_variance_y_from_to(\n                x_min=x_min, x_max=x_max, x_columnID=1)\n            if (var_x >= 0) and (var_y >= 0):\n                var_x = var_x**0.5\n                var_y = var_y**0.5\n                result = self.approximate_covar_from_to(\n                    x_min=x_min, x_max=x_max, x_columnID=1)[0] / var_x / var_y\n                self.logger.info(\"Approximate CORR: %.4f.\" % result)\n            else:\n                result = None\n                self.logger.warning(\n                    \"Cant be divided by zero! see Function approximate_corr_from_to()\")\n\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        self.b_print_time_cost = tmp_b\n        if self.b_print_time_cost:\n            self.logger.info(\n                \"Time spent for approximate CORR: %.4fs.\" % time_cost)\n        return result, time_cost\n\n    def approximate_percentile_from_to(self, p, q_min_boundary, q_max_boundary, x_columnID=0):\n        start = datetime.now()\n        result = generate_random.percentile(\n            p, self.kde, q_min_boundary, q_max_boundary, steps=500, n_bisect=20)\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        if self.b_print_time_cost:\n            self.logger.info(\n                \"Time spent for approximate CORR: %.4fs.\" % time_cost)\n        return result[0], time_cost\n\n\nif __name__ == \"__main__\":\n    import generate_random\n    warnings.filterwarnings(action='ignore', category=DeprecationWarning)\n\n    logger = logs.QueryLogs()\n    logger.set_no_output()\n    data = dl.load2d(5)\n    cRegression = CRegression(logger_object=logger)\n    cRegression.fit(data)\n\n    # cRegression.plot_training_data_2d()\n    logger.set_logging()\n    qe = QueryEngine(cRegression, logger_object=logger)\n    qe.density_estimation()\n    # qe.desngity_estimation_plt2d()\n\n    r = generate_random.percentile(\n        0.9, qe.kde, 30, 100, steps=200, n_bisect=100)\n    print(r)\n    # plt.plot(r)\n    # plt.show()\n\n    # qe.desngity_estimation_plt3d()\n    # qe.approximate_avg_from_to(70, 80, 0)[0]\n    # qe.approximate_sum_from_to(70, 80, 0)[0]\n    # qe.approximate_count_from_to(70, 80, 0)[0]\n    # qe.approximate_variance_x_from_to(70, 80, 0)[0]\n    # qe.approximate_variance_y_from_to(70, 80, 0)[0]\n    # qe.approximate_covar_from_to(70, 80, 0)[0]\n    #\n    # qe.approximate_avg_from_to(0.6, 0.8, 0)[0]\n    # qe.approximate_sum_from_to(0.6, 0.8, 0)[0]\n    # qe.approximate_count_from_to(0.6, 0.8, 0)[0]\n    # qe.approximate_variance_x_from_to(0.6, 0.8, 0)[0]\n    # qe.approximate_variance_y_from_to(0.6, 0.8, 0)[0]\n    # qe.approximate_covar_from_to(0.6, 0.8, 0)[0]\n    qe.approximate_corr_from_to(50, 70, 0)[0]\n\n    # qe.desngity_estimation_plt2d()\n",
 			"file": "creg/query_engine.py",
-			"file_size": 22071,
-			"file_write_time": 131769906731936882,
 			"settings":
 			{
-				"buffer_size": 22042,
+				"buffer_size": 24905,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "#!/usr/bin/env python\n# coding=utf-8\nfrom core import CRegression\nimport data_loader as dl\nfrom query_engine import QueryEngine\nimport logs\nimport random\nimport subprocess\n# from pyhive import hive\n# import subprocess\nimport os\nimport pyhs2\n# import MySQLdb\nimport pymysql\npymysql.install_as_MySQLdb()\nimport generate_random\n\n\nfrom datetime import datetime\nimport warnings\n\ndefault_mass_query_number = 5\nlogger_file = \"../results/deletable.log\"\n\n\nclass Query_Engine_2d:\n\n    def __init__(self, dataID, b_allow_repeated_value=True, logger_file=logger_file, num_of_points=None):\n        self.logger = logs.QueryLogs(log=logger_file)\n        # self.logger.set_no_output()\n        self.data = dl.load2d(dataID)\n        if not b_allow_repeated_value:\n            self.data.remove_repeated_x_1d()\n        self.cRegression = CRegression(logger_object=self.logger)\n        self.cRegression.fit(self.data)\n        # self.logger.set_logging(file_name=logger_file)\n        if num_of_points is None:\n            self.qe = QueryEngine(self.cRegression, logger_object=self.logger)\n        else:\n            self.qe = QueryEngine(\n                self.cRegression, logger_object=self.logger, num_training_points=num_of_points)\n        self.qe.density_estimation()\n        self.q_min = min(self.data.features)\n        self.q_max = max(self.data.features)\n        self.dataID = dataID\n\n        #warnings.filterwarnings(action='ignore', category=DeprecationWarning)\n\n    def query_2d_avg(self, l=0, h=100):\n        \"\"\"query to 2d data sets.\n\n        Args:\n            l (int, optional): query lower boundary\n            h (int, optional): query higher boundary\n        \"\"\"\n        avgs, time = self.qe.approximate_avg_from_to(l, h, 0)  # 0.05E8,0.1E8,\n        return avgs, time\n\n    def query_2d_sum(self, l=0, h=100):\n        \"\"\"query to 2d data sets.\n\n        Args:\n            l (int, optional): query lower boundary\n            h (int, optional): query higher boundary\n        \"\"\"\n        sums, time = self.qe.approximate_sum_from_to(l, h, 0)\n        return sums, time\n\n    def query_2d_count(self, l=0, h=100):\n        count, time = self.qe.approximate_count_from_to(l, h, 0)\n        return count, time\n\n    def query_2d_variance_x(self, l=0, h=100):\n        variance_x, time = self.qe.approximate_variance_x_from_to(l, h, 0)\n        return variance_x, time\n\n    def query_2d_variance_y(self, l=0, h=100):\n        variance_y, time = self.qe.approximate_variance_y_from_to(l, h, 0)\n        return variance_y, time\n\n    def query_2d_covariance(self, l=0, h=100):\n        covariance, time = self.qe.approximate_covar_from_to(l, h, 0)\n        return covariance, time\n\n    def query_2d_correlation(self, l=0, h=100):\n        correlation, time = self.qe.approximate_corr_from_to(l, h, 0)\n        return correlation, time\n\n    def query_2d_percentile(self, p):\n        percentile, time = self.qe.approximate_percentile_from_to(\n            p, self.q_min, self.q_max)\n        return percentile, time\n\n    def mass_query_sum(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            q_centre = random.uniform(self.q_min, self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT SUM(\" + y + \") FROM \" + str(table) + \" WHERE  \" + \\\n                x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_sum(l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_avg(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            q_centre = random.uniform(self.q_min, self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT AVG(\" + y + \") FROM \" + str(table) + \" WHERE  \" + \\\n                x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_avg(l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_count(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        random.seed(1.0)\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            q_centre = random.uniform(self.q_min, self.q_max)\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT COUNT(\" + y + \") FROM \" + str(table) + \" WHERE  \" + \\\n                x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_count(\n                l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_variance_x(self, table, x=\"ss_list_price\", \n        y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,\n        b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        self.logger.logger.info(\"Start generating queries\")\n        if b_random_queries:\n            random.seed(1.0)\n            query_centres = []\n            for i in range(number):\n                query_centres.append(random.uniform(self.q_min,self.q_max)[0])\n        else:\n            query_centres = generate_random.make_user_distribution(\n                self.qe.kde, self.q_min, self.q_max, n=number)\n        self.logger.logger.info(\"Finish generating \"+str(number)+\" queries, the center points are:\")\n        self.logger.logger.info(str(query_centres))\n        random_left_boundary = self.q_min + q_range_half_length\n        random_right_boundary = self.q_max - q_range_half_length\n        \n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            # random.uniform(self.q_min,self.q_max)\n            q_centre = query_centres[i]\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT VARIANCE(\" + x + \") FROM \" + str(table) + \" WHERE  \" + \\\n                x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_variance_x(\n                l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_variance_y(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        # random.seed(1.0)\n        random_left_boundary = self.q_min + q_range_half_length\n        random_right_boundary = self.q_max - q_range_half_length\n        self.logger.logger.info(\"Start generating queries\")\n        if b_random_queries:\n            random.seed(1.0)\n            query_centres = []\n            for i in range(number):\n                query_centres.append(random.uniform(self.q_min,self.q_max)[0])\n        else:\n            query_centres = generate_random.make_user_distribution(\n                self.qe.kde, self.q_min, self.q_max, n=number)\n        self.logger.logger.info(\"Finish generating \"+str(number)+\" queries, the center points are:\")\n        self.logger.logger.info(str(query_centres))\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            # random.uniform(self.q_min,self.q_max)\n            q_centre = query_centres[i]\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT VARIANCE(\" + y + \") FROM \" + str(table) + \" WHERE  \" + \\\n                x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_variance_y(\n                l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_covariance(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        # random.seed(1.0)\n        random_left_boundary = self.q_min + q_range_half_length\n        random_right_boundary = self.q_max - q_range_half_length\n        self.logger.logger.info(\"Start generating queries\")\n        if b_random_queries:\n            random.seed(1.0)\n            query_centres = []\n            for i in range(number):\n                query_centres.append(random.uniform(self.q_min,self.q_max)[0])\n        else:\n            query_centres = generate_random.make_user_distribution(\n                self.qe.kde, self.q_min, self.q_max, n=number)\n        self.logger.logger.info(\"Finish generating \"+str(number)+\" queries, the center points are:\")\n        self.logger.logger.info(str(query_centres))\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            # random.uniform(self.q_min,self.q_max)\n            q_centre = query_centres[i]\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT COVARIANCE(\" + x + \", \" + y + \") FROM \" + str(\n                table) + \" WHERE  \" + x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_covariance(\n                l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_correlation(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\",\n        percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        # random.seed(1.0)\n        random_left_boundary = self.q_min + q_range_half_length\n        random_right_boundary = self.q_max - q_range_half_length\n        self.logger.logger.info(\"Start generating queries\")\n        if b_random_queries:\n            random.seed(1.0)\n            query_centres = []\n            for i in range(number):\n                query_centres.append(random.uniform(self.q_min,self.q_max)[0])\n        else:\n            query_centres = generate_random.make_user_distribution(\n                self.qe.kde, self.q_min, self.q_max, n=number)\n        self.logger.logger.info(\"Finish generating \"+str(number)+\" queries, the center points are:\")\n        self.logger.logger.info(str(query_centres))\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            # random.uniform(self.q_min,self.q_max)\n            q_centre = query_centres[i]\n            q_left = q_centre - q_range_half_length\n            q_right = q_centre + q_range_half_length\n\n            sqlStr = \"SELECT CORR(\" + x + \", \" + y + \") FROM \" + str(\n                table) + \" WHERE  \" + x + \" BETWEEN \" + str(q_left[0]) + \" AND \" + str(q_right[0])\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_correlation(\n                l=q_left, h=q_right)\n            self.logger.logger.info(approx_result)\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        self.logger.logger.info(\"\")\n        return exact_results, approx_results, exact_times, approx_times\n\n    def mass_query_percentile(self, table, x=\"ss_list_price\", y=\"ss_wholesale_cost\", percent=5, number=default_mass_query_number,b_random_queries=True):\n        q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0\n        random.seed(1.0)\n\n        exact_results = []\n        exact_times = []\n        approx_results = []\n        approx_times = []\n        for i in range(number):\n            self.logger.logger.info(\n                \"start query No.\" + str(i + 1) + \" out of \" + str(number))\n            q_centre = random.uniform(0, 1)\n            sqlStr = \"SELECT percentile_cont(\" + x + \\\n                \", \" + str(q_centre) + \") FROM \" + str(table)\n            self.logger.logger.info(sqlStr)\n\n            approx_result, approx_time = self.query_2d_percentile(q_centre)\n            self.logger.logger.info(approx_result)\n\n            exact_result, exact_time = self.query2mysql(sql=sqlStr)\n\n            self.logger.logger.info(exact_result)\n            if (exact_result is not None) and (exact_result is not 0):\n                exact_results.append(exact_result)\n                exact_times.append(exact_time)\n                approx_results.append(approx_result)\n                approx_times.append(approx_time)\n            else:\n                self.logger.logger.warning(\n                    \"MYSQL returns None, so this record is ignored.\")\n        self.logger.logger.warning(\n            \"MYSQL query results: \" + str(exact_results))\n        self.logger.logger.warning(\n            \"MYSQL query time cost: \" + str(exact_times))\n        self.logger.logger.warning(\n            \"Approximate query results: \" + str(approx_results))\n        self.logger.logger.warning(\n            \"Approximate query time cost: \" + str(approx_times))\n        self.logger.logger.info(\"\")\n        return exact_results, approx_results, exact_times, approx_times\n\n    def relative_error(self, exact_results, approx_results):\n        # abs_errors = [abs(i - j) for i, j in zip(exact_results,approx_results) ]\n        rel_errors = [abs(i - j) * 1.0 / i for i,\n                      j in zip(exact_results, approx_results)]\n        # abs_time_reduction = [(j - i) for i, j in zip(exact_times, approx_times) ]\n        result = sum(rel_errors) / len(rel_errors)\n        self.logger.logger.warning(\"Relative error is : \" + str(result))\n        return result\n\n    def time_ratio(self, exact_times, approx_times):\n        result = sum(approx_times) / sum(exact_times)\n        self.logger.logger.warning(\"Time ratio is : \" + str(result))\n        return result\n\n    def query2hive(self, sql=\"SHOW TABLES\", use_server=True):\n        if use_server:\n            host = \"137.205.118.65\"\n        else:\n            host = \"localhost\"\n\n        with pyhs2.connect(host=host,\n                           port=10000,\n                           authMechanism=\"PLAIN\",\n                           user='hiveuser',\n                           password='bayern',\n                           database='default') as conn:\n            with conn.cursor() as cur:\n                # Show databases\n                # print cur.getDatabases()\n\n                # Execute query\n                # cur.execute(\"select * from src\")\n                start = datetime.now()\n                cur.execute(sql)\n                end = datetime.now()\n                time_cost = (end - start).total_seconds()\n                # Return column info from query\n                # print cur.getSchema()\n\n                # Fetch table results\n                self.logger.logger.info(\n                    \"Time spent for HIVE query: %.4fs.\" % time_cost)\n                for i in cur.fetch():\n                    self.logger.logger.info(i)\n        return i[0], time_cost\n\n    def query2mysql(self, sql=\"SHOW TABLES\", use_server=True):\n        # Open database connection\n        # db = MySQLdb.connect(\"127.0.0.1\",\"hiveuser\",\"bayern\",\"hivedb\" )\n        if use_server:\n            db = pymysql.connect(\"137.205.118.65\", \"u1796377\",\n                                 \"bayern\", \"hivedb\", port=3306)\n        else:\n            db = pymysql.connect(\"127.0.0.1\", \"hiveuser\",\n                                 \"bayern\", \"hivedb\", port=3306)\n\n        # prepare a cursor object using cursor() method\n        cursor = db.cursor()\n\n        # Drop table if it already exist using execute() method.\n        # cursor.execute(\"DROP TABLE IF EXISTS EMPLOYEE\")\n\n        # Create table as per requirement\n        # sql = sql\n        start = datetime.now()\n        cursor.execute(sql)\n        results = cursor.fetchall()\n\n        end = datetime.now()\n        time_cost = (end - start).total_seconds()\n        self.logger.logger.info(\n            \"Time spent for MYSQL query: %.4fs.\" % time_cost)\n        for row in results:\n            self.logger.logger.info(row)\n\n        # disconnect from server\n        db.close()\n        return row[0], time_cost\n\n    def mass_query(self, file, agg_func='percentile'):\n        AQP_results = []\n        with open(file) as fin:\n            for line in fin:\n                if agg_func is 'percentile':\n                    print(line)\n                    result, _ = self.query_2d_percentile(float(line))\n                    AQP_results.append(result)\n                    print(result)\n\n        print(AQP_results)\n        return AQP_results\n\n\n\n\nif __name__ == '__main__':\n\n    qe2d = Query_Engine_2d(\"100k\", num_of_points=100000,\n                           logger_file=\"../results/1m.log\")\n    qe2d.logger.set_level(\"DEBUG\")\n    qe2d.mass_query(file=\"percentile.hiveql\")\n\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()\n    #\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_avg(table=\"price_cost_1t_sorted\",number=5,percent=1)\n    # qe2d.relative_error(exact_results, approx_results)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_count(table=\"price_cost_1t_sorted\",number=5,percent=1)\n    # qe2d.relative_error(exact_results, approx_results)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum(table=\"price_cost_1t_sorted\",number=5,percent=1)\n    # qe2d.relative_error(exact_results, approx_results)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_variance_x(table=\"price_cost_100k\",number=5,percent=1)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_variance_y(table=\"price_cost_100k\",number=5,percent=1)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_covariance(table=\"price_cost_100k\",number=5,percent=1)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_correlation(table=\"price_cost_100k\",number=5,percent=1)\n    # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_percentile(\n        # table=\"price_cost_100k\", number=5, percent=1)\n    # qe2d.relative_error(exact_results, approx_results)\n",
 			"file": "creg/evaluate2d.py",
-			"file_size": 26929,
-			"file_write_time": 131769906731976882,
 			"settings":
 			{
-				"buffer_size": 26963,
+				"buffer_size": 43011,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -554,26 +561,19 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 117472,
+				"buffer_size": 117486,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "query/load_data/dataset8.sql",
-			"settings":
-			{
-				"buffer_size": 1247,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
+			"contents": "CREATE EXTERNAL TABLE store_sales_1t ( ss_sold_date_sk           INT,\nss_sold_time_sk           INT,\nss_item_sk                INT,\nss_customer_sk            INT,\nss_cdemo_sk               INT,\nss_hdemo_sk               INT,\nss_addr_sk                INT,\nss_store_sk               INT,\nss_promo_sk               INT,\nss_ticket_number          INT,\nss_quantity               INT,\nss_wholesale_cost         DECIMAL(7,2),\nss_list_price             DECIMAL(7,2),\nss_sales_price            DECIMAL(7,2),\nss_ext_discount_amt       DECIMAL(7,2),\nss_ext_sales_price        DECIMAL(7,2),\nss_ext_wholesale_cost     DECIMAL(7,2),\nss_ext_list_price         DECIMAL(7,2),\nss_ext_tax                DECIMAL(7,2),\nss_coupon_amt             DECIMAL(7,2),\nss_net_paid               DECIMAL(7,2),\nss_net_paid_inc_tax       DECIMAL(7,2),\nss_net_profit             DECIMAL(7,2)\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/store_sales_1t.dat';\n\nLOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;\nLOAD DATA INPATH 'hdfs:/data/1T.dat' INTO TABLE store_sales_1t;\n\n\n# select the x y columns\nCREATE TABLE xy AS SELECT ss_wholesale_cost,ss_list_price  FROM store_sales;\n# remove the null values\nCREATE TABLE price_cost AS SELECT ss_list_price,ss_wholesale_cost FROM xy\n    WHERE ss_list_price IS NOT NULL\n    AND ss_wholesale_cost IS NOT NULL;\n# the two sql commands above could be merged to one:\nCREATE TABLE price_cost_1t AS SELECT ss_list_price,ss_wholesale_cost FROM store_sales_1t\n    WHERE ss_list_price IS NOT NULL\n    AND ss_wholesale_cost IS NOT NULL;\n\n\n\n#hive -e 'set hive.cli.print.header=true; select * from xy' | sed 's/[\\t]/,/g'  > /home/u1796377/Desktop/xy_with_header.csv\n\n#hive -e 'select * from xy' | sed 's/[\\t]/,/g'  > /home/u1796377/Desktop/xy_without_header.csv\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY '1t'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from price_cost_1t;\n\n\n# load table to mysql\n# fisrt start the mysql server client\ncreate table price_cost_1t_sample_5m (\nss_list_price DOUBLE,\nss_wholesale_cost DOUBLE\n);\n# copy the table to the directory to be submitted to mysql\nsudo cp /disk/hadoopDir/warehouse/sample.csv /var/lib/mysql-files/sample.csv\n# load the file;\nLOAD DATA INFILE \"/var/lib/mysql-files/1t.csv\"\nINTO TABLE price_cost_1t\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\n\n\n\n\n\nCREATE EXTERNAL TABLE store_sales_5m (\nss_list_price             DECIMAL(7,2),\nss_wholesale_cost         DECIMAL(7,2)\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/price_cost_1t_sample_5m.dat';\n\nLOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;\nLOAD DATA INPATH 'hdfs:/data/5m.csv' INTO TABLE price_cost_1t_sample_5m;\n\n\n#\n# create the sorted dataset\nCREATE TABLE price_cost_1t_sorted\nAS SELECT * FROM price_cost_1t\nORDER BY ss_list_price;\n\nsort --parallel=8 -g  -o  1t_sorted.csv 1t.csv\nsort -k 1,1 -g  -o  1t_sorted.csv 1t.csv\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY '1t_sorted'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from price_cost_1t_sorted;\n\n\n# copy the file to csv, and load the data\n# fisrt start the mysql server client\ncreate table price_cost_100k (\nss_list_price DOUBLE,\nss_wholesale_cost DOUBLE\n);\n# copy the table to the directory to be submitted to mysql\nsudo cp /disk/hadoopDir/warehouse/price_cost_1t_sorted.csv /var/lib/mysql-files/price_cost_1t_sorted.csv\n# load the file;\nLOAD DATA INFILE \"/var/lib/mysql-files/100k.csv\"\nINTO TABLE price_cost_100k\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\n\n\n# Create the index\nCREATE INDEX idx_ss_list_price\nON price_cost_1t_sorted(ss_list_price);\n\nsed -i '1s/^/ss_list_price,ss_wholesale_cost\\n/' 100k.csv\n\n\n\n\nCREATE  TABLE store_sales ( ss_sold_date_sk           INT,\nss_sold_time_sk           INT,\nss_item_sk                INT,\nss_customer_sk            INT,\nss_cdemo_sk               INT,\nss_hdemo_sk               INT,\nss_addr_sk                INT,\nss_store_sk               INT,\nss_promo_sk               INT,\nss_ticket_number          INT,\nss_quantity               INT,\nss_wholesale_cost         DOUBLE,\nss_list_price             DOUBLE,\nss_sales_price            DOUBLE,\nss_ext_discount_amt       DOUBLE,\nss_ext_sales_price        DOUBLE,\nss_ext_wholesale_cost     DOUBLE,\nss_ext_list_price         DOUBLE,\nss_ext_tax                DOUBLE,\nss_coupon_amt             DOUBLE,\nss_net_paid               DOUBLE,\nss_net_paid_inc_tax       DOUBLE,\nss_net_profit             DOUBLE\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/store_sales';\n\n\nLOAD DATA INPATH '/data/tcp/tcp-ds/1t/store_sales.dat' INTO TABLE store_sales;\n\nLOAD DATA INPATH 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\nLOAD DATA INPATH 'hdfs:/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\n-- LOAD DATA INPATH '/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\n-- LOAD DATA  INPATH '/disk/dataset/hadoop/store_sales.dat' INTO TABLE store_sales_1t;\n\nALTER TABLE store_sales SET LOCATION \"/data/tcp/tcp-ds/1t/store_sales.dat\";\n-- ALTER TABLE store_sales_1t SET LOCATION 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales/1T.dat';\nALTER TABLE store_sales_1t SET LOCATION 'hdfs://guest-wl-65.dcs.warwick.ac.uk:9000/user/hive/warehouse/store_sales/1T.dat';\n\n\nCREATE TABLE store_sales_sample_1_percent1 AS SELECT * FROM store_sales SAMPLEWITH 0.01;\nCREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales_sample_1_percent;\n\nset blinkdb.sample.size=28794695;\nset blinkdb.dataset.size=2685596178;\n\ncat 1m_1.log | grep \"^INFO - SELECT\" >1m_1.hiveql\n./bin/blinkdb -i ~/results/1m_1.hiveql > ~/results/1m_1.log\n# append ; to the end  of each line\nsed -e 's/$/;/' -i 1m_1.hiveql\n\n# fetch the results from the file\n cat 1m_1.log | grep '(99% Confidence)' > results.log\n\n\n\n\n\n#################################################################################\n#create a new sample in blinkdb, the size is 1 million.\nCREATE TABLE store_sales_sample_1m_cached AS SELECT * FROM store_sales_sample_1_percent SAMPLEWITH 0.034728619;\nset blinkdb.sample.size=999173;\nset blinkdb.dataset.size=2685596178;\n\n\n\n\n\nawk 'FNR % 7 == 4' max >> max_qreg",
 			"file": "query/load_data/tcp_ds.sql",
+			"file_size": 6327,
+			"file_write_time": 131775168976226711,
 			"settings":
 			{
-				"buffer_size": 6287,
-				"encoding": "UTF-8",
+				"buffer_size": 6328,
 				"line_ending": "Unix"
 			}
 		}
@@ -589,6 +589,18 @@
 		"last_filter": "",
 		"selected_items":
 		[
+			[
+				"format",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"forma",
+				"User: Python PEP8 Autoformat"
+			],
+			[
+				"doc",
+				"AutoDocstring: Current"
+			],
 			[
 				"PEP8",
 				"Anaconda: Autoformat PEP8 Errors"
@@ -620,10 +632,6 @@
 			[
 				"ins",
 				"Package Control: Install Package"
-			],
-			[
-				"doc",
-				"AutoDocstring: Current"
 			],
 			[
 				"do",
@@ -699,6 +707,79 @@
 	],
 	"file_history":
 	[
+		"/tmp/rsub-z7oskx/generate_sample.sh",
+		"/tmp/rsub-9vhx2a/generate_sample.sh",
+		"/home/u1796377/Desktop/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-1px_to/1m_1.log",
+		"/tmp/rsub-e_58vh/1m_1_380.log",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/queries10.hiveql",
+		"/home/u1796377/Desktop/covar",
+		"/home/u1796377/Desktop/variance_x",
+		"/home/u1796377/Desktop/min",
+		"/home/u1796377/Desktop/percentile",
+		"/tmp/rsub-xmfjcx/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-799yov/1m_1_blinkdb_100k.result",
+		"/home/u1796377/Desktop/count10.result",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/Text.txt",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries10.qreg",
+		"/home/u1796377/Desktop/count10",
+		"/home/u1796377/Desktop/count10.hiveql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/percentile0.1.hiveql",
+		"/tmp/rsub-qdd025/1m_1_blinkdb_100k.result",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries0.1.hiveql600",
+		"/tmp/rsub-oqhx89/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-bu4lix/1m_1_blinkdb_100k.result",
+		"/home/u1796377/Workspace/CRegressionRDBM/results/hive_10.log",
+		"/tmp/rsub-gu4535/yarn-env.sh",
+		"/tmp/rsub-xpj298/yarn-site.xml",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/queries10.hiveql",
+		"/tmp/rsub-a77nxy/hive-site.xml",
+		"/tmp/rsub-ams17s/hive-site.xml",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/queries0.1.hiveql",
+		"/tmp/rsub-05eh4p/hive-site.xml",
+		"/tmp/rsub-2k2unm/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-z3bi94/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-mvfk6d/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-gepzby/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-w6rojg/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-9_q5g6/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-ss1sdz/1m_1_blinkdb_1m_after365.log",
+		"/tmp/rsub-699wj7/1m_1_blinkdb_1m.log",
+		"/tmp/rsub-gvclpr/1m_1_blinkdb_100k.result",
+		"/tmp/rsub-g0gqut/1m_1_blinkdb_1m.log",
+		"/tmp/rsub-26i8oz/1m_1_blinkdb_10k.hiveql",
+		"/tmp/rsub-rxn73u/blinkdb-env.sh",
+		"/tmp/rsub-ymn_nd/1m_1_blinkdb_100k.hiveql",
+		"/tmp/rsub-283mjc/1m_1_blinkdb_1m.hiveql",
+		"/home/u1796377/Desktop/covar.hiveql",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/queries0.1.hiveql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries1.qreg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries0.1.qreg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/percentile1.qreg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/percentile0.1.qreg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries10.hiveql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries0.1.hiveql",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/tools.py",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/percentile0.1.qreg",
+		"/home/u1796377/Desktop/project2/results/blinkdb/1m_1_blinkdb_1m.result",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/results/100k_1_all.log",
+		"/home/u1796377/Desktop/percentile.hiveql",
+		"/home/u1796377/Desktop/variance_x.hiveql",
+		"/home/u1796377/Desktop/min.hiveql",
+		"/home/u1796377/Desktop/max.hiveql",
+		"/home/u1796377/Desktop/max",
+		"/home/u1796377/Desktop/count",
+		"/home/u1796377/Desktop/sum.hiveql",
+		"/home/u1796377/Desktop/count.hiveql",
+		"/home/u1796377/Desktop/1m_1_agge.hiveql",
+		"/home/u1796377/Desktop/sum",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/dataset8.sql",
+		"/home/u1796377/Desktop/max_ground",
+		"/home/u1796377/Desktop/avg.hiveql",
+		"/home/u1796377/Desktop/avg",
+		"/home/u1796377/Desktop/max_time",
+		"/home/u1796377/Desktop/max_qreg",
 		"/tmp/rsub-4lhuua/results.log",
 		"/tmp/rsub-dp3pq4/results.log",
 		"/tmp/rsub-32kfe_/results.log",
@@ -721,7 +802,6 @@
 		"/tmp/rsub-n39l_1/1m_1_blinkdb_1m.hiveql",
 		"/tmp/rsub-a34i68/1m_1_blinkdb_1m.hiveql",
 		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1_percentile.log",
-		"/home/u1796377/Desktop/1m_1_agge.hiveql",
 		"/home/u1796377/Desktop/1m_1_aggregates.log",
 		"/home/u1796377/Desktop/percentile.log",
 		"/tmp/rsub-5avcq6/1m_1_blinkdb_1m_after365.hiveql",
@@ -731,7 +811,6 @@
 		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1.log",
 		"/tmp/rsub-sp8l9l/blinkdb-env.sh",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg/percentile.hiveql",
-		"/home/u1796377/Desktop/percentile.hiveql",
 		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh",
 		"/tmp/rsub-lgwo9c/blinkdb-env.sh",
 		"/opt/spark/spark1/conf/spark-env.sh",
@@ -755,78 +834,7 @@
 		"/tmp/rsub-6qj44r/1m_1_blinkdb_1m_after365.log",
 		"/tmp/rsub-iz5t4r/1m_1_blinkdb_1m_after365.log",
 		"/tmp/rsub-ej68r6/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-73thu7/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-hcj6zg/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-hf7evy/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-_9x7wy/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-yoy69c/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-qmfoxe/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-m9xz8_/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-yvbuvn/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-kcjfhq/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-fr202w/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-43gs2j/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-rqtpai/1m_1_blinkdb_1m_after365.hiveql",
-		"/home/u1796377/Dropbox/symbol_to_system.sh",
-		"/tmp/rsub-svyzlt/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-d0xbl2/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-x_a3b1/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-foouna/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-fah84u/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-ccghq6/1m_1_380.log",
-		"/tmp/rsub-g5hqal/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-4olv20/mysqld.cnf",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-ztbxj7/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-94ia49/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-y1_7ra/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-b1xznh/1m_1_blinkdb_1m.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1_aggregates.log",
-		"/tmp/rsub-aruou9/blinkdb-env.sh",
-		"/home/u1796377/.bashrc",
-		"/tmp/rsub-jil2i8/.bashrc",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/yarn-site.xml",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/yarn-env.sh",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/mapred-site.xml",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/mapred-env.sh",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/hdfs-site.xml",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/hadoop-env.sh",
-		"/opt/hadoop/hadoop-2-9-0/etc/hadoop/core-site.xml",
-		"/tmp/rsub-f3b4os/.bashrc",
-		"/tmp/rsub-sedyxe/blinkdb-env.sh",
-		"/opt/spark/conf/spark-env.sh",
-		"/tmp/rsub-g7q2gf/.bashrc",
-		"/home/u1796377/.ssh/config",
-		"/tmp/rsub-z1zyz2/.bashrc",
-		"/tmp/rsub-wb4d49/blinkdb-env.sh",
-		"/tmp/rsub-k4i1oy/blinkdb-env.sh",
-		"/tmp/rsub-1y139x/my.cnf",
-		"/tmp/rsub-02slq2/mysql.cnf",
-		"/tmp/rsub-5_mg2z/my.cnf",
-		"/tmp/rsub-85_1xz/blinkdb-env.sh",
-		"/tmp/rsub-5wfdn2/blinkdb-env.sh",
-		"/tmp/rsub-c0ohuf/blinkdb-env.sh",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m.log",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/pep8_autoformat.sublime-settings",
-		"/home/u1796377/.config/sublime-text-3/Packages/Python PEP8 Autoformat/pep8_autoformat.sublime-settings",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1_size.log",
-		"/home/u1796377/Dropbox/backup.sh",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/inverse_transform.py",
-		"/usr/share/gnome-background-properties/bionic-wallpapers.xml",
-		"/usr/share/gnome-shell/theme/ubuntu.css",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/python3_qz.sublime-build",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/Anaconda.sublime-settings",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/python3.sublime-build",
-		"/home/u1796377/workspace/CRegressionRDBM/creg/tools.py",
-		"/home/u1796377/workspace/CRegressionRDBM/requirements.txt",
-		"/home/u1796377/workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
-		"/home/u1796377/workspace/CRegressionRDBM/creg/core.py",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/python3_user.sublime-build",
-		"/home/u1796377/.config/sublime-text-3/Packages/User/python2_user.sublime-build",
-		"/home/u1796377/.config/sublime-text-3/Packages/Default/Preferences.sublime-settings",
-		"/home/u1796377/workspace/CRegressionRDBM/creg/logs.py",
-		"/home/u1796377/workspace/CRegressionRDBM/creg/query_engine.py",
-		"/home/u1796377/workspace/CRegressionRDBM/creg/evaluate2d.py"
+		"/tmp/rsub-73thu7/1m_1_blinkdb_1m_after365.log"
 	],
 	"find":
 	{
@@ -844,6 +852,37 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"confi",
+			"% Confiden",
+			"confi",
+			"INFO - ",
+			",)",
+			"price_cost_1t_sorted",
+			"Confi",
+			"confi",
+			"Confidence",
+			"confidence",
+			"store_sales_sample_1m_cached",
+			"variance_training_points_model",
+			"num_training_points_model",
+			"AND",
+			"INFO - SELECT COVARIANCE(ss_list_price, ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			"AND",
+			"INFO - SELECT VARIANCE(ss_list_price) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			"AND",
+			"INFO - SELECT MIN(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			"AND",
+			"INFO - SELECT MAX(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN ",
+			"AND",
+			"INFO - SELECT SUM(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN ",
+			"AND",
+			"INFO - SELECT COUNT(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			"AND",
+			",",
+			"INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			"AND",
+			"INFO - SELECT AVG(ss_wholesale_cost) FROM price_cost_1t_sorted WHERE  ss_list_price BETWEEN",
+			",)",
 			"INFO - ",
 			"price_cost_1t_sorted",
 			"store_sales_sample_1m_cached",
@@ -868,6 +907,25 @@
 		"regex": false,
 		"replace_history":
 		[
+			"",
+			"price_cost_1t",
+			"pc_10k_cached",
+			"pc_100k_cached",
+			",",
+			"",
+			",",
+			"",
+			",",
+			"",
+			",",
+			"",
+			",",
+			"",
+			",",
+			"",
+			",",
+			"",
+			",",
 			"",
 			"whole_1m_cached",
 			"",
@@ -896,16 +954,12 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 212,
+						"buffer_size": 213,
 						"regions":
 						{
 						},
 						"selection":
 						[
-							[
-								0,
-								0
-							]
 						],
 						"settings":
 						{
@@ -948,15 +1002,15 @@
 								],
 								[
 									5454,
-									5482
+									5483
 								],
 								[
-									5542,
-									5577
+									5543,
+									5578
 								],
 								[
-									6120,
-									6148
+									6121,
+									6149
 								]
 							],
 							"symlist":
@@ -969,46 +1023,11 @@
 								"price_cost_100k",
 								"idx_ss_list_price",
 								"store_sales",
-								"store_sales_sample_1_percent",
+								"store_sales_sample_1_percent1",
 								"store_sales_sample_1_percent_cached",
 								"store_sales_sample_1m_cached"
 							],
-							"syntax": "Packages/Outline/outline.hidden-tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 7,
-					"type": "text"
-				}
-			]
-		},
-		{
-			"selected": 6,
-			"sheets":
-			[
-				{
-					"buffer": 1,
-					"file": "creg/tools.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 34640,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								408,
-								408
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
+							"syntax": "Packages/Outline/outline.hidden-tmLanguage",
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
@@ -1016,24 +1035,30 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
-				},
+				}
+			]
+		},
+		{
+			"selected": 4,
+			"sheets":
+			[
 				{
-					"buffer": 2,
+					"buffer": 1,
 					"file": "creg/generate_random.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1544,
+						"buffer_size": 1543,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								944,
-								944
+								755,
+								755
 							]
 						],
 						"settings":
@@ -1064,73 +1089,27 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 183.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "creg/query_engine.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 22042,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								18792,
-								18792
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 7475.0,
+						"translation.y": 71.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
-					"file": "creg/evaluate2d.py",
+					"buffer": 2,
+					"file": "creg/query_engine.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 26963,
+						"buffer_size": 24905,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2501,
-								2547
+								21430,
+								21430
 							]
 						],
 						"settings":
@@ -1152,10 +1131,6 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -1164,98 +1139,127 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1110.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 5,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "creg/core.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 117472,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								9415,
-								9415
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 4675.0,
+						"translation.y": 9711.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 3,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "query/load_data/dataset8.sql",
+					"buffer": 3,
+					"file": "creg/evaluate2d.py",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1247,
+						"buffer_size": 43011,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								799,
-								799
+								40482,
+								40482
 							]
 						],
 						"settings":
 						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
 							"git_gutter_is_enabled": true,
-							"syntax": "Packages/SQL/SQL.sublime-syntax"
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 17154.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "creg/core.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 117486,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111278,
+								111278
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 50435.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 5,
 					"file": "query/load_data/tcp_ds.sql",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6287,
+						"buffer_size": 6328,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5125,
-								5125
+								5694,
+								5694
 							]
 						],
 						"settings":
@@ -1264,7 +1268,7 @@
 							"syntax": "Packages/SQL/SQL.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2938.0,
+						"translation.y": 2850.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1302,7 +1306,7 @@
 		[
 			0.0,
 			0.2,
-			0.833803878796,
+			0.762829287118,
 			1.0
 		],
 		"rows":
@@ -1315,7 +1319,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 240.0
+		"height": 234.0
 	},
 	"output.find_results":
 	{
@@ -1371,7 +1375,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 243.0,
+	"side_bar_width": 321.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

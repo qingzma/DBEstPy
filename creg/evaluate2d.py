@@ -15,6 +15,7 @@ import pymysql
 pymysql.install_as_MySQLdb()
 import generate_random
 
+from pyhive import hive
 
 from datetime import datetime
 import warnings
@@ -27,8 +28,8 @@ logger_file = "../results/deletable.log"
 
 class Query_Engine_2d:
 
-    def __init__(self, dataID, b_allow_repeated_value=True, logger_file=logger_file, 
-        num_of_points=None):
+    def __init__(self, dataID, b_allow_repeated_value=True, logger_file=logger_file,
+                 num_of_points=None):
         self.logger = logs.QueryLogs(log=logger_file)
         # self.logger.set_no_output()
         self.data = dl.load2d(dataID)
@@ -41,7 +42,7 @@ class Query_Engine_2d:
             self.qe = QueryEngine(self.cRegression, logger_object=self.logger)
         else:
             self.qe = QueryEngine(
-                self.cRegression, logger_object=self.logger, 
+                self.cRegression, logger_object=self.logger,
                 num_training_points=num_of_points)
         self.qe.density_estimation()
         self.q_min = min(self.data.features)
@@ -95,16 +96,18 @@ class Query_Engine_2d:
             p, self.q_min, self.q_max)
         return percentile, time
 
-    def query_2d_min(self, l=0, h=100):
-        _min, time = self.qe.approximate_min_from_to(l, h)
+    def query_2d_min(self, l=0, h=100, ci=True, confidence=0.95):
+        _min, time = self.qe.approximate_min_from_to(
+            l, h, ci=ci, confidence=confidence)
         return _min, time
 
-    def query_2d_max(self, l=0, h=100):
-        _max, time = self.qe.approximate_max_from_to(l, h)
+    def query_2d_max(self, l=0, h=100, ci=True, confidence=0.95):
+        _max, time = self.qe.approximate_max_from_to(
+            l, h, ci=ci, confidence=confidence)
         return _max, time
 
-    def mass_query_sum(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_sum(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                       percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         self.logger.logger.info("Start generating queries")
         if b_random_queries:
@@ -158,8 +161,8 @@ class Query_Engine_2d:
             "Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_avg(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_avg(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                       percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         self.logger.logger.info("Start generating queries")
         if b_random_queries:
@@ -212,8 +215,8 @@ class Query_Engine_2d:
             "Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_count(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_count(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                         percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         self.logger.logger.info("Start generating queries")
         if b_random_queries:
@@ -272,7 +275,7 @@ class Query_Engine_2d:
 
     def mass_query_variance_x(self, table, x="ss_list_price",
                               y="ss_wholesale_cost", percent=5,
-                               number=default_mass_query_number,
+                              number=default_mass_query_number,
                               b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         self.logger.logger.info("Start generating queries")
@@ -330,8 +333,8 @@ class Query_Engine_2d:
             "Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_variance_y(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_variance_y(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                              percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         # random.seed(1.0)
         random_left_boundary = self.q_min + q_range_half_length
@@ -389,7 +392,7 @@ class Query_Engine_2d:
         return exact_results, approx_results, exact_times, approx_times
 
     def mass_query_covariance(self, table, x="ss_list_price", y="ss_wholesale_cost",
-     percent=5, number=default_mass_query_number, b_random_queries=True):
+                              percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         # random.seed(1.0)
         random_left_boundary = self.q_min + q_range_half_length
@@ -419,7 +422,7 @@ class Query_Engine_2d:
             q_right = q_centre + q_range_half_length
 
             sqlStr = "SELECT COVARIANCE(" + x + ", " + y + ") FROM " + str(
-                table) +" WHERE  " + x + " BETWEEN " + str(q_left[0]) + " AND " + str(
+                table) + " WHERE  " + x + " BETWEEN " + str(q_left[0]) + " AND " + str(
                 q_right[0])
             self.logger.logger.info(sqlStr)
 
@@ -448,7 +451,7 @@ class Query_Engine_2d:
         return exact_results, approx_results, exact_times, approx_times
 
     def mass_query_correlation(self, table, x="ss_list_price", y="ss_wholesale_cost",
-                               percent=5, number=default_mass_query_number, 
+                               percent=5, number=default_mass_query_number,
                                b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         # random.seed(1.0)
@@ -509,7 +512,7 @@ class Query_Engine_2d:
         return exact_results, approx_results, exact_times, approx_times
 
     def mass_query_percentile(self, table, x="ss_list_price", y="ss_wholesale_cost",
-                              percent=5, number=default_mass_query_number, 
+                              percent=5, number=default_mass_query_number,
                               b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         random.seed(1.0)
@@ -551,8 +554,8 @@ class Query_Engine_2d:
         self.logger.logger.info("")
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_min(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_min(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                       percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         random.seed(1.0)
         exact_results = []
@@ -595,8 +598,8 @@ class Query_Engine_2d:
             "Approximate query time cost: " + str(approx_times))
         return exact_results, approx_results, exact_times, approx_times
 
-    def mass_query_max(self, table, x="ss_list_price", y="ss_wholesale_cost", 
-        percent=5, number=default_mass_query_number, b_random_queries=True):
+    def mass_query_max(self, table, x="ss_list_price", y="ss_wholesale_cost",
+                       percent=5, number=default_mass_query_number, b_random_queries=True):
         q_range_half_length = (self.q_max - self.q_min) * percent / 100.0 / 2.0
         random.seed(1.0)
         exact_results = []
@@ -653,37 +656,59 @@ class Query_Engine_2d:
         self.logger.logger.warning("Time ratio is : " + str(result))
         return result
 
-    def query2hive(self, sql="SHOW TABLES", use_server=True):
+    # def query2hive(self, sql="SHOW TABLES", use_server=True):
+    #     if use_server:
+    #         host = "137.205.118.65"
+    #     else:
+    #         host = "localhost"
+
+    #     with pyhs2.connect(host=host,
+    #                        port=10000,
+    #                        authMechanism="NOSASL",
+    #                        user='hiveuser',
+    #                        password='bayern',
+    #                        database='default') as conn:
+    #         with conn.cursor() as cur:
+    #             # Show databases
+    #             # print cur.getDatabases()
+
+    #             # Execute query
+    #             # cur.execute("select * from src")
+    #             start = datetime.now()
+    #             cur.execute(sql)
+    #             end = datetime.now()
+    #             time_cost = (end - start).total_seconds()
+    #             # Return column info from query
+    #             # print cur.getSchema()
+
+    #             # Fetch table results
+    #             self.logger.logger.info(
+    #                 "Time spent for HIVE query: %.4fs." % time_cost)
+    #             for i in cur.fetch():
+    #                 self.logger.logger.info(i)
+    #     return i[0], time_cost
+
+    def query2hive2(self, sql="SHOW TABLES", use_server=True):
         if use_server:
             host = "137.205.118.65"
         else:
             host = "localhost"
 
-        with pyhs2.connect(host=host,
-                           port=10000,
-                           authMechanism="PLAIN",
-                           user='hiveuser',
-                           password='bayern',
-                           database='default') as conn:
-            with conn.cursor() as cur:
-                # Show databases
-                # print cur.getDatabases()
+        conn = hive.connect(host=host, port=10000, username='hiveuser', auth='NOSASL')
 
-                # Execute query
-                # cur.execute("select * from src")
-                start = datetime.now()
-                cur.execute(sql)
-                end = datetime.now()
-                time_cost = (end - start).total_seconds()
-                # Return column info from query
-                # print cur.getSchema()
+        cursor = conn.cursor()
+        start = datetime.now()
+        cursor.execute(sql)
+        end = datetime.now()
+        time_cost = (end - start).total_seconds()
+        for result in cursor.fetchall():
+            self.logger.logger.info(result)
+        return result[0], time_cost
 
-                # Fetch table results
-                self.logger.logger.info(
-                    "Time spent for HIVE query: %.4fs." % time_cost)
-                for i in cur.fetch():
-                    self.logger.logger.info(i)
-        return i[0], time_cost
+
+
+
+        
 
     def query2mysql(self, sql="SHOW TABLES", use_server=True):
         # Open database connection
@@ -718,11 +743,14 @@ class Query_Engine_2d:
         db.close()
         return row[0], time_cost
 
-    def mass_query(self, file, agg_func='avg'):
+    def mass_query(self, file, agg_func='avg',ci=True, confidence=0.95):
         AQP_results = []
         time_costs = []
+        index = 0
         with open(file) as fin:
             for line in fin:
+                self.logger.logger.info("Starting Query " + str(index) + ":")
+                index = index + 1
                 if agg_func is 'percentile':
                     # print(line)
                     result, time = self.query_2d_percentile(float(line))
@@ -761,14 +789,14 @@ class Query_Engine_2d:
                     lh = line.split(",")
                     l = float(lh[0])
                     h = float(lh[1])
-                    result, time = self.query_2d_min(l, h)
+                    result, time = self.query_2d_min(l, h,ci=ci,confidence=confidence)
                     AQP_results.append(result)
                     time_costs.append(time)
                 if agg_func is 'max':
                     lh = line.split(",")
                     l = float(lh[0])
                     h = float(lh[1])
-                    result, time = self.query_2d_max(l, h)
+                    result, time = self.query_2d_max(l, h,ci=ci,confidence=confidence)
                     AQP_results.append(result)
                     time_costs.append(time)
                 if agg_func is 'covar':
@@ -791,7 +819,7 @@ class Query_Engine_2d:
         return AQP_results
 
     def generate_queries(self, table, x="ss_list_price", y="ss_wholesale_cost",
-                         percent=5, number=default_mass_query_number, 
+                         percent=5, number=default_mass_query_number,
                          b_random_queries=False,
                          mode=2):
         """Summary
@@ -825,10 +853,14 @@ class Query_Engine_2d:
             query_centres = []
             for i in range(number):
                 if mode is 1:
-                    _start = (self.q_max - self.q_min)*0.4
-                    query_centres.append(random.uniform(self.q_min + _start, self.q_max)[0])
+                    # _start = (self.q_max - self.q_min) * 0.4
+                    # query_centres.append(random.uniform(
+                    #     self.q_min + _start, self.q_max)[0])
+                    query_centres.append(random.uniform(
+                        0.4, 1))
                 else:
-                    query_centres.append(random.uniform(self.q_min, self.q_max)[0])
+                    query_centres.append(
+                        random.uniform(self.q_min, self.q_max)[0])
         else:
             query_centres = generate_random.make_user_distribution(
                 self.qe.kde, self.q_min, self.q_max, n=number)
@@ -841,7 +873,7 @@ class Query_Engine_2d:
         approx_times = []
 
         if mode is 1:
-            with open(file_name_hiveql,'w+') as f_hiveql:
+            with open(file_name_hiveql, 'w+') as f_hiveql:
                 with open(file_name_qreg, 'w+') as f_qreg:
                     for i in range(number):
                         q_centre = query_centres[i]
@@ -851,29 +883,34 @@ class Query_Engine_2d:
                         f_hiveql.write(sqlStr + "\n")
                         f_qreg.write(qregStr + "\n")
         else:
-            with open(file_name_hiveql,'w+') as f_hiveql:
+            with open(file_name_hiveql, 'w+') as f_hiveql:
                 with open(file_name_qreg, 'w+') as f_qreg:
-                    aggregates = ["COUNT", "SUM", "AVG","MIN", "MAX", "VARIANCE"]
+                    aggregates = ["COUNT", "SUM",
+                                  "AVG", "MIN", "MAX", "VARIANCE"]
                     for aggregate in aggregates:
                         for i in range(number):
                             q_centre = query_centres[i]
                             q_left = q_centre - q_range_half_length
                             q_right = q_centre + q_range_half_length
                             qregStr = str(q_left[0]) + ", " + str(q_right[0])
-                            sqlStr = "SELECT "+aggregate+"(" + y + ") FROM " + str(table) + " WHERE  " + \
+                            sqlStr = "SELECT " + aggregate + "(" + y + ") FROM " + str(table) + " WHERE  " + \
                                 x + " BETWEEN " + \
                                     str(q_left[0]) + " AND " + str(q_right[0])
-                            
-                            f_hiveql.write(sqlStr + "\n")
-                            f_qreg.write(qregStr + "\n")
-            self.logger.logger.info("Queries are written to file " + file_name_qreg +" and "+file_name_hiveql)
 
+                            f_hiveql.write(sqlStr + "\n")
+                            if aggregate is "COUNT":
+                                f_qreg.write(qregStr + "\n")
+            self.logger.logger.info(
+                "Queries are written to file " + file_name_qreg + " and " + file_name_hiveql)
 
     def mass_query2mysql(self, file):
         AQP_results = []
         time_costs = []
+        index = 1
         with open(file) as fin:
             for line in fin:
+                self.logger.logger.info("Starting Query " + str(index) + ":")
+                index = index + 1
                 self.logger.logger.info(line)
                 result, time = self.query2mysql(sql=line)
                 AQP_results.append(result)
@@ -881,13 +918,30 @@ class Query_Engine_2d:
         self.logger.logger.info(AQP_results)
         self.logger.logger.info(time_costs)
         return AQP_results
+
+    def mass_query2hive(self, file):
+        AQP_results = []
+        time_costs = []
+        index = 1
+        with open(file) as fin:
+            for line in fin:
+                self.logger.logger.info("Starting Query " + str(index) + ":")
+                index = index + 1
+                self.logger.logger.info(line)
+                result, time = self.query2hive2(sql=line)
+                AQP_results.append(result)
+                time_costs.append(time)
+        self.logger.logger.info(AQP_results)
+        self.logger.logger.info(time_costs)
+        return AQP_results
 if __name__ == '__main__':
 
-    qe2d = Query_Engine_2d("10k", num_of_points=100000,
+    qe2d = Query_Engine_2d("10k", num_of_points=10000,
                            logger_file="../results/1m.log")
     qe2d.logger.set_level("DEBUG")
-    qe2d.mass_query2mysql("../query/mysql/queries0.1.hiveql")
-    # qe2d.generate_queries(table="price_cost_1t_sorted",number=200,percent=0.1,mode=2,b_random_queries=True)
+    # qe2d.mass_query2hive("../query/hiveql/queries10.hiveql")
+    qe2d.generate_queries(table="price_cost_1t",
+                          number=100, percent=1, mode=1, b_random_queries=True)
     # qe2d.mass_query(file="avg.hiveql", agg_func="avg")
 
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()
