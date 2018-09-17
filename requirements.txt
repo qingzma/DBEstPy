@@ -2,4 +2,3 @@ scipy
 xgboost
 pyhs2
 pwlf
-pyarrow

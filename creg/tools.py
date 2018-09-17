@@ -947,8 +947,8 @@ def t_distribution(region=0.95):
 
 def resorvoir_sampling():
     import subprocess
-    import pyarrow as pa
-    fs = pa.hdfs.connect("137.205.118.65", 50075, user="hduser")
+    # import pyarrow as pa
+    # fs = pa.hdfs.connect("137.205.118.65", 50075, user="hduser")
     subprocess.call(['ls'])
 
 if __name__ == "__main__":
