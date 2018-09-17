@@ -552,7 +552,7 @@
 			"file": "creg/evaluate2d.py",
 			"settings":
 			{
-				"buffer_size": 43847,
+				"buffer_size": 43097,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -570,13 +570,16 @@
 			"file": "query/load_data/tcp_ds.sql",
 			"settings":
 			{
-				"buffer_size": 6681,
+				"buffer_size": 6328,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": "# HIVE\nCREATE EXTERNAL TABLE  IF NOT EXISTS ETrade( T_ID           INT,\nT_DTS           CHAR(23),\nT_ST_ID         CHAR(4),\nT_TT_ID         CHAR(3),\nT_IS_CASH       INT,\nT_S_SYMB        CHAR(15),\nT_QTY           INT,\nT_BID_PRICE     DECIMAL(7,2),\nT_CA_ID         INT,\nT_EXEC_NAME     CHAR(49),\nT_TRADE_PRICE   DECIMAL(7,2),\nT_CHRG          DECIMAL(7,2),\nT_COMM          DECIMAL(7,2),\nT_TAX           DECIMAL(7,2),\nT_LIFO          INT\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/tpce';\n\n\n\nCREATE TABLE etrade_price_comm AS SELECT T_TRADE_PRICE,T_COMM FROM ETrade\n    WHERE T_TRADE_PRICE IS NOT NULL\n    AND T_COMM IS NOT NULL;\n\n\nCREATE TABLE etrade_price_charge AS SELECT T_TRADE_PRICE,T_CHRG FROM ETrade\n    WHERE T_TRADE_PRICE IS NOT NULL\n    AND T_CHRG IS NOT NULL;\n\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY 'etrade_price_comm'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from etrade_price_comm;\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY 'etrade_price_charge'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from etrade_price_charge;\n\n\n# merge splits into one csv file\ncat 000* > etrade_price_comm.csv\ncat 000* > etrade_price_charge.csv\n\n# create sample here\n\n\n# sort\nsort -k 1,1 -g  -o  etrade_price_comm_sorted.csv etrade_price_comm.csv\nsort -k 1,1 -g  -o  etrade_price_charge_sorted.csv etrade_price_charge.csv\n\n\n\n## in mysql, create the corresponding full tables\n\ncreate table etrade_price_comm (\nT_TRADE_PRICE DOUBLE,\nT_COMM DOUBLE\n);\n\ncreate table etrade_price_charge (\nT_TRADE_PRICE DOUBLE,\nT_CHRG DOUBLE\n);\n\n# copy the table to the directory to be submitted to mysql\nsudo mv /home/hduser/etrade_price_comm/etrade_price_comm_sorted.csv /var/lib/mysql-files/etrade_price_comm_sorted.csv\nsudo mv /home/hduser/etrade_price_charge/etrade_price_charge_sorted.csv /var/lib/mysql-files/etrade_price_charge_sorted.csv\n# load the file;\nLOAD DATA INFILE \"/var/lib/mysql-files/etrade_price_comm_sorted.csv\"\nINTO TABLE etrade_price_comm\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\nLOAD DATA INFILE \"/var/lib/mysql-files/etrade_price_charge_sorted.csv\"\nINTO TABLE etrade_price_charge\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\n# Create the index\nCREATE INDEX idx_T_TRADE_PRICE\nON etrade_price_comm(T_TRADE_PRICE);\n\nCREATE INDEX idx_T_TRADE_PRICE\nON etrade_price_charge(T_TRADE_PRICE);\n\n\n# insert headers to the csv file\nsed -i '1s/^/T_TRADE_PRICE,T_COMM\\n/' etrade_price_comm_1m_sorted.csv\nsed -i '1s/^/T_TRADE_PRICE,T_CHRG\\n/' etrade_price_charge_1m.csv\n\n\n\n2160000000",
 			"file": "query/load_data/tpc_e.sql",
+			"file_size": 2584,
+			"file_write_time": 131816494989688508,
 			"settings":
 			{
 				"buffer_size": 2584,
@@ -588,7 +591,7 @@
 			"file": "creg/data_loader.py",
 			"settings":
 			{
-				"buffer_size": 33277,
+				"buffer_size": 31737,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -597,7 +600,7 @@
 			"file": "creg/tools.py",
 			"settings":
 			{
-				"buffer_size": 34723,
+				"buffer_size": 34640,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -610,6 +613,14 @@
 				"encoding": "UTF-8",
 				"line_ending": "Unix",
 				"name": "tpc_ds"
+			}
+		},
+		{
+			"file": ".gitignore",
+			"settings":
+			{
+				"buffer_size": 383,
+				"line_ending": "Unix"
 			}
 		}
 	],
@@ -736,11 +747,14 @@
 	[
 		"/home/u1796377/Workspace/CRegressionRDBM",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query",
-		"/home/u1796377/Workspace/CRegressionRDBM/results"
+		"/home/u1796377/Workspace/CRegressionRDBM/data",
+		"/home/u1796377/Workspace/CRegressionRDBM/query"
 	],
 	"file_history":
 	[
+		"/home/u1796377/Workspace/CRegressionRDBM/.gitignore",
+		"/home/u1796377/Workspace/CRegressionRDBM/requirements.txt",
+		"/tmp/rsub-6cqftx/00-header",
 		"/tmp/rsub-vmmarh/query9.tpl",
 		"/tmp/rsub-i291ii/10periodic",
 		"/tmp/rsub-rhp284/query85.tpl",
@@ -865,10 +879,7 @@
 		"/tmp/rsub-1jdqnp/generate_sample.sh",
 		"/home/u1796377/Workspace/CRegressionRDBM/data/etrade_price_comm_1m_sorted.csv",
 		"/home/u1796377/Workspace/CRegressionRDBM/data/etrade_price_comm_10k.csv",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/etrade_hive_percentile.log",
-		"/tmp/rsub-sh1kjo/generate_sample.sh",
-		"/etc/cups/printers.conf",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/etrade_percentile1.hiveql"
+		"/home/u1796377/Workspace/CRegressionRDBM/results/etrade_hive_percentile.log"
 	],
 	"find":
 	{
@@ -1064,7 +1075,7 @@
 						],
 						"settings":
 						{
-							"current_file": "/home/u1796377/Desktop/tpc_ds.sql",
+							"current_file": "/home/u1796377/Workspace/CRegressionRDBM/.gitignore",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
@@ -1081,13 +1092,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 10,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 8,
+			"selected": 9,
 			"sheets":
 			[
 				{
@@ -1138,7 +1149,7 @@
 						"translation.y": 77.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -1188,7 +1199,7 @@
 						"translation.y": 9709.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1197,7 +1208,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 43847,
+						"buffer_size": 43097,
 						"regions":
 						{
 						},
@@ -1262,7 +1273,7 @@
 						"translation.y": 16425.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1304,7 +1315,7 @@
 						"translation.y": 1311.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -1313,7 +1324,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6681,
+						"buffer_size": 6328,
 						"regions":
 						{
 						},
@@ -1333,7 +1344,7 @@
 						"translation.y": 1777.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1362,7 +1373,7 @@
 						"translation.y": 1292.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1371,7 +1382,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 33277,
+						"buffer_size": 31737,
 						"regions":
 						{
 						},
@@ -1408,7 +1419,7 @@
 						"translation.y": 2736.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 3,
 					"type": "text"
 				},
 				{
@@ -1417,15 +1428,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 34723,
+						"buffer_size": 34640,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								25858,
-								25858
+								34640,
+								34640
 							]
 						],
 						"settings":
@@ -1439,6 +1450,10 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -1447,10 +1462,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 12125.0,
+						"translation.y": 17596.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -1466,8 +1481,8 @@
 						"selection":
 						[
 							[
-								7748,
-								7748
+								9267,
+								9267
 							]
 						],
 						"settings":
@@ -1477,7 +1492,36 @@
 							"syntax": "Packages/SQL/SQL.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1539.0,
+						"translation.y": 1824.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": ".gitignore",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 383,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								266,
+								266
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Git Formats/Git Ignore.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1542,7 +1586,7 @@
 	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
-		"height": 72.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":
