@@ -694,7 +694,8 @@ class Query_Engine_2d:
         else:
             host = "localhost"
 
-        conn = hive.connect(host=host, port=10000, username='hiveuser', auth='NOSASL')
+        conn = hive.connect(host=host, port=10000,
+                            username='hiveuser', auth='NOSASL')
 
         cursor = conn.cursor()
         start = datetime.now()
@@ -704,11 +705,6 @@ class Query_Engine_2d:
         for result in cursor.fetchall():
             self.logger.logger.info(result)
         return result[0], time_cost
-
-
-
-
-        
 
     def query2mysql(self, sql="SHOW TABLES", use_server=True):
         # Open database connection
@@ -743,7 +739,7 @@ class Query_Engine_2d:
         db.close()
         return row[0], time_cost
 
-    def mass_query(self, file, agg_func='avg',ci=True, confidence=0.95):
+    def mass_query(self, file, agg_func='avg', ci=True, confidence=0.95):
         AQP_results = []
         time_costs = []
         index = 0
@@ -789,14 +785,16 @@ class Query_Engine_2d:
                     lh = line.split(",")
                     l = float(lh[0])
                     h = float(lh[1])
-                    result, time = self.query_2d_min(l, h,ci=ci,confidence=confidence)
+                    result, time = self.query_2d_min(
+                        l, h, ci=ci, confidence=confidence)
                     AQP_results.append(result)
                     time_costs.append(time)
                 if agg_func is 'max':
                     lh = line.split(",")
                     l = float(lh[0])
                     h = float(lh[1])
-                    result, time = self.query_2d_max(l, h,ci=ci,confidence=confidence)
+                    result, time = self.query_2d_max(
+                        l, h, ci=ci, confidence=confidence)
                     AQP_results.append(result)
                     time_costs.append(time)
                 if agg_func is 'covar':
@@ -821,7 +819,7 @@ class Query_Engine_2d:
     def generate_queries(self, table, x="ss_list_price", y="ss_wholesale_cost",
                          percent=5, number=default_mass_query_number,
                          b_random_queries=False,
-                         mode=2):
+                         mode=2, file_pre="etrade_"):
         """Summary
 
         Args:
@@ -837,11 +835,12 @@ class Query_Engine_2d:
                                   2 for other queries, SQL or HIVEQL;
         """
         if mode is 1:
-            file_name_qreg = "percentile" + str(percent) + ".qreg"
-            file_name_hiveql = "percentile" + str(percent) + ".hiveql"
+            file_name_qreg = file_pre + "percentile" + str(percent) + ".qreg"
+            file_name_hiveql = file_pre + \
+                "percentile" + str(percent) + ".hiveql"
         elif mode is 2:
-            file_name_qreg = "queries" + str(percent) + ".qreg"
-            file_name_hiveql = "queries" + str(percent) + ".hiveql"
+            file_name_qreg = file_pre + "queries" + str(percent) + ".qreg"
+            file_name_hiveql = file_pre + "queries" + str(percent) + ".hiveql"
         else:
             self.logger.logger.error(
                 "Failed to generate queries, no mode selected!")
@@ -886,7 +885,7 @@ class Query_Engine_2d:
             with open(file_name_hiveql, 'w+') as f_hiveql:
                 with open(file_name_qreg, 'w+') as f_qreg:
                     aggregates = ["COUNT", "SUM",
-                                  "AVG", "MIN", "MAX", "VARIANCE"]
+                                  "AVG", "MIN", "MAX"]
                     for aggregate in aggregates:
                         for i in range(number):
                             q_centre = query_centres[i]
@@ -900,6 +899,17 @@ class Query_Engine_2d:
                             f_hiveql.write(sqlStr + "\n")
                             if aggregate is "COUNT":
                                 f_qreg.write(qregStr + "\n")
+                    for i in range(number):
+                        q_centre = query_centres[i]
+                        q_left = q_centre - q_range_half_length
+                        q_right = q_centre + q_range_half_length
+                        qregStr = str(q_left[0]) + ", " + str(q_right[0])
+                        sqlStr = "SELECT " + "VARIANCE" + "(" + x + ") FROM " + str(table) + " WHERE  " + \
+                            x + " BETWEEN " + \
+                                str(q_left[0]) + " AND " + str(q_right[0])
+
+                        f_hiveql.write(sqlStr + "\n")
+
             self.logger.logger.info(
                 "Queries are written to file " + file_name_qreg + " and " + file_name_hiveql)
 
@@ -939,9 +949,10 @@ if __name__ == '__main__':
     qe2d = Query_Engine_2d("10k", num_of_points=10000,
                            logger_file="../results/1m.log")
     qe2d.logger.set_level("DEBUG")
+    # print("haha")
     # qe2d.mass_query2hive("../query/hiveql/queries10.hiveql")
-    qe2d.generate_queries(table="price_cost_1t",
-                          number=100, percent=1, mode=1, b_random_queries=True)
+    # qe2d.generate_queries(table="price_cost_1t",
+    #                       number=100, percent=1, mode=1, b_random_queries=True)
     # qe2d.mass_query(file="avg.hiveql", agg_func="avg")
 
     # exact_results, approx_results, exact_times, approx_times = qe2d.mass_query_sum()

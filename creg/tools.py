@@ -702,7 +702,8 @@ def split_data_to_2(data_source, weights_=0.5):
 def load_csv(filename, fields=None, y_column=None, sep=','):
     """ Read the csv file."""
     input = pd.read_csv(filename, skipinitialspace=True,
-                        usecols=fields, sep=sep)
+                        usecols=fields, sep=sep, low_memory=False)
+    # dtype={"ss_list_price": float, "ss_wholesale_cost": float}
     input_data = input.values
     data = DataSource()
 
@@ -925,24 +926,32 @@ def fast_reservoir_sampling(file_handle, N=1000000, callable=None):
     return sample
 
 
-def reservoir_sampling(file_handle, N=1000000, callable=None):
-    sample = []
+# def reservoir_sampling(file_handle, N=1000000, callable=None):
+#     sample = []
 
-    if callable is None:
-        callable = lambda x: x
+#     if callable is None:
+#         callable = lambda x: x
 
-    for n, line in enumerate(file_handle):
-        if n < N:
-            sample.append(callable(line))
-        elif n >= N and random.random() < N / float(n + 1):
-            replace = random.randint(0, len(sample) - 1)
-            sample[replace] = callable(line)
-    return sample
+#     for n, line in enumerate(file_handle):
+#         if n < N:
+#             sample.append(callable(line))
+#         elif n >= N and random.random() < N / float(n + 1):
+#             replace = random.randint(0, len(sample) - 1)
+#             sample[replace] = callable(line)
+#     return sample
 
 
 def t_distribution(region=0.95):
     return stats.t.ppf(region, 5)
 
 
+def resorvoir_sampling():
+    import subprocess
+    import pyarrow as pa
+    fs = pa.hdfs.connect("137.205.118.65", 50075, user="hduser")
+    subprocess.call(['ls'])
+
 if __name__ == "__main__":
-    t_distribution()
+    str = resorvoir_sampling()
+    
+

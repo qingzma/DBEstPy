@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"contents": "xy\nprice_cost\nprice_cost_1t\nprice_cost_1t_sample_5m\nprice_cost_1t_sorted\nprice_cost_100k\nidx_ss_list_price\nstore_sales\nstore_sales_sample_1_percent1\nstore_sales_sample_1_percent_cached\nstore_sales_sample_1m_cached",
+			"contents": "",
 			"settings":
 			{
-				"buffer_size": 213,
+				"buffer_size": 0,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -552,7 +552,7 @@
 			"file": "creg/evaluate2d.py",
 			"settings":
 			{
-				"buffer_size": 43011,
+				"buffer_size": 43847,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -567,14 +567,49 @@
 			}
 		},
 		{
-			"contents": "CREATE EXTERNAL TABLE store_sales_1t ( ss_sold_date_sk           INT,\nss_sold_time_sk           INT,\nss_item_sk                INT,\nss_customer_sk            INT,\nss_cdemo_sk               INT,\nss_hdemo_sk               INT,\nss_addr_sk                INT,\nss_store_sk               INT,\nss_promo_sk               INT,\nss_ticket_number          INT,\nss_quantity               INT,\nss_wholesale_cost         DECIMAL(7,2),\nss_list_price             DECIMAL(7,2),\nss_sales_price            DECIMAL(7,2),\nss_ext_discount_amt       DECIMAL(7,2),\nss_ext_sales_price        DECIMAL(7,2),\nss_ext_wholesale_cost     DECIMAL(7,2),\nss_ext_list_price         DECIMAL(7,2),\nss_ext_tax                DECIMAL(7,2),\nss_coupon_amt             DECIMAL(7,2),\nss_net_paid               DECIMAL(7,2),\nss_net_paid_inc_tax       DECIMAL(7,2),\nss_net_profit             DECIMAL(7,2)\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/store_sales_1t.dat';\n\nLOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;\nLOAD DATA INPATH 'hdfs:/data/1T.dat' INTO TABLE store_sales_1t;\n\n\n# select the x y columns\nCREATE TABLE xy AS SELECT ss_wholesale_cost,ss_list_price  FROM store_sales;\n# remove the null values\nCREATE TABLE price_cost AS SELECT ss_list_price,ss_wholesale_cost FROM xy\n    WHERE ss_list_price IS NOT NULL\n    AND ss_wholesale_cost IS NOT NULL;\n# the two sql commands above could be merged to one:\nCREATE TABLE price_cost_1t AS SELECT ss_list_price,ss_wholesale_cost FROM store_sales_1t\n    WHERE ss_list_price IS NOT NULL\n    AND ss_wholesale_cost IS NOT NULL;\n\n\n\n#hive -e 'set hive.cli.print.header=true; select * from xy' | sed 's/[\\t]/,/g'  > /home/u1796377/Desktop/xy_with_header.csv\n\n#hive -e 'select * from xy' | sed 's/[\\t]/,/g'  > /home/u1796377/Desktop/xy_without_header.csv\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY '1t'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from price_cost_1t;\n\n\n# load table to mysql\n# fisrt start the mysql server client\ncreate table price_cost_1t_sample_5m (\nss_list_price DOUBLE,\nss_wholesale_cost DOUBLE\n);\n# copy the table to the directory to be submitted to mysql\nsudo cp /disk/hadoopDir/warehouse/sample.csv /var/lib/mysql-files/sample.csv\n# load the file;\nLOAD DATA INFILE \"/var/lib/mysql-files/1t.csv\"\nINTO TABLE price_cost_1t\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\n\n\n\n\n\nCREATE EXTERNAL TABLE store_sales_5m (\nss_list_price             DECIMAL(7,2),\nss_wholesale_cost         DECIMAL(7,2)\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/price_cost_1t_sample_5m.dat';\n\nLOAD DATA INPATH 'hdfs:/data/store_sales_1g.dat' INTO TABLE store_sales_1g;\nLOAD DATA INPATH 'hdfs:/data/5m.csv' INTO TABLE price_cost_1t_sample_5m;\n\n\n#\n# create the sorted dataset\nCREATE TABLE price_cost_1t_sorted\nAS SELECT * FROM price_cost_1t\nORDER BY ss_list_price;\n\nsort --parallel=8 -g  -o  1t_sorted.csv 1t.csv\nsort -k 1,1 -g  -o  1t_sorted.csv 1t.csv\n\n# export the table to csv file.\nINSERT OVERWRITE LOCAL DIRECTORY '1t_sorted'\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY ','\nselect * from price_cost_1t_sorted;\n\n\n# copy the file to csv, and load the data\n# fisrt start the mysql server client\ncreate table price_cost_100k (\nss_list_price DOUBLE,\nss_wholesale_cost DOUBLE\n);\n# copy the table to the directory to be submitted to mysql\nsudo cp /disk/hadoopDir/warehouse/price_cost_1t_sorted.csv /var/lib/mysql-files/price_cost_1t_sorted.csv\n# load the file;\nLOAD DATA INFILE \"/var/lib/mysql-files/100k.csv\"\nINTO TABLE price_cost_100k\nCOLUMNS TERMINATED BY ','\nLINES TERMINATED BY '\\n';\n\n\n\n# Create the index\nCREATE INDEX idx_ss_list_price\nON price_cost_1t_sorted(ss_list_price);\n\nsed -i '1s/^/ss_list_price,ss_wholesale_cost\\n/' 100k.csv\n\n\n\n\nCREATE  TABLE store_sales ( ss_sold_date_sk           INT,\nss_sold_time_sk           INT,\nss_item_sk                INT,\nss_customer_sk            INT,\nss_cdemo_sk               INT,\nss_hdemo_sk               INT,\nss_addr_sk                INT,\nss_store_sk               INT,\nss_promo_sk               INT,\nss_ticket_number          INT,\nss_quantity               INT,\nss_wholesale_cost         DOUBLE,\nss_list_price             DOUBLE,\nss_sales_price            DOUBLE,\nss_ext_discount_amt       DOUBLE,\nss_ext_sales_price        DOUBLE,\nss_ext_wholesale_cost     DOUBLE,\nss_ext_list_price         DOUBLE,\nss_ext_tax                DOUBLE,\nss_coupon_amt             DOUBLE,\nss_net_paid               DOUBLE,\nss_net_paid_inc_tax       DOUBLE,\nss_net_profit             DOUBLE\n)\nROW FORMAT DELIMITED\nFIELDS TERMINATED BY '|'\nLOCATION '/user/hive/warehouse/store_sales';\n\n\nLOAD DATA INPATH '/data/tcp/tcp-ds/1t/store_sales.dat' INTO TABLE store_sales;\n\nLOAD DATA INPATH 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\nLOAD DATA INPATH 'hdfs:/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\n-- LOAD DATA INPATH '/user/hive/warehouse/store_sales_1t.dat/1T.dat' INTO TABLE store_sales_1t;\n-- LOAD DATA  INPATH '/disk/dataset/hadoop/store_sales.dat' INTO TABLE store_sales_1t;\n\nALTER TABLE store_sales SET LOCATION \"/data/tcp/tcp-ds/1t/store_sales.dat\";\n-- ALTER TABLE store_sales_1t SET LOCATION 'hdfs://137.205.118.65:50075/user/hive/warehouse/store_sales/1T.dat';\nALTER TABLE store_sales_1t SET LOCATION 'hdfs://guest-wl-65.dcs.warwick.ac.uk:9000/user/hive/warehouse/store_sales/1T.dat';\n\n\nCREATE TABLE store_sales_sample_1_percent1 AS SELECT * FROM store_sales SAMPLEWITH 0.01;\nCREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales_sample_1_percent;\n\nset blinkdb.sample.size=28794695;\nset blinkdb.dataset.size=2685596178;\n\ncat 1m_1.log | grep \"^INFO - SELECT\" >1m_1.hiveql\n./bin/blinkdb -i ~/results/1m_1.hiveql > ~/results/1m_1.log\n# append ; to the end  of each line\nsed -e 's/$/;/' -i 1m_1.hiveql\n\n# fetch the results from the file\n cat 1m_1.log | grep '(99% Confidence)' > results.log\n\n\n\n\n\n#################################################################################\n#create a new sample in blinkdb, the size is 1 million.\nCREATE TABLE store_sales_sample_1m_cached AS SELECT * FROM store_sales_sample_1_percent SAMPLEWITH 0.034728619;\nset blinkdb.sample.size=999173;\nset blinkdb.dataset.size=2685596178;\n\n\n\n\n\nawk 'FNR % 7 == 4' max >> max_qreg",
 			"file": "query/load_data/tcp_ds.sql",
-			"file_size": 6327,
-			"file_write_time": 131775168976226711,
 			"settings":
 			{
-				"buffer_size": 6328,
+				"buffer_size": 6681,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "query/load_data/tpc_e.sql",
+			"settings":
+			{
+				"buffer_size": 2584,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/data_loader.py",
+			"settings":
+			{
+				"buffer_size": 33277,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/tools.py",
+			"settings":
+			{
+				"buffer_size": 34723,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/u1796377/Desktop/tpc_ds.sql",
+			"settings":
+			{
+				"buffer_size": 10093,
+				"encoding": "UTF-8",
+				"line_ending": "Unix",
+				"name": "tpc_ds"
 			}
 		}
 	],
@@ -702,139 +737,138 @@
 		"/home/u1796377/Workspace/CRegressionRDBM",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data",
 		"/home/u1796377/Workspace/CRegressionRDBM/results"
 	],
 	"file_history":
 	[
-		"/tmp/rsub-z7oskx/generate_sample.sh",
-		"/tmp/rsub-9vhx2a/generate_sample.sh",
-		"/home/u1796377/Desktop/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-1px_to/1m_1.log",
-		"/tmp/rsub-e_58vh/1m_1_380.log",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/queries10.hiveql",
-		"/home/u1796377/Desktop/covar",
-		"/home/u1796377/Desktop/variance_x",
-		"/home/u1796377/Desktop/min",
-		"/home/u1796377/Desktop/percentile",
-		"/tmp/rsub-xmfjcx/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-799yov/1m_1_blinkdb_100k.result",
-		"/home/u1796377/Desktop/count10.result",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/Text.txt",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries10.qreg",
-		"/home/u1796377/Desktop/count10",
-		"/home/u1796377/Desktop/count10.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/percentile0.1.hiveql",
-		"/tmp/rsub-qdd025/1m_1_blinkdb_100k.result",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries0.1.hiveql600",
-		"/tmp/rsub-oqhx89/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-bu4lix/1m_1_blinkdb_100k.result",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/hive_10.log",
-		"/tmp/rsub-gu4535/yarn-env.sh",
-		"/tmp/rsub-xpj298/yarn-site.xml",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/queries10.hiveql",
-		"/tmp/rsub-a77nxy/hive-site.xml",
-		"/tmp/rsub-ams17s/hive-site.xml",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/queries0.1.hiveql",
-		"/tmp/rsub-05eh4p/hive-site.xml",
-		"/tmp/rsub-2k2unm/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-z3bi94/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-mvfk6d/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-gepzby/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-w6rojg/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-9_q5g6/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-ss1sdz/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-699wj7/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-gvclpr/1m_1_blinkdb_100k.result",
-		"/tmp/rsub-g0gqut/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-26i8oz/1m_1_blinkdb_10k.hiveql",
-		"/tmp/rsub-rxn73u/blinkdb-env.sh",
-		"/tmp/rsub-ymn_nd/1m_1_blinkdb_100k.hiveql",
-		"/tmp/rsub-283mjc/1m_1_blinkdb_1m.hiveql",
-		"/home/u1796377/Desktop/covar.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/queries0.1.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries1.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/queries0.1.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/percentile1.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/QReg/percentile0.1.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries10.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/mysql/queries0.1.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/tools.py",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/percentile0.1.qreg",
-		"/home/u1796377/Desktop/project2/results/blinkdb/1m_1_blinkdb_1m.result",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/100k_1_all.log",
-		"/home/u1796377/Desktop/percentile.hiveql",
-		"/home/u1796377/Desktop/variance_x.hiveql",
-		"/home/u1796377/Desktop/min.hiveql",
+		"/tmp/rsub-vmmarh/query9.tpl",
+		"/tmp/rsub-i291ii/10periodic",
+		"/tmp/rsub-rhp284/query85.tpl",
+		"/tmp/rsub-johnku/query79.tpl",
+		"/tmp/rsub-c05it1/query48.tpl",
+		"/tmp/rsub-dx9z6d/query9.tpl",
+		"/tmp/rsub-xi7g9q/query28.tpl",
+		"/tmp/rsub-s0oeig/query100.tpl",
+		"/tmp/rsub-uboxr9/query99.tpl",
+		"/tmp/rsub-szyx95/query98.tpl",
+		"/tmp/rsub-7fs34m/query97.tpl",
+		"/tmp/rsub-vv04co/query96.tpl",
+		"/tmp/rsub-8o4oos/query95.tpl",
+		"/tmp/rsub-76w309/query94.tpl",
+		"/tmp/rsub-ck20gt/query93.tpl",
+		"/tmp/rsub-b4aguc/query92.tpl",
+		"/tmp/rsub-8udv60/query87.tpl",
+		"/tmp/rsub-ysd4mx/query91.tpl",
+		"/tmp/rsub-z11ouq/query90.tpl",
+		"/tmp/rsub-4s9d0s/query89.tpl",
+		"/tmp/rsub-h23ooj/query88.tpl",
+		"/tmp/rsub-j25w48/query86.tpl",
+		"/tmp/rsub-ebw186/query85.tpl",
+		"/tmp/rsub-fuadth/query84.tpl",
+		"/tmp/rsub-dnru78/query83.tpl",
+		"/tmp/rsub-3gd_5b/query82.tpl",
+		"/tmp/rsub-ni7esp/query81.tpl",
+		"/tmp/rsub-emq296/query80.tpl",
+		"/tmp/rsub-xutsf2/query79.tpl",
+		"/tmp/rsub-n3nohz/query78.tpl",
+		"/tmp/rsub-f6rrvu/query77.tpl",
+		"/tmp/rsub-69_mx1/query76.tpl",
+		"/tmp/rsub-9c9ijx/query75.tpl",
+		"/tmp/rsub-3um489/query74.tpl",
+		"/tmp/rsub-q4g0l3/query73.tpl",
+		"/tmp/rsub-y6f1v_/query72.tpl",
+		"/tmp/rsub-8g8ghi/query71.tpl",
+		"/tmp/rsub-1aej1m/query70.tpl",
+		"/tmp/rsub-yn_sz4/query69.tpl",
+		"/tmp/rsub-cggg2c/query68.tpl",
+		"/tmp/rsub-lsoadc/query67.tpl",
+		"/tmp/rsub-zhzfqv/query66.tpl",
+		"/tmp/rsub-tg1smw/query65.tpl",
+		"/tmp/rsub-8l_z9f/query64.tpl",
+		"/tmp/rsub-gnylwr/query63.tpl",
+		"/tmp/rsub-oi2060/query62.tpl",
+		"/tmp/rsub-9_0yaz/query61.tpl",
+		"/tmp/rsub-saelry/query60.tpl",
+		"/tmp/rsub-6_bbij/query59.tpl",
+		"/tmp/rsub-gzkk7t/query58.tpl",
+		"/tmp/rsub-16zpkp/query57.tpl",
+		"/tmp/rsub-rfgn0f/query56.tpl",
+		"/tmp/rsub-9nrc44/query55.tpl",
+		"/tmp/rsub-8rbf0o/query54.tpl",
+		"/tmp/rsub-tlw0nv/query53.tpl",
+		"/tmp/rsub-2q508k/query52.tpl",
+		"/tmp/rsub-uecudu/query51.tpl",
+		"/tmp/rsub-p06wu7/query50.tpl",
+		"/tmp/rsub-chiumm/query49.tpl",
+		"/tmp/rsub-kaqna8/query48.tpl",
+		"/tmp/rsub-kliqxk/query47.tpl",
+		"/tmp/rsub-hqnnsu/query47.tpl",
+		"/tmp/rsub-901p0s/query46.tpl",
+		"/tmp/rsub-33g9mf/query43.tpl",
+		"/tmp/rsub-zlur2z/query45.tpl",
+		"/tmp/rsub-2fmy70/query44.tpl",
+		"/tmp/rsub-l5e13g/query44.tpl",
+		"/tmp/rsub-8reb80/query42.tpl",
+		"/tmp/rsub-e2ya5r/query41.tpl",
+		"/tmp/rsub-m_pelp/query40.tpl",
+		"/tmp/rsub-u07db3/query39.tpl",
+		"/tmp/rsub-64zb29/query38.tpl",
+		"/tmp/rsub-i_0tek/query37.tpl",
+		"/tmp/rsub-n0jv8r/query36.tpl",
+		"/tmp/rsub-rtcaa8/query35.tpl",
+		"/tmp/rsub-ffep0x/query34.tpl",
+		"/tmp/rsub-chr_3j/query33.tpl",
+		"/tmp/rsub-aso6z0/query32.tpl",
+		"/tmp/rsub-rggtcc/query31.tpl",
+		"/tmp/rsub-v6dfee/query30.tpl",
+		"/tmp/rsub-8o3vy9/query27.tpl",
+		"/tmp/rsub-2ehdtl/query29.tpl",
+		"/tmp/rsub-4ijdqw/query28.tpl",
+		"/tmp/rsub-ru41yg/query27.tpl",
+		"/tmp/rsub-4um8zv/query9.tpl",
+		"/tmp/rsub-oxgwz5/query26.tpl",
+		"/tmp/rsub-1cm8ct/query25.tpl",
+		"/tmp/rsub-r91aq5/query24.tpl",
+		"/tmp/rsub-t32vaf/query23.tpl",
+		"/tmp/rsub-rcdeee/query22.tpl",
+		"/tmp/rsub-d22vwd/query21.tpl",
+		"/tmp/rsub-l_phef/query20.tpl",
+		"/tmp/rsub-6gj_uo/query19.tpl",
+		"/tmp/rsub-qqlu_y/query18.tpl",
+		"/tmp/rsub-8w1xrx/query17.tpl",
+		"/tmp/rsub-a046f8/query16.tpl",
+		"/tmp/rsub-295vbp/query15.tpl",
+		"/tmp/rsub-0bads8/query14.tpl",
+		"/tmp/rsub-6zqe9k/query13.tpl",
+		"/tmp/rsub-yqbkn7/query12.tpl",
+		"/tmp/rsub-__09d2/query11.tpl",
+		"/tmp/rsub-ph7of2/query10.tpl",
+		"/tmp/rsub-t73qpy/query9.tpl",
+		"/tmp/rsub-4_o_02/query8.tpl",
+		"/tmp/rsub-xqvys_/query7.tpl",
+		"/tmp/rsub-oj_i6o/query6.tpl",
+		"/tmp/rsub-48ie3x/query5.tpl",
+		"/tmp/rsub-214bq6/query4.tpl",
+		"/tmp/rsub-8cwdcj/query1.tpl",
+		"/tmp/rsub-7ahnfw/query3.tpl",
+		"/tmp/rsub-lbt_nu/query2.tpl",
+		"/tmp/rsub-1w_99y/query1.tpl",
+		"/tmp/rsub-1bye4d/netezza.tpl",
+		"/tmp/rsub-pc0ba4/db2.tpl",
+		"/tmp/rsub-qmbg0_/ansi.tpl",
+		"/tmp/rsub-o18ckr/ansi.tpl",
+		"/tmp/rsub-5i57dj/query1.tpl",
+		"/tmp/rsub-t_hky9/query10a.tpl",
 		"/home/u1796377/Desktop/max.hiveql",
-		"/home/u1796377/Desktop/max",
-		"/home/u1796377/Desktop/count",
-		"/home/u1796377/Desktop/sum.hiveql",
-		"/home/u1796377/Desktop/count.hiveql",
-		"/home/u1796377/Desktop/1m_1_agge.hiveql",
-		"/home/u1796377/Desktop/sum",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/dataset8.sql",
-		"/home/u1796377/Desktop/max_ground",
-		"/home/u1796377/Desktop/avg.hiveql",
-		"/home/u1796377/Desktop/avg",
-		"/home/u1796377/Desktop/max_time",
-		"/home/u1796377/Desktop/max_qreg",
-		"/tmp/rsub-4lhuua/results.log",
-		"/tmp/rsub-dp3pq4/results.log",
-		"/tmp/rsub-32kfe_/results.log",
-		"/tmp/rsub-39ct0r/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-uewr3s/results.log.bak",
-		"/tmp/rsub-hopoz7/results.log",
-		"/tmp/rsub-scy8vh/results.log",
-		"/tmp/rsub-dep5nl/results.log",
-		"/tmp/rsub-tew2l1/results.log",
-		"/tmp/rsub-tkme42/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-cgmce6/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-2rf4q1/results.log",
-		"/tmp/rsub-o7s4fa/results.log",
-		"/tmp/rsub-dhqrb0/results.log",
-		"/tmp/rsub-qsr682/results.log",
-		"/tmp/rsub-k9tikg/results.log",
-		"/tmp/rsub-5z8t3r/results.log",
-		"/tmp/rsub-i4syl7/results.log",
-		"/tmp/rsub-zh3ybl/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-n39l_1/1m_1_blinkdb_1m.hiveql",
-		"/tmp/rsub-a34i68/1m_1_blinkdb_1m.hiveql",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1_percentile.log",
-		"/home/u1796377/Desktop/1m_1_aggregates.log",
-		"/home/u1796377/Desktop/percentile.log",
-		"/tmp/rsub-5avcq6/1m_1_blinkdb_1m_after365.hiveql",
-		"/tmp/rsub-awzt_u/1m_1_blinkdb_1m_after365.hiveql",
-		"/tmp/rsub-rioikz/000000_0",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/deletable.py",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/1m_1.log",
-		"/tmp/rsub-sp8l9l/blinkdb-env.sh",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/percentile.hiveql",
-		"/home/u1796377/Program/blinkdb/conf/blinkdb-env.sh",
-		"/tmp/rsub-lgwo9c/blinkdb-env.sh",
-		"/opt/spark/spark1/conf/spark-env.sh",
-		"/home/u1796377/Desktop/project2/results/blinkdb/1m_1.result",
-		"/home/u1796377/Desktop/project2/results/blinkdb/1m_1.log",
-		"/home/u1796377/Desktop/1m_1_380.log",
-		"/home/u1796377/Desktop/1m_1.log",
-		"/home/u1796377/Desktop/1m_1_380.result",
-		"/home/u1796377/Desktop/1m_1.result",
-		"/media/u1796377/sceavens Baby/2018-07-dcs-desktop/Desktop/project2/results/blinkdb/results.log",
-		"/media/u1796377/sceavens Baby/2018-07-dcs-desktop/Desktop/project2/results/blinkdb/1m_1.log",
-		"/home/u1796377/Desktop/result1m_1.log",
-		"/home/u1796377/Desktop/project2/results/blinkdb/1m_1_blinkdb_1m.log",
-		"/home/u1796377/Desktop/1m_1_blinkdb_1m_after365.log",
-		"/home/u1796377/Desktop/result1m_2.log",
-		"/home/u1796377/Desktop/project2/results/blinkdb/blinkdb_1m.result",
-		"/home/u1796377/Desktop/project2/results/blinkdb/results.log",
-		"/home/u1796377/Desktop/1m_1_blinkdb_1m.log",
-		"/tmp/rsub-zbpabx/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-z262so/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-6qj44r/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-iz5t4r/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-ej68r6/1m_1_blinkdb_1m_after365.log",
-		"/tmp/rsub-73thu7/1m_1_blinkdb_1m_after365.log"
+		"/tmp/rsub-3jq_ss/generate_sample.sh",
+		"/tmp/rsub-xyicz9/generate_sample.sh",
+		"/tmp/rsub-1jdqnp/generate_sample.sh",
+		"/home/u1796377/Workspace/CRegressionRDBM/data/etrade_price_comm_1m_sorted.csv",
+		"/home/u1796377/Workspace/CRegressionRDBM/data/etrade_price_comm_10k.csv",
+		"/home/u1796377/Workspace/CRegressionRDBM/results/etrade_hive_percentile.log",
+		"/tmp/rsub-sh1kjo/generate_sample.sh",
+		"/etc/cups/printers.conf",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/hiveql/etrade_percentile1.hiveql"
 	],
 	"find":
 	{
@@ -852,6 +886,44 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"count",
+			"percentile_cont",
+			"\t",
+			"merge",
+			"head",
+			"header",
+			"CXX",
+			"RM",
+			"prefix",
+			"confi",
+			"confid",
+			"confi",
+			"confid",
+			"confiden",
+			"confid",
+			"confide",
+			"confid",
+			"pc_1m_cached",
+			"price_cost_1t_sorted",
+			"AVG",
+			"SUM",
+			"COUNT",
+			"price_cost_1t_sorted",
+			"AVG",
+			"SUM",
+			"COUNT",
+			"pc_10k_cached",
+			"VARIANCE(ss_wholesale_cost)",
+			"confi",
+			"-",
+			"pc_100k_cached",
+			"AVG",
+			"SUM",
+			"COUNT",
+			"price_cost_1t",
+			"pc_10k_cached",
+			"price_cost_1t",
+			"percentile_cont",
 			"confi",
 			"% Confiden",
 			"confi",
@@ -907,6 +979,35 @@
 		"regex": false,
 		"replace_history":
 		[
+			"avg",
+			"percentile_approx",
+			"    ",
+			"pc_10k_cached",
+			"pc_100k_cached",
+			"pc_1k_cached",
+			"pc_10k_cached",
+			"pc_1k_cached",
+			"pc_1m_cached",
+			"APPROX_AVG",
+			"APPROX_SUM",
+			"APPROX_COUNT",
+			"pc_1m_cached",
+			"APPROX_AVG",
+			"APPROX_SUM",
+			"APPROX_COUNT",
+			"pc_1k_cached",
+			"VARIANCE(ss_list_price)",
+			"pc_1m_cached",
+			"pc_10k_cached",
+			"APPROX_AVG",
+			"APPROX_SUM",
+			"APPROX_COUNT",
+			"pc_10k_cached",
+			"pc_100k_cached",
+			"pc_1m_cached",
+			"pc_100k_cached",
+			"pc_10k_cached",
+			"percentile_approx",
 			"",
 			"price_cost_1t",
 			"pc_10k_cached",
@@ -954,7 +1055,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 213,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -963,69 +1064,14 @@
 						],
 						"settings":
 						{
-							"current_file": "/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
+							"current_file": "/home/u1796377/Desktop/tpc_ds.sql",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
-								[
-									1140,
-									1142
-								],
-								[
-									1242,
-									1252
-								],
-								[
-									1444,
-									1457
-								],
-								[
-									2039,
-									2062
-								],
-								[
-									2820,
-									2840
-								],
-								[
-									3240,
-									3255
-								],
-								[
-									3652,
-									3669
-								],
-								[
-									3787,
-									3798
-								],
-								[
-									5454,
-									5483
-								],
-								[
-									5543,
-									5578
-								],
-								[
-									6121,
-									6149
-								]
 							],
 							"symlist":
 							[
-								"xy",
-								"price_cost",
-								"price_cost_1t",
-								"price_cost_1t_sample_5m",
-								"price_cost_1t_sorted",
-								"price_cost_100k",
-								"idx_ss_list_price",
-								"store_sales",
-								"store_sales_sample_1_percent1",
-								"store_sales_sample_1_percent_cached",
-								"store_sales_sample_1m_cached"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage",
 							"tab_size": 4,
@@ -1035,13 +1081,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 4,
+			"selected": 8,
 			"sheets":
 			[
 				{
@@ -1089,10 +1135,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 71.0,
+						"translation.y": 77.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -1108,8 +1154,8 @@
 						"selection":
 						[
 							[
-								21430,
-								21430
+								22603,
+								22603
 							]
 						],
 						"settings":
@@ -1139,10 +1185,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 9711.0,
+						"translation.y": 9709.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -1151,15 +1197,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 43011,
+						"buffer_size": 43847,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								40482,
-								40482
+								40483,
+								40483
 							]
 						],
 						"settings":
@@ -1189,6 +1235,22 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
 								}
 							],
 							"git_gutter_is_enabled": true,
@@ -1197,10 +1259,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 17154.0,
+						"translation.y": 16425.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -1216,8 +1278,8 @@
 						"selection":
 						[
 							[
-								111278,
-								111278
+								3272,
+								3272
 							]
 						],
 						"settings":
@@ -1239,10 +1301,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 50435.0,
+						"translation.y": 1311.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -1251,15 +1313,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6328,
+						"buffer_size": 6681,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5694,
-								5694
+								3620,
+								3620
 							]
 						],
 						"settings":
@@ -1268,7 +1330,154 @@
 							"syntax": "Packages/SQL/SQL.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 2850.0,
+						"translation.y": 1777.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "query/load_data/tpc_e.sql",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2584,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2034,
+								2034
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/SQL/SQL.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1292.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "creg/data_loader.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 33277,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7890,
+								7890
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2736.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "creg/tools.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 34723,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								25858,
+								25858
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 12125.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/home/u1796377/Desktop/tpc_ds.sql",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10093,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7748,
+								7748
+							]
+						],
+						"settings":
+						{
+							"auto_name": "tpc_ds",
+							"git_gutter_is_enabled": false,
+							"syntax": "Packages/SQL/SQL.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 1539.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -1333,7 +1542,7 @@
 	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
-		"height": 52.0
+		"height": 72.0
 	},
 	"save_all_on_build": true,
 	"select_file":

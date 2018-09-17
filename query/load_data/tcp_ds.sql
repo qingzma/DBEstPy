@@ -167,7 +167,7 @@ ALTER TABLE store_sales SET LOCATION "/data/tcp/tcp-ds/1t/store_sales.dat";
 ALTER TABLE store_sales_1t SET LOCATION 'hdfs://guest-wl-65.dcs.warwick.ac.uk:9000/user/hive/warehouse/store_sales/1T.dat';
 
 
-CREATE TABLE store_sales_sample_1_percent1 AS SELECT * FROM store_sales SAMPLEWITH 0.01;
+CREATE TABLE store_sales_sample_1_percent1 AS SELECT * FROM store_sales SAMPLEWITHhive s 0.01;
 CREATE TABLE store_sales_sample_1_percent_cached AS SELECT * FROM store_sales_sample_1_percent;
 
 set blinkdb.sample.size=28794695;
@@ -196,3 +196,19 @@ set blinkdb.dataset.size=2685596178;
 
 
 awk 'FNR % 7 == 4' max >> max_qreg
+
+
+# export the table to csv file.
+INSERT OVERWRITE LOCAL DIRECTORY '/home/u1796377/1_percent.csv'
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY ','
+select * from price_cost_1t;
+
+INSERT OVERWRITE LOCAL DIRECTORY '/home/u1796377/1_percent.csv' ROW FORMAT DELIMITED FIELDS TERMINATED BY ',' SELECT * FROM pc_1_percent;
+
+
+2685596178
+999173
+99917
+9991
+968

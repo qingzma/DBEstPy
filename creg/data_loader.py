@@ -15,6 +15,11 @@ file9 = "../data/1m.csv"
 file10 = "../data/5m.csv"
 file11 = "../data/10k.csv"
 file12 = "../data/100k.csv"
+file13 = "../data/1_percent.csv"
+etrade_price_comm_1m = "../data/etrade_price_comm_1m.csv"
+etrade_price_comm_100k = "../data/etrade_price_comm_100k.csv"
+etrade_price_comm_10k = "../data/etrade_price_comm_10k.csv"
+etrade_price_comm_1k = "../data/etrade_price_comm_1k.csv"
 
 def load2d(dataID):
     if dataID == 1:
@@ -131,6 +136,31 @@ def load2d(dataID):
         fields = ['ss_list_price', 'ss_wholesale_cost']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         data = tools.load_csv(file12, fields, y_column, sep=',')
+
+    if dataID == "1%":
+        fields = ['ss_list_price', 'ss_wholesale_cost']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(file13, fields, y_column, sep=',')
+    
+    if dataID == "etrade_price_comm_1m":
+        fields = ['T_TRADE_PRICE', 'T_COMM']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(etrade_price_comm_1m, fields, y_column, sep=',')
+
+    if dataID == "etrade_price_comm_100k":
+        fields = ['T_TRADE_PRICE', 'T_COMM']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(etrade_price_comm_100k, fields, y_column, sep=',')
+
+    if dataID == "etrade_price_comm_10k":
+        fields = ['T_TRADE_PRICE', 'T_COMM']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(etrade_price_comm_10k, fields, y_column, sep=',')
+
+    if dataID == "etrade_price_comm_1k":
+        fields = ['T_TRADE_PRICE', 'T_COMM']
+        y_column = 1  # should be the order in the input file, not in the "fields" order.
+        data = tools.load_csv(etrade_price_comm_1k, fields, y_column, sep=',')
 
     return data
 
