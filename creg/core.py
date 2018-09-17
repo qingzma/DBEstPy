@@ -651,7 +651,7 @@ class CRegression:
         start = datetime.now()
         if self.b_cross_validation:
             parameters = {'max_depth': [1, 8, 12]}
-            clf = GridSearchCV(XGBRegressor_sklearn(), parameters, n_jobs=4)
+            clf = GridSearchCV(XGBRegressor_sklearn(), parameters, n_jobs=4,verbose=0)
             clf.fit(X, y)
             reg = clf.best_estimator_
         else:

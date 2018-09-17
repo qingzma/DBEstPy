@@ -547,6 +547,14 @@ class DataSource:
         labels = np.asarray(labels)  # .reshape(-1, 1)
         self.features = features
         self.labels = labels
+    def removeNAN(self):
+        indexs=[]
+        for index in range(self.labels):
+            if y is "NAN" or "nan":
+                indexs.append(index)
+            self.labels=np.delete(self.labels,indexs)
+            self.features=np.delete(self.features,indexs)
+
 
 
 class Evaluation:

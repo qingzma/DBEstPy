@@ -1,4 +1,28 @@
-2018-09-17 15:20:20,029 - INFO - Initialising DBEst...
-2018-09-17 15:20:20,029 - INFO - Dataset contains 2 tables, which are:
-2018-09-17 15:20:20,029 - INFO - ['store_sales', 'web_sales']
-2018-09-17 15:20:20,029 - INFO - Talbes in the dataset need [2, 1] Column Sets.
+2018-09-17 21:07:02,320 - INFO - Initialising DBEst...
+2018-09-17 21:07:02,320 - INFO - Dataset contains 1 tables, which are:
+2018-09-17 21:07:02,320 - INFO - ['store_sales']
+2018-09-17 21:07:02,321 - INFO - Talbes in the dataset need [1] Column Sets.
+2018-09-17 21:07:02,321 - DEBUG - [['ss_quantity', 'ss_ext_discount_amt']]
+2018-09-17 21:07:02,321 - DEBUG - {'store_sales': [['ss_quantity', 'ss_ext_discount_amt']]}
+2018-09-17 21:07:02,616 - INFO - --------------------------------------------------
+2018-09-17 21:07:02,621 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
+2018-09-17 21:07:05,392 - DEBUG - Sucessfully deployed GBoost
+2018-09-17 21:07:05,393 - DEBUG - Time cost to train the model is : 2.76620 s.
+2018-09-17 21:07:07,370 - DEBUG - Sucessfully deployed XGboost
+2018-09-17 21:07:07,370 - DEBUG - Time cost to train the model is : 1.97694 s.
+2018-09-17 21:07:07,370 - INFO - Start querying to GBoost.
+2018-09-17 21:07:09,666 - DEBUG - Finish 45483 queries, average latency is 0.050475 ms. 
+2018-09-17 21:07:09,666 - INFO - Total time spent: 2.2958 s.
+2018-09-17 21:07:09,666 - INFO - --------------------------------------------------------------------------------------------
+2018-09-17 21:07:09,666 - INFO - Start querying to XGboost.
+2018-09-17 21:07:18,682 - DEBUG - Finish 45483 queries, average latency is 0.198230 ms. 
+2018-09-17 21:07:18,683 - INFO - Total time spent: 9.0161 s.
+2018-09-17 21:07:18,683 - INFO - --------------------------------------------------------------------------------------------
+2018-09-17 21:07:18,870 - DEBUG - Queries are classified into 2 categories:  
+2018-09-17 21:07:18,870 - DEBUG - Counts are: [ 7226 38257].
+2018-09-17 21:07:21,651 - DEBUG - Total time to train xgboost classifier is: 2.7810 s.
+2018-09-17 21:07:21,655 - INFO - Time to fit the model is 19s.
+2018-09-17 21:07:21,657 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
+2018-09-17 21:07:21,657 - INFO - --------------------------------------------------
+2018-09-17 21:07:21,657 - DEBUG - {"['ss_quantity', 'ss_ext_discount_amt']": <query_engine.QueryEngine object at 0x7f46384ce080>}
+2018-09-17 21:07:21,657 - INFO - DBEsti has been initialised, ready to serve...
