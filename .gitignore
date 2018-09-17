@@ -6,6 +6,7 @@ youtube_videos.tsv
 7ethylene_methane_with_header.csv
 ethylene_CO.txt
 ethylene_methane.txt
+1_percent.csv
 CRegressionRDBMWorkspace
 CRegressionRDBMWorkspace.sublime-project
 CRegressionRDBMWorkspace.sublime-workspace
@@ -16,4 +17,3 @@ CRegressionRDBMWorkspace.sublime-workspace
 .idea/workspace.xml
 creg/*.pyc
 results/deletable.log
-data/1_percent.csv
