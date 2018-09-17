@@ -16,3 +16,4 @@ CRegressionRDBMWorkspace.sublime-workspace
 .idea/workspace.xml
 creg/*.pyc
 results/deletable.log
+data/1_percent.csv
