@@ -211,4 +211,86 @@ INSERT OVERWRITE LOCAL DIRECTORY '/home/u1796377/1_percent.csv' ROW FORMAT DELIM
 999173
 99917
 9991
-968
+968;
+
+
+CREATE EXTERNAL TABLE time_dim (
+    t_time_sk                 INT,
+    t_time_id                 char(16),
+    t_time                    INT,
+    t_hour                    INT,
+    t_minute                  INT,
+    t_second                  INT,
+    t_am_pm                   char(2),
+    t_shift                   char(20),
+    t_sub_shift               char(20),
+    t_meal_time               char(20)
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/user/hive/warehouse/tpcDs/time_dim';
+
+
+
+
+create external table web_page
+(
+    wp_web_page_sk            INT               ,
+    wp_web_page_id            char(16)              ,
+    wp_rec_start_date         date                          ,
+    wp_rec_end_date           date                          ,
+    wp_creation_date_sk       INT                       ,
+    wp_access_date_sk         INT                       ,
+    wp_autogen_flag           char(1)                       ,
+    wp_customer_sk            INT                       ,
+    wp_url                    varchar(100)                  ,
+    wp_type                   char(50)                      ,
+    wp_char_count             INT                       ,
+    wp_link_count             INT                       ,
+    wp_image_count            INT                       ,
+    wp_max_ad_count           INT
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/user/hive/warehouse/tpcDs/web_page';
+
+create external table web_sales
+(
+    ws_sold_date_sk           INT                       ,
+    ws_sold_time_sk           INT                       ,
+    ws_ship_date_sk           INT                       ,
+    ws_item_sk                INT               ,
+    ws_bill_customer_sk       INT                       ,
+    ws_bill_cdemo_sk          INT                       ,
+    ws_bill_hdemo_sk          INT                       ,
+    ws_bill_addr_sk           INT                       ,
+    ws_ship_customer_sk       INT                       ,
+    ws_ship_cdemo_sk          INT                       ,
+    ws_ship_hdemo_sk          INT                       ,
+    ws_ship_addr_sk           INT                       ,
+    ws_web_page_sk            INT                       ,
+    ws_web_site_sk            INT                       ,
+    ws_ship_mode_sk           INT                       ,
+    ws_warehouse_sk           INT                       ,
+    ws_promo_sk               INT                       ,
+    ws_order_number           INT               ,
+    ws_quantity               INT                       ,
+    ws_wholesale_cost         decimal(7,2)                  ,
+    ws_list_price             decimal(7,2)                  ,
+    ws_sales_price            decimal(7,2)                  ,
+    ws_ext_discount_amt       decimal(7,2)                  ,
+    ws_ext_sales_price        decimal(7,2)                  ,
+    ws_ext_wholesale_cost     decimal(7,2)                  ,
+    ws_ext_list_price         decimal(7,2)                  ,
+    ws_ext_tax                decimal(7,2)                  ,
+    ws_coupon_amt             decimal(7,2)                  ,
+    ws_ext_ship_cost          decimal(7,2)                  ,
+    ws_net_paid               decimal(7,2)                  ,
+    ws_net_paid_inc_tax       decimal(7,2)                  ,
+    ws_net_paid_inc_ship      decimal(7,2)                  ,
+    ws_net_paid_inc_ship_tax  decimal(7,2)                  ,
+    ws_net_profit             decimal(7,2)                  
+)
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '|'
+LOCATION '/user/hive/warehouse/tpcDs/web_sales';

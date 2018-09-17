@@ -1,1 +1,4 @@
-INFO - Time spent for approximate MAX: 0.0354s.
+2018-09-17 15:20:20,029 - INFO - Initialising DBEst...
+2018-09-17 15:20:20,029 - INFO - Dataset contains 2 tables, which are:
+2018-09-17 15:20:20,029 - INFO - ['store_sales', 'web_sales']
+2018-09-17 15:20:20,029 - INFO - Talbes in the dataset need [2, 1] Column Sets.

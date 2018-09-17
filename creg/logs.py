@@ -35,8 +35,8 @@ class QueryLogs:
         self.ch = logging.StreamHandler()
         self.ch.setLevel(logging.DEBUG)
         # create formatter and add it to the handlers
-        formatter = self.logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-        formatter = self.logging.Formatter('%(levelname)s - %(message)s')
+        formatter = self.logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+        #formatter = self.logging.Formatter('%(levelname)s - %(message)s')
         #formatter = self.logging.Formatter('%(message)s')
         self.fh.setFormatter(formatter)
         self.ch.setFormatter(formatter)
