@@ -105,6 +105,7 @@ class DBEst:
                     qe = QueryEngine(
                         cRegression, logger_object=self.logger,
                         num_training_points=num_of_points[uniqueTable])
+                    qe.density_estimation()
                     DBEstiClient[str(columnItem)]=qe
                     self.logger.logger.info("Finish training Qeury Engine for Table "+uniqueTable+
                         ", Column Set: "+str(columnItem))

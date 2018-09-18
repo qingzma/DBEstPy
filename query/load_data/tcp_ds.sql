@@ -294,3 +294,7 @@ create external table web_sales
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 LOCATION '/user/hive/warehouse/tpcDs/web_sales';
+
+
+#remove comma , at end of each line
+sed 's/,$//' web_page.csv > web_page.csv.nocomma
