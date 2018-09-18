@@ -7,15 +7,17 @@ import pandas as pd
 from tools import DataSource
 from core import CRegression
 from query_engine import QueryEngine
-
+from datetime import datetime
+import json
 logger_file = "../results/deletable.log"
 
 
 class DBEst:
 
     def __init__(self, sampleSize="100k",num_of_points=None, dataset="tpcds", logger_file=logger_file):
+        start_time = datetime.now()
         self.logger = logs.QueryLogs(log=logger_file)
-        self.logger.set_level("DEBUG")
+        self.logger.set_level("INFO")
         self.logger.logger.info("Initialising DBEst...")
         if dataset is "tpcds":
             # initialise the column set, tables in TPC-DS dataset.
@@ -24,25 +26,25 @@ class DBEst:
                 num_of_points["store_sales"]=2685596178
                 num_of_points["web_page"]=3000
                 num_of_points["time_dim"]=86400
-                num_of_points["web_sales"]=10
+                num_of_points["web_sales"]=720000376
             tableColumnSets = [
                 # ["store_sales", "ss_quantity", "*"],
                 ["store_sales", "ss_quantity", "ss_ext_discount_amt"],
-                # ["store_sales", "ss_quantity", "ss_ext_sales_price"],
-                # ["store_sales", "ss_quantity", "ss_ext_list_price"],
-                # ["store_sales", "ss_quantity", "ss_ext_tax"],
-                # ["store_sales", "ss_quantity", "ss_net_paid"],
-                # ["store_sales", "ss_quantity", "ss_net_paid_inc_tax"],
-                # ["store_sales", "ss_quantity", "ss_net_profit"],
-                # ["store_sales", "ss_quantity", "ss_list_price"],
-                # ["store_sales", "ss_list_price", "ss_list_price"],
-                # ["store_sales", "ss_coupon_amt", "ss_list_price"],
-                # ["store_sales", "ss_wholesale_cost", "ss_list_price"],
-                # ["store_sales", "ss_sales_price", "ss_quantity"],
-                # ["store_sales", "ss_net_profit", "ss_quantity"],
-                # ["web_page", "wp_char_count", "*"],
-                # ["time_dim", "t_minute", "*"],
-                # ["web_sales", "ws_sales_price", "ws_quantity"]
+                ["store_sales", "ss_quantity", "ss_ext_sales_price"],
+                ["store_sales", "ss_quantity", "ss_ext_list_price"],
+                ["store_sales", "ss_quantity", "ss_ext_tax"],
+                ["store_sales", "ss_quantity", "ss_net_paid"],
+                ["store_sales", "ss_quantity", "ss_net_paid_inc_tax"],
+                ["store_sales", "ss_quantity", "ss_net_profit"],
+                ["store_sales", "ss_quantity", "ss_list_price"],
+                ["store_sales", "ss_list_price", "ss_list_price"],
+                ["store_sales", "ss_coupon_amt", "ss_list_price"],
+                ["store_sales", "ss_wholesale_cost", "ss_list_price"],
+                ["store_sales", "ss_sales_price", "ss_quantity"],
+                ["store_sales", "ss_net_profit", "ss_quantity"],
+                ["web_page", "wp_char_count", "wp_link_count"],             # *
+                ["time_dim", "t_minute", "t_hour"],                         # *
+                ["web_sales", "ws_sales_price", "ws_quantity"]
                 ]
             tables = [sublist[0] for sublist in tableColumnSets]
             self.uniqueTables = list(set(tables))
@@ -109,7 +111,11 @@ class DBEst:
                     self.logger.logger.info("--------------------------------------------------")
                 self.logger.logger.debug(DBEstiClient)
                 DBEstClients[uniqueTable]=DBEstiClient
-            self.logger.logger.info("DBEsti has been initialised, ready to serve...")
+            self.logger.logger.info(DBEstClients)
+            # self.logger.logger.info(json.dumps(DBEstClients, indent=4))
+            end_time = datetime.now()
+            time_cost = (end_time-start_time).total_seconds()
+            self.logger.logger.info("DBEsti has been initialised, ready to serve... (%.1fs)"%time_cost)
 
 
 
