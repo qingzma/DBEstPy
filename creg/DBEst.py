@@ -9,6 +9,7 @@ from core import CRegression
 from query_engine import QueryEngine
 from datetime import datetime
 import json
+import re
 logger_file = "../results/deletable.log"
 
 
@@ -71,7 +72,7 @@ class DBEst:
                 self.CSinTable[uniqueTable]=columnSet
             self.logger.logger.debug(self.CSinTable)
 
-            DBEstClients={}     #store all QeuryEngines, for each table
+            self.DBEstClients={}     #store all QeuryEngines, for each table
             # load data
             for uniqueTable in self.uniqueTables:
                 if sampleSize is "100k":
@@ -111,14 +112,69 @@ class DBEst:
                         ", Column Set: "+str(columnItem))
                     self.logger.logger.info("--------------------------------------------------")
                 self.logger.logger.debug(DBEstiClient)
-                DBEstClients[uniqueTable]=DBEstiClient
-            self.logger.logger.info(DBEstClients)
+                self.DBEstClients[uniqueTable]=DBEstiClient
+            self.logger.logger.info(self.DBEstClients)
             # self.logger.logger.info(json.dumps(DBEstClients, indent=4))
-            end_time = datetime.now()
-            time_cost = (end_time-start_time).total_seconds()
-            self.logger.logger.info("DBEsti has been initialised, ready to serve... (%.1fs)"%time_cost)
+        end_time = datetime.now()
+        time_cost = (end_time-start_time).total_seconds()
+        self.logger.logger.info("DBEsti has been initialised, ready to serve... (%.1fs)"%time_cost)
+
+    def mass_query_simple(self, file):
+        AQP_results = []
+        time_costs = []
+        index = 1
+        with open(file) as fin:
+            for line in fin:
+                self.logger.logger.info("Starting Query " + str(index) + ":")
+                self.logger.logger.info(line)
+                index = index + 1
+                query_list=line.replace("(","").replace(")","")
+                query_list =  re.split('\s+',query_list)
+                # remove empty strings caused by sequential blank spaces.
+                query_list=list(filter(None,query_list))
+                func = query_list[1]
+                tbl =  query_list[4]
+                x = query_list[6]
+                y = query_list[2]
+                lb = query_list[8]
+                hb = query_list[10]
 
 
+                if y =="*":
+                    columnSetsInTable = self.CSinTable[tbl]
+                    for cs in columnSetsInTable:
+                        if x ==cs[0]:
+                            self.logger.logger.debug("Find a column set in table "+ tbl+ " to replace *: " +
+                                str(cs))
+                            y = cs[1]
+                        break
+                columnItem=str([x,y])
+                if func == "avg":
+                    DBEstClient=self.DBEstClients[tbl]
+                    result, time=DBEstClient[columnItem].approximate_avg_from_to(float(lb),float(hb),0)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                elif func == "sum":
+                    DBEstClient=self.DBEstClients[tbl]
+                    result, time=DBEstClient[columnItem].approximate_sum_from_to(float(lb),float(hb),0)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                elif func == "count":
+                    DBEstClient=self.DBEstClients[tbl]
+                    result, time=DBEstClient[columnItem].approximate_count_from_to(float(lb),float(hb),0)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                else:
+                    self.logger.logger.warning(func +" is currently not supported!")
+            self.logger.logger.info(AQP_results)
+            self.logger.logger.info(time_costs)
+
+
+
+                
+                # result, time = self.query_2d_percentile(float(line))
+                
 
 if __name__ == "__main__":
-    db = DBEst(dataset="tpcds",sampleSize="100k")
+    db = DBEst(dataset="tpcds",sampleSize="10k")
+    db.mass_query_simple(file="../query/tpcds/qreg/sample.qreg")

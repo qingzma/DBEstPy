@@ -935,12 +935,27 @@ class Query_Engine_2d:
         index = 1
         with open(file) as fin:
             for line in fin:
-                self.logger.logger.info("Starting Query " + str(index) + ":")
-                index = index + 1
-                self.logger.logger.info(line)
-                result, time = self.query2hive2(sql=line)
-                AQP_results.append(result)
-                time_costs.append(time)
+                try:
+                    self.logger.logger.info("Starting Query " + str(index) + ":")
+                    index = index + 1
+                    self.logger.logger.info(line)
+                    result, time = self.query2hive2(sql=line)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                except Exception as e:
+                    import smtplib
+ 
+                    server = smtplib.SMTP('smtp.gmail.com', 587)
+                    server.starttls()
+                    server.login("qingzma@gmail.com", "jszuo1991228")
+                     
+                    msg = "failed!"
+                    server.sendmail("qingzma@gmail.com", "qingzma@gmail.com", msg)
+                    server.quit()
+
+                    import sys
+                    sys.exit("Error message")
+
         self.logger.logger.info(AQP_results)
         self.logger.logger.info(time_costs)
         return AQP_results
