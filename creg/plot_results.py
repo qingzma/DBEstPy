@@ -1,4 +1,6 @@
 import matplotlib.pyplot as plt
+from matplotlib.ticker import FuncFormatter
+import numpy as np
 
 font_size=14
 
@@ -39,5 +41,32 @@ def model_training_time_base_models():
     plt.show()
 
 
+
+def draw_tpcds_bars():
+    def to_percent(y,pos):
+        return '%.1f%%' % (y * 100)
+    x=[1,3]
+    x1 = [0.8,2.8]
+    x2= [1.2,3.2]
+    y1 = [0.0531, 0.0137]
+    y2 = [0.436,2.592]
+
+    fig, ax1 = plt.subplots()
+
+    ax2 = ax1.twinx()
+    p1=ax1.bar(x1, y1, color='g',width=0.3)
+    
+    formatter = FuncFormatter(to_percent)
+    ax1.yaxis.set_major_formatter(formatter)
+    p2=ax2.bar(x2, y2,color='r',width=0.3)
+    #ax1.set_xlabel('X data')
+    plt.xticks(x,("Relative Error (%)",'Response Time (s)'))
+    plt.legend((p1[0],p2[0]),('10k','100k'),loc='center')
+    ax1.set_ylabel("Relative Error (%)")
+    ax2.set_ylabel('Response Time (s)')
+    
+    plt.show()
+
+
 if __name__=="__main__":
-    model_training_time_ensemble()
+    draw_tpcds_bars()

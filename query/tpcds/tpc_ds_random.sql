@@ -63,45 +63,45 @@ select count(ss_list_price) from store_sales where ss_quantity between 26 and 30
 
 #define LISTPRICE=ulist(random(0, 190, uniform),6);
 select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100; 
-select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100; 
-select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100;
-select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100;
-select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100;
-select avg(ss_list_price) from store_sales where ss_list_price between 90 and 100;
+select avg(ss_list_price) from store_sales where ss_list_price between 70 and 80; 
+select avg(ss_list_price) from store_sales where ss_list_price between 80 and 90;
+select avg(ss_list_price) from store_sales where ss_list_price between 100 and 110;
+select avg(ss_list_price) from store_sales where ss_list_price between 110 and 120;
+select avg(ss_list_price) from store_sales where ss_list_price between 120 and 130;
+select count(ss_list_price) from store_sales where ss_list_price between 90 and 100; 
+select count(ss_list_price) from store_sales where ss_list_price between 70 and 80; 
+select count(ss_list_price) from store_sales where ss_list_price between 80 and 90;
 select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
-select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
-select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
-select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
-select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
-select count(ss_list_price) from store_sales where ss_list_price between 100 and 110;
+select count(ss_list_price) from store_sales where ss_list_price between 110 and 120;
+select count(ss_list_price) from store_sales where ss_list_price between 120 and 130;
 
 #define COUPONAMT=ulist(random(0, 18000, uniform),6); 9000
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000; 
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000; 
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000;
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000;
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000;
-select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
-select count(ss_list_price) from store_sales where ss_coupon_amt between 9000 and 10000;
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 7000    and 8000 ; 
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 8000    and 9000 ; 
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 9000    and 10000;
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 10000   and 11000;
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 11000   and 12000;
+select avg(ss_list_price)   from store_sales where ss_coupon_amt between 12000   and 13000;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 7000    and 8000 ;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 8000    and 9000 ;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 9000    and 10000;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 10000   and 11000;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 11000   and 12000;
+select count(ss_list_price) from store_sales where ss_coupon_amt between 12000   and 13000;
 
 #define WHOLESALECOST=ulist(random(0, 80, uniform),6);40
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60; 
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60; 
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60;
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60;
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60;
-select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
-select count(ss_list_price) from store_sales where ss_wholesale_cost between 40 and 60;
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 10     and 30; 
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 20     and 40; 
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 30     and 50;
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 40     and 60;
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 50     and 70;
+select avg(ss_list_price)   from store_sales where ss_wholesale_cost between 60     and 80;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 10     and 30;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 20     and 40;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 30     and 50;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 40     and 60;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 50     and 70;
+select count(ss_list_price) from store_sales where ss_wholesale_cost between 60     and 80;
 
 
 #48 contains other conditions as well

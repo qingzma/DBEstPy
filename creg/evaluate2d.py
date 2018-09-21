@@ -947,10 +947,10 @@ class Query_Engine_2d:
  
                     server = smtplib.SMTP('smtp.gmail.com', 587)
                     server.starttls()
-                    server.login("qingzma@gmail.com", "jszuo1991228")
+                    server.login("qzmawork@gmail.com", "warwickpass")
                      
                     msg = "failed!"
-                    server.sendmail("qingzma@gmail.com", "qingzma@gmail.com", msg)
+                    server.sendmail("qzmawork@gmail.com", "qingzma@gmail.com", msg)
                     server.quit()
 
                     import sys
