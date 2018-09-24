@@ -129,3 +129,9 @@ select avg(wr_refunded_cash) from web_sales, web_returns where ws_sales_price be
 select avg(wr_fee) from web_sales, web_returns where ws_sales_price between 100.00 and 150.00; 
 select avg(wr_fee) from web_sales, web_returns where ws_sales_price between  50.00 and 100.00;
 select avg(wr_fee) from web_sales, web_returns where ws_sales_price between 150.00 and 200.00;
+
+#90
+select count(*) from  web_page where wp_char_count between 5000 and 5200;
+
+#96
+select count(*) from time_dim where t_minute>=30;
