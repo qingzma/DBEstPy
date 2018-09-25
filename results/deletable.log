@@ -1,28 +1,34 @@
-2018-09-19 14:35:39,123 - INFO - Initialising DBEst...
-2018-09-19 14:35:39,124 - INFO - Dataset contains 1 tables, which are:
-2018-09-19 14:35:39,124 - INFO - ['store_sales']
-2018-09-19 14:35:39,124 - INFO - Talbes in the dataset need [1] Column Sets.
-2018-09-19 14:35:39,162 - INFO - --------------------------------------------------
-2018-09-19 14:35:39,162 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
-2018-09-19 14:35:39,896 - INFO - Start querying to GBoost.
-2018-09-19 14:35:40,131 - INFO - Total time spent: 0.2344 s.
-2018-09-19 14:35:40,131 - INFO - --------------------------------------------------------------------------------------------
-2018-09-19 14:35:40,131 - INFO - Start querying to XGboost.
-2018-09-19 14:35:41,046 - INFO - Total time spent: 0.9151 s.
-2018-09-19 14:35:41,046 - INFO - --------------------------------------------------------------------------------------------
-2018-09-19 14:35:41,648 - INFO - Time to fit the model is 2s.
-2018-09-19 14:35:41,651 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
-2018-09-19 14:35:41,651 - INFO - --------------------------------------------------
-2018-09-19 14:35:41,651 - INFO - {'store_sales': {"['ss_quantity', 'ss_ext_discount_amt']": <query_engine.QueryEngine object at 0x7f9e71eaf080>}}
-2018-09-19 14:35:41,651 - INFO - DBEsti has been initialised, ready to serve... (2.5s)
-2018-09-19 14:35:41,651 - INFO - Starting Query 1:
-2018-09-19 14:35:41,651 - INFO - select avg (ss_ext_discount_amt) from store_sales where ss_quantity       between 1      and 20
-
-2018-09-19 14:35:41,818 - INFO - Approximate AVG: 51.9113.
-2018-09-19 14:35:41,818 - INFO - Time spent for approximate AVG: 0.1666s.
-2018-09-19 14:35:41,818 - INFO - Starting Query 2:
-2018-09-19 14:35:41,818 - INFO - select avg (ss_ext_discount_amt) from store_sales where ss_quantity       between 21     and 40
-2018-09-19 14:35:42,187 - INFO - Approximate AVG: 111.2552.
-2018-09-19 14:35:42,187 - INFO - Time spent for approximate AVG: 0.3685s.
-2018-09-19 14:35:42,187 - INFO - [51.91126468346354, 111.25522094912536]
-2018-09-19 14:35:42,187 - INFO - [0.166575, 0.36848]
+2018-09-25 10:43:44,383 - DEBUG - Sucessfully deployed LR
+2018-09-25 10:43:44,384 - DEBUG - Time cost to train the model is : 0.03766 s.
+2018-09-25 10:43:44,399 - DEBUG - Sucessfully deployed PR
+2018-09-25 10:43:44,400 - DEBUG - Time cost to train the model is : 0.01240 s.
+2018-09-25 10:43:44,753 - DEBUG - Sucessfully deployed DTR
+2018-09-25 10:43:44,753 - DEBUG - Time cost to train the model is : 0.34932 s.
+2018-09-25 10:43:45,486 - DEBUG - Sucessfully deployed GBoost
+2018-09-25 10:43:45,486 - DEBUG - Time cost to train the model is : 0.72717 s.
+2018-09-25 10:43:46,128 - DEBUG - Sucessfully deployed XGboost
+2018-09-25 10:43:46,128 - DEBUG - Time cost to train the model is : 0.64185 s.
+2018-09-25 10:43:46,128 - INFO - Start querying to LR.
+2018-09-25 10:43:46,225 - DEBUG - Finish 4784 queries, average latency is 0.020330 ms. 
+2018-09-25 10:43:46,226 - INFO - Total time spent: 0.0973 s.
+2018-09-25 10:43:46,226 - INFO - --------------------------------------------------------------------------------------------
+2018-09-25 10:43:46,226 - INFO - Start querying to PR.
+2018-09-25 10:43:46,998 - DEBUG - Finish 4784 queries, average latency is 0.161454 ms. 
+2018-09-25 10:43:46,998 - INFO - Total time spent: 0.7724 s.
+2018-09-25 10:43:46,998 - INFO - --------------------------------------------------------------------------------------------
+2018-09-25 10:43:46,998 - INFO - Start querying to DTR.
+2018-09-25 10:43:47,118 - DEBUG - Finish 4784 queries, average latency is 0.025015 ms. 
+2018-09-25 10:43:47,118 - INFO - Total time spent: 0.1197 s.
+2018-09-25 10:43:47,118 - INFO - --------------------------------------------------------------------------------------------
+2018-09-25 10:43:47,119 - INFO - Start querying to GBoost.
+2018-09-25 10:43:47,366 - DEBUG - Finish 4784 queries, average latency is 0.051730 ms. 
+2018-09-25 10:43:47,366 - INFO - Total time spent: 0.2475 s.
+2018-09-25 10:43:47,366 - INFO - --------------------------------------------------------------------------------------------
+2018-09-25 10:43:47,366 - INFO - Start querying to XGboost.
+2018-09-25 10:43:48,352 - DEBUG - Finish 4784 queries, average latency is 0.206003 ms. 
+2018-09-25 10:43:48,352 - INFO - Total time spent: 0.9855 s.
+2018-09-25 10:43:48,352 - INFO - --------------------------------------------------------------------------------------------
+2018-09-25 10:43:48,387 - DEBUG - Queries are classified into 5 categories:  
+2018-09-25 10:43:48,387 - DEBUG - Counts are: [ 994  698 1158  586 1348].
+2018-09-25 10:43:51,995 - DEBUG - Total time to train xgboost classifier is: 3.6080 s.
+2018-09-25 10:43:51,996 - INFO - Time to fit the model is 7s.

@@ -1,14 +1,12 @@
 #!/usr/bin/env python
 # coding=utf-8
 from __future__ import print_function, division
-import numpy as np
 import logs
 import pandas as pd
 from tools import DataSource
 from core import CRegression
 from query_engine import QueryEngine
 from datetime import datetime
-import json
 import re
 logger_file = "../results/deletable.log"
 

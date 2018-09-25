@@ -5,12 +5,6 @@ import data_loader as dl
 from query_engine import QueryEngine
 import logs
 import random
-import subprocess
-# from pyhive import hive
-# import subprocess
-import os
-import pyhs2
-# import MySQLdb
 import pymysql
 pymysql.install_as_MySQLdb()
 import generate_random
@@ -18,7 +12,7 @@ import generate_random
 from pyhive import hive
 
 from datetime import datetime
-import warnings
+
 import sys
 import errno
 
@@ -48,6 +42,7 @@ class Query_Engine_2d:
         self.q_min = min(self.data.features)
         self.q_max = max(self.data.features)
         self.dataID = dataID
+        del self.data
 
         #warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 

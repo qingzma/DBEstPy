@@ -3,96 +3,34 @@
 from __future__ import print_function, division
 import tools
 
-# import random
-# import socket
-import time
+
 import numpy as np
-import os
 import sys
 
-# Path for spark source folder
-#os.environ['SPARK_HOME'] = "/home/u1796377/Program/spark-2.1.0-bin-hadoop2.7"
-
 # Append pyspark  to Python Path
-sys.path.append("/home/u1796377/Program/spark-2.1.0-bin-hadoop2.7")
-# import requests
-# import json
-from collections import Counter
-from sklearn import svm
-from sklearn.svm import SVC
+#sys.path.append("/home/u1796377/Program/spark-2.1.0-bin-hadoop2.7")
 
-#import findspark
-
-# findspark.init()
-#import pyspark
-
-import subprocess as subprocess
-import pprint
-
-# from pyspark.mllib.classification import LogisticRegressionWithSGD
-# from pyspark.mllib.classification import SVMWithSGD
-# from pyspark.mllib.regression import LinearRegressionWithSGD
-# from pyspark.mllib.tree import RandomForest
-# from pyspark.mllib.regression import LabeledPoint
-# from pyspark.ml.regression import GeneralizedLinearRegression
-# from pyspark.sql import SparkSession
 
 from datetime import datetime
 from sklearn import linear_model
 from sklearn import neighbors
 from sklearn import svm
-from sklearn.svm import SVR
-from sklearn.gaussian_process import GaussianProcessRegressor
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
-from sklearn.preprocessing import PolynomialFeatures
-from sklearn.linear_model import Ridge
-from sklearn.pipeline import make_pipeline
-from sklearn.tree import DecisionTreeRegressor
-from sklearn.ensemble import AdaBoostRegressor
-from sklearn.ensemble import GradientBoostingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import GridSearchCV
-# piecewise_linear_fit
-import pwlf
+from collections import Counter
 
-
-import matplotlib.pyplot as plt
-from mpl_toolkits.mplot3d import Axes3D
-# %matplotlib inline
-
-# from clipper_admin import Clipper
-# import ClassifierClient
-
-
-# package for different classifier
-from sklearn.neural_network import MLPClassifier
-from sklearn.neighbors import KNeighborsClassifier
-from sklearn.svm import SVC
-from sklearn.gaussian_process import GaussianProcessClassifier
-from sklearn.gaussian_process.kernels import RBF
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
-from sklearn.naive_bayes import GaussianNB
-from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
-
-# import vispy.plot as vp
-# from vispy.color import ColorArray
-from mpl_toolkits.mplot3d import axes3d
-from matplotlib import gridspec
 
 from xgboost import XGBRegressor
-from xgboost import XGBClassifier
 from xgboost.sklearn import XGBRegressor as XGBRegressor_sklearn
 from xgboost.sklearn import XGBClassifier as XGBClassifier_sklearn
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
-import logging
+
 from scipy import stats
 
-import matplotlib
-import matplotlib.ticker as mtick
+from matplotlib import gridspec
 from matplotlib.ticker import FuncFormatter
-from matplotlib.ticker import FormatStrFormatter
+import matplotlib.pyplot as plt
+from matplotlib import rcParams
+
 import warnings
 
 
@@ -412,7 +350,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_linear)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return reg, time_train
 
         def sklearn_lr_predict_fn(inputs):
@@ -423,6 +362,8 @@ class CRegression:
         return sklearn_linear_model, tools.app_linear, time_train
 
     def deploy_model_pwlf_regression(self, training_data, num_of_segments=4):
+        # piecewise_linear_fit
+        import pwlf
         def train_pwlf_regression(trainingData):
             start = datetime.now()
             X = trainingData.features[:, 0]
@@ -435,6 +376,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_pwlf)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
+            del X
+            del y
 
             return reg, time_train
 
@@ -454,6 +397,9 @@ class CRegression:
         return model_wrapper, tools.app_pwlf, time_train
 
     def deploy_model_sklearn_poly_regression(self, training_data):
+        from sklearn.preprocessing import PolynomialFeatures
+        from sklearn.linear_model import Ridge
+        from sklearn.pipeline import make_pipeline
         def train_sklearn_poly_regression(trainingData):
             start = datetime.now()
             X = trainingData.features
@@ -466,7 +412,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_poly)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return model, time_train
 
         def sklearn_poly_predict_fn(inputs):
@@ -492,7 +439,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_knn)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return knn, time_train
 
         def sklearn_knn_predict_fn(inputs):
@@ -504,6 +452,7 @@ class CRegression:
         return sklearn_knn_model, tools.app_knn, time_train
 
     def deploy_model_sklearn_svr_rbf_regression(self, training_data):
+        from sklearn.svm import SVR
         def train_sklearn_rbf_regression(trainingData):
             start = datetime.now()
             X = trainingData.features
@@ -516,7 +465,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_rbf)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return svr_rbf, time_train
 
         def sklearn_rbf_predict_fn(inputs):
@@ -528,6 +478,8 @@ class CRegression:
         return sklearn_rbf_model, tools.app_rbf, time_train
 
     def deploy_model_sklearn_gaussion_process_regression(self, training_data):
+        from sklearn.gaussian_process import GaussianProcessRegressor
+        from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
         def train_sklearn_gp_regression(trainingData):
             X = trainingData.features
             y = trainingData.labels
@@ -543,7 +495,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_gaussian)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return gp, time_train
 
         def sklearn_gp_predict_fn(inputs):
@@ -556,6 +509,7 @@ class CRegression:
         return sklearn_gp_model, tools.app_gaussian, time_train
 
     def deploy_model_sklearn_ensemble_adaboost(self, training_data):
+        from sklearn.ensemble import AdaBoostRegressor
         def train_sklearn_ensemble_adaboost(trainingData):
             X = trainingData.features
             y = trainingData.labels
@@ -568,7 +522,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_adaboost)
             self.logger.debug("Time cost to train the model is : %.5f s." % (
                 end - start).total_seconds())
-
+            del X
+            del y
             return reg, time_train
 
         def sklearn_ensemble_adaboost_predict_fn(inputs):
@@ -579,6 +534,7 @@ class CRegression:
         return sklearn_adaboost_model, tools.app_adaboost, time_train
 
     def deploy_model_sklearn_ensemble_gradient_tree_boosting(self, training_data):
+        from sklearn.ensemble import GradientBoostingRegressor
         def train_sklearn_ensemble_gradient_tree_boosting(trainingData):
             X = trainingData.features
             y = trainingData.labels
@@ -600,7 +556,8 @@ class CRegression:
             self.logger.debug("Sucessfully deployed " + tools.app_boosting)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return reg, time_train
 
         def sklearn_ensemble_gradient_tree_boosting_predict_fn(inputs):
@@ -633,7 +590,8 @@ class CRegression:
                               tools.app_decision_tree)
             self.logger.debug(
                 "Time cost to train the model is : %.5f s." % time_train)
-
+            del X
+            del y
             return reg, time_train
 
         def sklearn_decision_tree_predict_fn(inputs):
@@ -665,7 +623,8 @@ class CRegression:
         self.logger.debug("Sucessfully deployed " + tools.app_xgboost)
         self.logger.debug(
             "Time cost to train the model is : %.5f s." % time_train)
-
+        del X
+        del y
         return reg, tools.app_xgboost, time_train
 
         # self.apps_deployed.append(sklearn_decision_tree_model)
@@ -867,7 +826,7 @@ class CRegression:
         return rankings, minimum_errors
 
     def build_classifier(self, training_data_classifier, y_classifier, C=100):
-
+        
         distribution = Counter(y_classifier)
         start = datetime.now()
         if len(distribution.keys()) == 1:
@@ -893,7 +852,7 @@ class CRegression:
         return classifier, (end - start).total_seconds()
 
     def build_classifier_rbf(self, training_data_classifier, y_classifier, C=1):
-
+        
         distribution = Counter(y_classifier)
 
         start = datetime.now()
@@ -909,6 +868,7 @@ class CRegression:
             self.logger.warning(
                 "To use more models, please change the facotr of time term to be greater than 0.")
         else:
+            from sklearn.svm import SVC
             classifier = SVC(C=C, kernel='rbf')
             classifier.fit(training_data_classifier.features, y_classifier)
 
@@ -1034,8 +994,10 @@ class CRegression:
         time_program_end = datetime.now()
         self.logger.info("Time to fit the model is " +
                          str((time_program_end - time_program_start).seconds) + "s.")
+        
 
     def select_classifiers(self, training_data_classifier, y_classifier, testing_data):
+        
         # global classifier_names_candidate
         classifier_names_candidate = ["Nearest Neighbors", "Linear SVM",  # "RBF SVM",
                                       "Decision Tree", "Random Forest", "Neural Net",  # "AdaBoost",
@@ -1057,7 +1019,12 @@ class CRegression:
                 "To use more models, please change the facotr of time term to be greater than 0.")
             time_costs.append(0.0)
         else:
-
+            from sklearn.neural_network import MLPClassifier
+            from sklearn.neighbors import KNeighborsClassifier
+            from sklearn.tree import DecisionTreeClassifier
+            from sklearn.ensemble import RandomForestClassifier, AdaBoostClassifier
+            from sklearn.naive_bayes import GaussianNB
+            from sklearn.discriminant_analysis import QuadraticDiscriminantAnalysis
             classifiers = [
                 KNeighborsClassifier(3),
                 svm.LinearSVC(C=100),  # SVC(kernel="linear", C=0.025),
@@ -1583,7 +1550,7 @@ class CRegression:
             s = str(100 * y)
 
             # The percent symbol needs escaping in latex
-            if matplotlib.rcParams['text.usetex'] is True:
+            if rcParams['text.usetex'] is True:
                 return s + r'$\%$'
             else:
                 return s + '%'
@@ -1681,7 +1648,7 @@ class CRegression:
             s = "%.2f" % (100 * y)
 
             # The percent symbol needs escaping in latex
-            if matplotlib.rcParams['text.usetex'] is True:
+            if rcParams['text.usetex'] is True:
                 return s + r'$\%$'
             else:
                 return s + '%'
@@ -1822,7 +1789,7 @@ class CRegression:
             s = "%.2f" % (100 * y)
 
             # The percent symbol needs escaping in latex
-            if matplotlib.rcParams['text.usetex'] is True:
+            if rcParams['text.usetex'] is True:
                 return s + r'$\%$'
             else:
                 return s + '%'
@@ -1833,7 +1800,7 @@ class CRegression:
             s = "%.1f" % (100 * y)
 
             # The percent symbol needs escaping in latex
-            if matplotlib.rcParams['text.usetex'] is True:
+            if rcParams['text.usetex'] is True:
                 return s + r'$\%$'
             else:
                 return s + '%'
@@ -1844,7 +1811,7 @@ class CRegression:
             s = "%.0f" % (100 * y)
 
             # The percent symbol needs escaping in latex
-            if matplotlib.rcParams['text.usetex'] is True:
+            if rcParams['text.usetex'] is True:
                 return s + r'$\%$'
             else:
                 return s + '%'
@@ -2632,6 +2599,14 @@ class CRegression:
         self.logger.info("QLOL: " + str(QLOLs))
         return
 
+    def clear_training_data(self):
+        del self.answers_for_testing
+        del self.predictions_classified
+        del self.y_classifier_testing
+        del self.optimal_y
+        del self.optimal_error
+        del self.training_data
+        
 
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":

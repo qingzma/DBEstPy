@@ -71,6 +71,10 @@ class QueryEngine:
             kernel = 'gaussian'
         self.kde = KernelDensity(kernel=kernel).fit(
             self.training_data.features)
+        # remove unecessary memory usage
+        del self.training_data
+        self.cregression.clear_training_data()
+
         return self.kde
 
     def desngity_estimation_plt2d(self):
