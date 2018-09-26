@@ -520,10 +520,10 @@
 	"buffers":
 	[
 		{
-			"contents": "time_dim\nweb_page\nweb_sales\nstore_sales_10k_cached\nweb_sales_10k_cached\ntime_dim_10k_cached\nweb_page_10k_cached\nstore_sales_100k_cached\nweb_sales_100k_cached\ntime_dim_100k_cached\nweb_page_100k_cached\nstore_sales_10k_cached\nweb_sales_10k_cached\ntime_dim_10k_cached\nweb_page_10k_cached\nstore_sales_100k_cached\nweb_sales_100k_cached\ntime_dim_100k_cached\nweb_page_100k_cached",
+			"contents": "DBEst:\n    __init__(…)\n    mass_query_simple(…)",
 			"settings":
 			{
-				"buffer_size": 371,
+				"buffer_size": 47,
 				"line_ending": "Unix",
 				"name": "𝌆 Outline",
 				"scratch": true
@@ -533,25 +533,8 @@
 			"file": "creg/evaluate2d.py",
 			"settings":
 			{
-				"buffer_size": 44396,
+				"buffer_size": 44299,
 				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "query/load_data/blinkdb_tpcds.sql",
-			"settings":
-			{
-				"buffer_size": 6645,
-				"encoding": "UTF-8",
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "query/load_data/tcp_ds.sql",
-			"settings":
-			{
-				"buffer_size": 10349,
 				"line_ending": "Unix"
 			}
 		},
@@ -559,7 +542,16 @@
 			"file": "creg/core.py",
 			"settings":
 			{
-				"buffer_size": 117496,
+				"buffer_size": 116856,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "creg/query_engine.py",
+			"settings":
+			{
+				"buffer_size": 25025,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -567,15 +559,7 @@
 			"file": "creg/DBEst.py",
 			"settings":
 			{
-				"buffer_size": 8454,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "query/tpcds/qreg/count.qreg",
-			"settings":
-			{
-				"buffer_size": 2656,
+				"buffer_size": 8423,
 				"line_ending": "Unix"
 			}
 		},
@@ -728,33 +712,98 @@
 	"expanded_folders":
 	[
 		"/home/u1796377/Workspace/CRegressionRDBM",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds"
 	],
 	"file_history":
 	[
-		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/DBEst_tpcds.sql",
+		"/home/u1796377/Desktop/project2/istabul_data/GaussianNoCorrelationNoDFS.java",
+		"/home/u1796377/Desktop/project2/istabul_data/data.dat",
+		"/home/u1796377/.cache/.fr-Tha7cF/org/apache/commons/math3/distribution/MultivariateNormalDistribution.class",
+		"/home/u1796377/Desktop/project2/istabul_data/istambulCovariance.csv",
+		"/home/u1796377/Desktop/project2/istabul data/GaussianNoCorrelationNoDFS.java",
+		"/home/u1796377/Desktop/project2/istabul_data/istambulMean.csv",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/evaluation.py",
+		"/home/u1796377/Workspace/CRegressionRDBM/creg/query_engine.py",
+		"/tmp/rsub-saawxc/generate_sample.sh",
+		"/tmp/rsub-j0du49/generate_sample.sh",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/blinkdb/tpc_ds_10k.blinkdbql",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/total.sql",
-		"/home/u1796377/Workspace/CRegressionRDBM/.gitignore",
-		"/home/u1796377/Workspace/CRegressionRDBM/results/tpcds_10k.log",
-		"/tmp/rsub-os78gp/hive-site.xml",
+		"/tmp/rsub-fl5j5c/init.log",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/total (copy).sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/count.qreg",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/avg.qreg",
+		"/home/u1796377/Desktop/10.log",
+		"/home/u1796377/Desktop/100k_rest.log",
+		"/home/u1796377/Desktop/100k.log",
+		"/home/u1796377/Desktop/10k_rest.log",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/blinkdb_tpcds.sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/count.qreg",
+		"/tmp/rsub-mj102p/init.log",
+		"/tmp/rsub-qljmcj/10k.blinkdbql",
+		"/tmp/rsub-cc030m/100k.blinkdbql",
+		"/tmp/rsub-izb57i/10k.blinkdbql",
+		"/home/u1796377/Desktop/10.result",
+		"/tmp/rsub-2cac5f/10k_rest.blinkdbql",
+		"/tmp/rsub-1zf6_7/100k_rest.blinkdbql",
+		"/tmp/rsub-i9wf8f/100k.blinkdbql",
+		"/home/u1796377/Desktop/100k.result",
+		"/home/u1796377/Desktop/100k_rest.result",
+		"/tmp/rsub-7ivhc0/10.log",
+		"/home/u1796377/Desktop/10k_rest.result",
+		"/tmp/rsub-9v2rau/100k.blinkdbql",
+		"/tmp/rsub-1m2vt6/10k_rest.log",
+		"/tmp/rsub-xshzdi/10k_rest.log",
+		"/tmp/rsub-gvlidf/10k.blinkdbql",
+		"/tmp/rsub-q0i_ym/10k_rest.blinkdbql",
+		"/tmp/rsub-8i6ssj/10k.blinkdbql",
+		"/tmp/rsub-hm0rk4/10k_rest.log",
+		"/tmp/rsub-6y0i86/10k*.loh",
+		"/tmp/rsub-bxd1gd/100k.blinkdbql",
+		"/tmp/rsub-adlw_m/10.log",
+		"/tmp/rsub-nbxh_w/10k.blinkdbql",
+		"/tmp/rsub-4t2yk4/10.log",
+		"/tmp/rsub-iiboet/init.blinkdbql",
+		"/tmp/rsub-rsz7e2/init.log",
+		"/tmp/rsub-8lw4ks/init.log",
+		"/tmp/rsub-d3118v/init.log",
+		"/tmp/rsub-dojwdk/init.log",
+		"/tmp/rsub-jqvl0s/init.log",
+		"/tmp/rsub-ann6hd/10k.blinkdbql",
+		"/tmp/rsub-fglw2_/100k.blinkdbql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/blinkdb/tpc_ds_100k.blinkdbql",
+		"/tmp/rsub-6gq359/10k.blinkdbql",
+		"/tmp/rsub-pvujea/10k.blinkdbql",
+		"/tmp/rsub-mz0x0j/init.blinkdbql",
+		"/tmp/rsub-6ufmfx/1m_1_380.hiveql",
+		"/tmp/rsub-9ohvdl/init.log",
+		"/tmp/rsub-cw1cwc/init.log",
+		"/tmp/rsub-xonia1/init.blinkdbql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/extra.sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/extra.txt",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/tpc_ds.sql",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/tpc_ds_random.sql",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpc_ds.sql",
 		"/home/u1796377/Desktop/tpc_ds.sql",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/total (copy).sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/blinkdb10k/total (copy).sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/blinkdb10k/tpc_ds_19k.blinkdbql",
+		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/DBEst_tpcds.sql",
+		"/home/u1796377/Workspace/CRegressionRDBM/.gitignore",
+		"/home/u1796377/Workspace/CRegressionRDBM/results/tpcds_10k.log",
+		"/tmp/rsub-os78gp/hive-site.xml",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg/plot_results.py",
 		"/tmp/rsub-oeuitk/hive-site.xml",
 		"/tmp/rsub-5xi63e/spark-env.sh",
 		"/tmp/rsub-zc7kks/crontab",
 		"/tmp/rsub-8k6mf7/crontab",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/count.qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/sample.qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/avg (copy).qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/avg.qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/qreg/sum.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/avg.qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/hiveql/sum.qreg",
-		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tcp_ds.sql",
 		"/home/u1796377/Workspace/CRegressionRDBM/data/tpcDs100k/store_sales.csv",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/sum.qreg",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/tpcds/count.qreg",
@@ -780,7 +829,6 @@
 		"/tmp/rsub-3gapci/query90.tpl",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg/core.py",
 		"/home/u1796377/Workspace/CRegressionRDBM/creg/generate_random.py",
-		"/home/u1796377/Workspace/CRegressionRDBM/creg/query_engine.py",
 		"/home/u1796377/Workspace/CRegressionRDBM/query/load_data/tpc_e.sql",
 		"/tmp/rsub-6cqftx/00-header",
 		"/tmp/rsub-vmmarh/query9.tpl",
@@ -798,73 +846,11 @@
 		"/tmp/rsub-8o4oos/query95.tpl",
 		"/tmp/rsub-76w309/query94.tpl",
 		"/tmp/rsub-ck20gt/query93.tpl",
-		"/tmp/rsub-b4aguc/query92.tpl",
-		"/tmp/rsub-8udv60/query87.tpl",
-		"/tmp/rsub-ysd4mx/query91.tpl",
-		"/tmp/rsub-z11ouq/query90.tpl",
-		"/tmp/rsub-4s9d0s/query89.tpl",
-		"/tmp/rsub-h23ooj/query88.tpl",
-		"/tmp/rsub-j25w48/query86.tpl",
-		"/tmp/rsub-ebw186/query85.tpl",
-		"/tmp/rsub-fuadth/query84.tpl",
-		"/tmp/rsub-dnru78/query83.tpl",
-		"/tmp/rsub-3gd_5b/query82.tpl",
-		"/tmp/rsub-ni7esp/query81.tpl",
-		"/tmp/rsub-emq296/query80.tpl",
-		"/tmp/rsub-xutsf2/query79.tpl",
-		"/tmp/rsub-n3nohz/query78.tpl",
-		"/tmp/rsub-f6rrvu/query77.tpl",
-		"/tmp/rsub-69_mx1/query76.tpl",
-		"/tmp/rsub-9c9ijx/query75.tpl",
-		"/tmp/rsub-3um489/query74.tpl",
-		"/tmp/rsub-q4g0l3/query73.tpl",
-		"/tmp/rsub-y6f1v_/query72.tpl",
-		"/tmp/rsub-8g8ghi/query71.tpl",
-		"/tmp/rsub-1aej1m/query70.tpl",
-		"/tmp/rsub-yn_sz4/query69.tpl",
-		"/tmp/rsub-cggg2c/query68.tpl",
-		"/tmp/rsub-lsoadc/query67.tpl",
-		"/tmp/rsub-zhzfqv/query66.tpl",
-		"/tmp/rsub-tg1smw/query65.tpl",
-		"/tmp/rsub-8l_z9f/query64.tpl",
-		"/tmp/rsub-gnylwr/query63.tpl",
-		"/tmp/rsub-oi2060/query62.tpl",
-		"/tmp/rsub-9_0yaz/query61.tpl",
-		"/tmp/rsub-saelry/query60.tpl",
-		"/tmp/rsub-6_bbij/query59.tpl",
-		"/tmp/rsub-gzkk7t/query58.tpl",
-		"/tmp/rsub-16zpkp/query57.tpl",
-		"/tmp/rsub-rfgn0f/query56.tpl",
-		"/tmp/rsub-9nrc44/query55.tpl",
-		"/tmp/rsub-8rbf0o/query54.tpl",
-		"/tmp/rsub-tlw0nv/query53.tpl",
-		"/tmp/rsub-2q508k/query52.tpl",
-		"/tmp/rsub-uecudu/query51.tpl",
-		"/tmp/rsub-p06wu7/query50.tpl",
-		"/tmp/rsub-chiumm/query49.tpl",
-		"/tmp/rsub-kaqna8/query48.tpl",
-		"/tmp/rsub-kliqxk/query47.tpl",
-		"/tmp/rsub-hqnnsu/query47.tpl",
-		"/tmp/rsub-901p0s/query46.tpl",
-		"/tmp/rsub-33g9mf/query43.tpl",
-		"/tmp/rsub-zlur2z/query45.tpl",
-		"/tmp/rsub-2fmy70/query44.tpl",
-		"/tmp/rsub-l5e13g/query44.tpl",
-		"/tmp/rsub-8reb80/query42.tpl",
-		"/tmp/rsub-e2ya5r/query41.tpl",
-		"/tmp/rsub-m_pelp/query40.tpl",
-		"/tmp/rsub-u07db3/query39.tpl",
-		"/tmp/rsub-64zb29/query38.tpl",
-		"/tmp/rsub-i_0tek/query37.tpl",
-		"/tmp/rsub-n0jv8r/query36.tpl",
-		"/tmp/rsub-rtcaa8/query35.tpl",
-		"/tmp/rsub-ffep0x/query34.tpl",
-		"/tmp/rsub-chr_3j/query33.tpl",
-		"/tmp/rsub-aso6z0/query32.tpl"
+		"/tmp/rsub-b4aguc/query92.tpl"
 	],
 	"find":
 	{
-		"height": 31.0
+		"height": 28.0
 	},
 	"find_in_files":
 	{
@@ -878,6 +864,46 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"Counter",
+			"pwlf",
+			"DecisionTreeRegressor",
+			"neighbors",
+			"Counter",
+			"stats",
+			"GaussianNB",
+			"RandomForestClassifier",
+			"DecisionTreeClassifier",
+			"GradientBoostingRegressor",
+			"AdaBoostRegressor",
+			"make_pipeline",
+			"Ridge",
+			"matplotlib.rcParams",
+			"matplotlib",
+			"PolynomialFeatures",
+			"RBF",
+			"SVC",
+			"MLPClassifier",
+			"KNeighborsClassifier",
+			"GaussianProcessRegressor",
+			"SVR",
+			"MLPClassifier",
+			"self.data",
+			"99%",
+			"confi",
+			"99%",
+			"182.2",
+			"182",
+			"182.28",
+			"Nan",
+			"100k",
+			";  ;",
+			"; ;",
+			";;",
+			"10k",
+			"sum",
+			"count",
+			"avg",
+			";",
 			"decimal(7,2)",
 			";",
 			"|",
@@ -965,14 +991,7 @@
 			" FROM price_cost_1t_sorted",
 			"INFO - SELECT percentile_cont(ss_list_price, ",
 			"confi",
-			"store_sales_sample_1_percent_cached",
-			"137.205.118.65",
-			"Time to fit the model is",
-			"\t",
-			"jdk1.8.0_171",
-			"jdk-10.0.1",
-			"jdk-10.0.1_linux-x64_bin",
-			"jdk1.8.0"
+			"store_sales_sample_1_percent_cached"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -980,6 +999,11 @@
 		"regex": false,
 		"replace_history":
 		[
+			"rcParams",
+			"APPROX_SUM",
+			"APPROX_COUNT",
+			"APPROX_AVG",
+			"",
 			"DOUBLE",
 			"",
 			",",
@@ -1062,7 +1086,7 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 371,
+						"buffer_size": 47,
 						"regions":
 						{
 						},
@@ -1071,109 +1095,29 @@
 						],
 						"settings":
 						{
-							"current_file": "/home/u1796377/Workspace/CRegressionRDBM/query/load_data/blinkdb_tpcds.sql",
+							"current_file": "/home/u1796377/Workspace/CRegressionRDBM/creg/DBEst.py",
 							"git_gutter_is_enabled": false,
 							"outline_rename_mode": false,
 							"symkeys":
 							[
 								[
-									14,
-									22
+									295,
+									307
 								],
 								[
-									503,
-									511
+									309,
+									412
 								],
 								[
-									1413,
-									1422
-								],
-								[
-									3521,
-									3543
-								],
-								[
-									3672,
-									3692
-								],
-								[
-									3819,
-									3838
-								],
-								[
-									3962,
-									3981
-								],
-								[
-									4118,
-									4141
-								],
-								[
-									4269,
-									4290
-								],
-								[
-									4416,
-									4436
-								],
-								[
-									4552,
-									4572
-								],
-								[
-									5058,
-									5080
-								],
-								[
-									5264,
-									5284
-								],
-								[
-									5463,
-									5482
-								],
-								[
-									5660,
-									5679
-								],
-								[
-									5871,
-									5894
-								],
-								[
-									6078,
-									6099
-								],
-								[
-									6278,
-									6298
-								],
-								[
-									6469,
-									6489
+									5886,
+									5924
 								]
 							],
 							"symlist":
 							[
-								"time_dim",
-								"web_page",
-								"web_sales",
-								"store_sales_10k_cached",
-								"web_sales_10k_cached",
-								"time_dim_10k_cached",
-								"web_page_10k_cached",
-								"store_sales_100k_cached",
-								"web_sales_100k_cached",
-								"time_dim_100k_cached",
-								"web_page_100k_cached",
-								"store_sales_10k_cached",
-								"web_sales_10k_cached",
-								"time_dim_10k_cached",
-								"web_page_10k_cached",
-								"store_sales_100k_cached",
-								"web_sales_100k_cached",
-								"time_dim_100k_cached",
-								"web_page_100k_cached"
+								"DBEst:",
+								"    __init__(…)",
+								"    mass_query_simple(…)"
 							],
 							"syntax": "Packages/Outline/outline.hidden-tmLanguage",
 							"tab_size": 4,
@@ -1183,13 +1127,13 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 7,
 					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 1,
+			"selected": 3,
 			"sheets":
 			[
 				{
@@ -1198,15 +1142,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 44396,
+						"buffer_size": 44299,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								42123,
-								42123
+								651,
+								651
 							]
 						],
 						"settings":
@@ -1256,107 +1200,6 @@
 								{
 									"characters": ".",
 									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 20488.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "query/load_data/blinkdb_tpcds.sql",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6645,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4817,
-								4817
-							]
-						],
-						"settings":
-						{
-							"auto_name": "",
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/SQL/SQL.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2859.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "query/load_data/tcp_ds.sql",
-					"semi_transient": true,
-					"settings":
-					{
-						"buffer_size": 10349,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								6114,
-								6114
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/SQL/SQL.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 3746.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 4,
-					"file": "creg/core.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 117496,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								24744,
-								24744
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
 								},
 								{
 									"characters": ".",
@@ -1366,89 +1209,136 @@
 							"git_gutter_is_enabled": true,
 							"syntax": "Packages/Python/Python.sublime-syntax",
 							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 13812.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "creg/DBEst.py",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8454,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								902,
-								902
-							]
-						],
-						"settings":
-						{
-							"auto_complete_triggers":
-							[
-								{
-									"characters": ".",
-									"selector": "source.python - string - comment - constant.numeric"
-								},
-								{
-									"characters": ".",
-									"selector": "source.python - string - constant.numeric"
-								}
-							],
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/Python/Python.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 66.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 6,
-					"file": "query/tpcds/qreg/count.qreg",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 2656,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								112,
-								112
-							]
-						],
-						"settings":
-						{
-							"git_gutter_is_enabled": true,
-							"syntax": "Packages/SQL/SQL.sublime-syntax",
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 2,
+					"file": "creg/core.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 116856,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								111869,
+								111869
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 47872.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "creg/query_engine.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25025,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2467,
+								2467
+							]
+						],
+						"settings":
+						{
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 399.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "creg/DBEst.py",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 8423,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1893,
+								1893
+							]
+						],
+						"settings":
+						{
+							"auto_complete_triggers":
+							[
+								{
+									"characters": ".",
+									"selector": "source.python - string - comment - constant.numeric"
+								},
+								{
+									"characters": ".",
+									"selector": "source.python - string - constant.numeric"
+								}
+							],
+							"git_gutter_is_enabled": true,
+							"syntax": "Packages/Python/Python.sublime-syntax",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 399.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
 					"file": "creg/data_loader.py",
 					"semi_transient": false,
 					"settings":
@@ -1487,14 +1377,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 128.0,
+						"translation.y": 1536.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 6,
 					"file": "creg/tools.py",
 					"semi_transient": false,
 					"settings":
@@ -1537,14 +1427,14 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 11700.0,
+						"translation.y": 10107.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 7,
 					"file": "creg/logs.py",
 					"semi_transient": false,
 					"settings":
@@ -1571,7 +1461,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 6,
 					"type": "text"
 				}
 			]
@@ -1579,7 +1469,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 31.0
+		"height": 28.0
 	},
 	"input":
 	{
@@ -1606,7 +1496,7 @@
 		[
 			0.0,
 			0.2,
-			0.780453308006,
+			0.968730456535,
 			1.0
 		],
 		"rows":
@@ -1633,7 +1523,7 @@
 	"project": "CRegressionRDBM.sublime-project",
 	"replace":
 	{
-		"height": 78.0
+		"height": 52.0
 	},
 	"save_all_on_build": true,
 	"select_file":
