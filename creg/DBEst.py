@@ -19,6 +19,10 @@ class DBEst:
         self.logger.set_level("INFO")
         self.logger.logger.info("Initialising DBEst...")
         if dataset is "tpcds":
+            if sampleSize is "100k":
+                csv_file_pre="../data/tpcDs100k/"
+            if sampleSize is "10k":
+                csv_file_pre="../data/tpcDs10k/"
             # initialise the column set, tables in TPC-DS dataset.
             if num_of_points is None:
                 num_of_points = {}
@@ -45,74 +49,89 @@ class DBEst:
                 ["time_dim", "t_minute", "t_hour"],                         # *
                 ["web_sales", "ws_sales_price", "ws_quantity"]
                 ]
-            tables = [sublist[0] for sublist in tableColumnSets]
-            self.uniqueTables = list(set(tables))
-            self.logger.logger.info(
-                "Dataset contains " + str(len(self.uniqueTables)) +
-                " tables, which are:")
-            self.logger.logger.info(self.uniqueTables)
-            self.uniqueTCS = []
-            for element in tableColumnSets:
-                if element not in self.uniqueTCS:
-                    self.uniqueTCS.append(element)
-            self.numOfCsOfTables = [tables.count(uniqueTableName) for
-                                    uniqueTableName in self.uniqueTables]
-            self.logger.logger.info(
-                "Talbes in the dataset need " + str(self.numOfCsOfTables) +
-                " Column Sets.")
+        if dataset is "pp":
+            if sampleSize is "100k":
+                csv_file_pre="../data/pp100k/"
+            if sampleSize is "10k":
+                csv_file_pre="../data/pp10k/"
+            # initialise the column set, tables in TPC-DS dataset.
+            if num_of_points is None:
+                num_of_points = {}
+                num_of_points["powerplant"]=1000000000
+            tableColumnSets = [
+                # ["store_sales", "ss_quantity", "*"],
+                ["powerplant", "T", "EP"],
+                ["powerplant", "AP", "EP"],
+                ["powerplant", "RH", "EP"]
+                ] 
+        tables = [sublist[0] for sublist in tableColumnSets]
+        self.uniqueTables = list(set(tables))
+        self.logger.logger.info(
+            "Dataset contains " + str(len(self.uniqueTables)) +
+            " tables, which are:")
+        self.logger.logger.info(self.uniqueTables)
+        self.uniqueTCS = []
+        for element in tableColumnSets:
+            if element not in self.uniqueTCS:
+                self.uniqueTCS.append(element)
+        self.numOfCsOfTables = [tables.count(uniqueTableName) for
+                                uniqueTableName in self.uniqueTables]
+        self.logger.logger.info(
+            "Talbes in the dataset need " + str(self.numOfCsOfTables) +
+            " Column Sets.")
 
-            # get column set in each table
-            self.CSinTable = {}
-            for uniqueTable in self.uniqueTables:
-                columnSet = [[item[1], item[2]]
-                             for item in self.uniqueTCS if item[0] is uniqueTable]
-                self.logger.logger.debug(columnSet)
-                self.CSinTable[uniqueTable]=columnSet
-            self.logger.logger.debug(self.CSinTable)
+        # get column set in each table
+        self.CSinTable = {}
+        for uniqueTable in self.uniqueTables:
+            columnSet = [[item[1], item[2]]
+                         for item in self.uniqueTCS if item[0] is uniqueTable]
+            self.logger.logger.debug(columnSet)
+            self.CSinTable[uniqueTable]=columnSet
+        self.logger.logger.debug(self.CSinTable)
 
-            self.DBEstClients={}     #store all QeuryEngines, for each table
-            # load data
-            for uniqueTable in self.uniqueTables:
-                if sampleSize is "100k":
-                    csv_file="../data/tpcDs100k/"+uniqueTable+".csv"
-                if sampleSize is "10k":
-                    csv_file="../data/tpcDs10k/"+uniqueTable+".csv"
-                #self.logger.logger.info(csv_file)
-                df=pd.read_csv(csv_file)
-                #self.logger.logger.info(df.to_string())
-                df=df.dropna()
-                DBEstiClient={}     #store all QeuryEngines within each table
-                for columnItem in self.CSinTable[uniqueTable]:
-                    self.logger.logger.info("--------------------------------------------------")
-                    self.logger.logger.info("Start training Qeury Engine for Table "+uniqueTable+
-                        ", Column Set: "+str(columnItem))
-                    headerX = columnItem[0]
-                    headerY = columnItem[1]
-                    x=df[[headerX]].values
-                    y=df[[headerY]].values.reshape(-1)
-                    
-                    self.data=DataSource()
-                    self.data.features=x
-                    self.data.labels=y
-                    self.data.headers=columnItem
-                    self.data.file=csv_file
-                    #self.data.removeNAN()
+        self.DBEstClients={}     #store all QeuryEngines, for each table
+        # load data
+        for uniqueTable in self.uniqueTables:
+            if sampleSize is "100k":
+                csv_file=csv_file_pre+uniqueTable+".csv"
+            if sampleSize is "10k":
+                csv_file=csv_file_pre+uniqueTable+".csv"
+            #self.logger.logger.info(csv_file)
+            df=pd.read_csv(csv_file)
+            #self.logger.logger.info(df.to_string())
+            df=df.dropna()
+            DBEstiClient={}     #store all QeuryEngines within each table
+            for columnItem in self.CSinTable[uniqueTable]:
+                self.logger.logger.info("--------------------------------------------------")
+                self.logger.logger.info("Start training Qeury Engine for Table "+uniqueTable+
+                    ", Column Set: "+str(columnItem))
+                headerX = columnItem[0]
+                headerY = columnItem[1]
+                x=df[[headerX]].values
+                y=df[[headerY]].values.reshape(-1)
+                
+                self.data=DataSource()
+                self.data.features=x
+                self.data.labels=y
+                self.data.headers=columnItem
+                self.data.file=csv_file
+                #self.data.removeNAN()
 
-                    cRegression = CRegression(logger_object=self.logger)
-                    cRegression.fit(self.data)
-                    
-                    qe = QueryEngine(
-                        cRegression, logger_object=self.logger,
-                        num_training_points=num_of_points[uniqueTable])
-                    qe.density_estimation()
-                    DBEstiClient[str(columnItem)]=qe
-                    self.logger.logger.info("Finish training Qeury Engine for Table "+uniqueTable+
-                        ", Column Set: "+str(columnItem))
-                    self.logger.logger.info("--------------------------------------------------")
-                self.logger.logger.debug(DBEstiClient)
-                self.DBEstClients[uniqueTable]=DBEstiClient
-            self.logger.logger.info(self.DBEstClients)
-            # self.logger.logger.info(json.dumps(DBEstClients, indent=4))
+                cRegression = CRegression(logger_object=self.logger)
+                cRegression.fit(self.data)
+                
+                qe = QueryEngine(
+                    cRegression, logger_object=self.logger,
+                    num_training_points=num_of_points[uniqueTable])
+                qe.density_estimation()
+                DBEstiClient[str(columnItem)]=qe
+                self.logger.logger.info("Finish training Qeury Engine for Table "+uniqueTable+
+                    ", Column Set: "+str(columnItem))
+                self.logger.logger.info("--------------------------------------------------")
+            self.logger.logger.debug(DBEstiClient)
+            self.DBEstClients[uniqueTable]=DBEstiClient
+        self.logger.logger.info(self.DBEstClients)
+        # self.logger.logger.info(json.dumps(DBEstClients, indent=4))
         end_time = datetime.now()
         time_cost = (end_time-start_time).total_seconds()
         self.logger.logger.info("DBEsti has been initialised, ready to serve... (%.1fs)"%time_cost)
@@ -126,7 +145,8 @@ class DBEst:
                 self.logger.logger.info("Starting Query " + str(index) + ":")
                 self.logger.logger.info(line)
                 index = index + 1
-                query_list=line.replace("(","").replace(")","")
+                query_list=line.replace("("," ").replace(")"," ").replace(";","")
+                #self.logger.logger.info(query_list)
                 query_list =  re.split('\s+',query_list)
                 # remove empty strings caused by sequential blank spaces.
                 query_list=list(filter(None,query_list))
@@ -147,17 +167,17 @@ class DBEst:
                             y = cs[1]
                         break
                 columnItem=str([x,y])
-                if func == "avg":
+                if func.lower() == "avg":
                     DBEstClient=self.DBEstClients[tbl]
                     result, time=DBEstClient[columnItem].approximate_avg_from_to(float(lb),float(hb),0)
                     AQP_results.append(result)
                     time_costs.append(time)
-                elif func == "sum":
+                elif func.lower() == "sum":
                     DBEstClient=self.DBEstClients[tbl]
                     result, time=DBEstClient[columnItem].approximate_sum_from_to(float(lb),float(hb),0)
                     AQP_results.append(result)
                     time_costs.append(time)
-                elif func == "count":
+                elif func.lower() == "count":
                     DBEstClient=self.DBEstClients[tbl]
                     result, time=DBEstClient[columnItem].approximate_count_from_to(float(lb),float(hb),0)
                     AQP_results.append(result)
@@ -174,5 +194,5 @@ class DBEst:
                 
 
 if __name__ == "__main__":
-    db = DBEst(dataset="tpcds",sampleSize="10k")
-    db.mass_query_simple(file="../query/tpcds/qreg/sample.qreg")
+    db = DBEst(dataset="pp",sampleSize="10k")
+    db.mass_query_simple(file="../query/power/sql/hive.sql")
