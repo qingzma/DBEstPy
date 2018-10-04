@@ -233,6 +233,61 @@ class QueryEngine:
                 "Time spent for approximate SUM: %.4fs." % time_cost)
         return result, time_cost
 
+    def approximate_avgx_from_to(self, x_min, x_max, x_columnID):
+        """ calculate the approximate average value between x_min and x_max
+
+        Args:
+            x_min (TYPE): lower bound
+            x_max (TYPE): upper bound
+            x_columnID (TYPE): the index of the x to be interated
+
+        Returns:
+            TYPE: the integeral value
+        """
+        start = datetime.now()
+        if self.dimension is 1:
+            def f_pRx(x):
+                # print(self.cregression.predict(x))
+                return np.exp(self.kde.score_samples(x)) * x
+
+            def f_p(x):
+                return np.exp(self.kde.score_samples(x))
+            a = integrate.quad(f_pRx, x_min, x_max,
+                               epsabs=epsabs, epsrel=epsrel)[0]
+            b = integrate.quad(f_p, x_min, x_max,
+                               epsabs=epsabs, epsrel=epsrel)[0]
+
+            if b:
+                result = a / b
+            else:
+                result = None
+        end = datetime.now()
+        time_cost = (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate AVG: %.4f." % result)
+            self.logger.info(
+                "Time spent for approximate AVG: %.4fs." % time_cost)
+        return result, time_cost
+
+    def approximate_sumx_from_to(self, x_min, x_max, x_columnID):
+        start = datetime.now()
+        if self.dimension is 1:
+            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+            def f_pRx(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+                    * np.array(args)[0]
+            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
+                0] * self.num_training_points
+            # return result
+
+        
+        time_cost = (end - start).total_seconds()
+        if self.b_print_time_cost:
+            self.logger.info("Approximate SUM: %.4f." % result)
+            self.logger.info(
+                "Time spent for approximate SUM: %.4fs." % time_cost)
+        return result, time_cost
+
     def approximate_count_from_to(self, x_min, x_max, x_columnID):
         start = datetime.now()
         if self.dimension is 1:

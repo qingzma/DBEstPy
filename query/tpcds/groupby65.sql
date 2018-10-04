@@ -1,0 +1,2 @@
+select sum(ss_sales_price) from store_sales where ss_list_price between 20 and 30  group by ss_store_sk
+select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk
