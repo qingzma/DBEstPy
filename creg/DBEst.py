@@ -24,6 +24,8 @@ class DBEst:
         self.sampleSize = sampleSize
         self.group_names = {}
         self.num_of_points_per_group_tbls = {}
+        self.df={}
+        self.DBEstClients = {}  # store all QeuryEngines, for each table
         if dataset is "tpcds":
             if sampleSize is "100k":
                 self.csv_file_pre = "../data/tpcDs100k/"
@@ -94,9 +96,8 @@ class DBEst:
             self.CSinTable[uniqueTable] = columnSet
         self.logger.logger.debug(self.CSinTable)
 
-        self.DBEstClients = {}  # store all QeuryEngines, for each table
-        self.df = {}  # store all dataframes
-
+        
+        
         # load data
         for uniqueTable in self.uniqueTables:
             if self.sampleSize is "100k":
@@ -163,9 +164,10 @@ class DBEst:
             self.logger.logger.info(AQP_results)
             self.logger.logger.info(time_costs)
 
-    def mass_query_simple_groupby(self, query):
+    def query_simple_groupby(self, query):
         AQP_results = []
         time_costs = []
+        groups_results = []
         index = 1
         line = query
         self.logger.logger.info("Starting Query " + str(index) + ":")
@@ -193,22 +195,25 @@ class DBEst:
                     float(lb), float(hb), 0)
                 AQP_results.append(result)
                 time_costs.append(time)
+                groups_results.append(grp_name)
             elif func.lower() == "sum":
                 DBEstClient = self.DBEstClients[tbl]
                 result, time = DBEstClient[columnItem].approximate_sum_from_to(
                     float(lb), float(hb), 0)
                 AQP_results.append(result)
                 time_costs.append(time)
+                groups_results.append(grp_name)
             elif func.lower() == "count":
                 DBEstClient = self.DBEstClients[tbl]
                 result, time = DBEstClient[columnItem].approximate_count_from_to(
                     float(lb), float(hb), 0)
                 AQP_results.append(result)
                 time_costs.append(time)
+                groups_results.append(grp_name)
             else:
                 self.logger.logger.warning(
                     func + " is currently not supported!")
-
+        self.logger.logger.info(groups_results)
         self.logger.logger.info(AQP_results)
         self.logger.logger.info(time_costs)
 
@@ -257,7 +262,7 @@ class DBEst:
         self.logger.logger.info(
             "DBEsti has been initialised, ready to serve... (%.1fs)" % time_cost)
 
-    def init_groupby(self, table="store_sales", group="ss_store_sk", columnItem=["ss_wholesale_cost", "ss_list_price"],
+    def init_groupby(self, file="../data/tpcDs10k/store_sales.csv", table="store_sales", group="ss_store_sk", columnItem=["ss_wholesale_cost", "ss_list_price"],
                      num_of_points_per_group=None):
         """ support simple group by,
             train regression models for each group 
@@ -270,6 +275,8 @@ class DBEst:
         """
         self.logger.logger.info("")
         self.logger.logger.info("Start building GROUP BY for Table " + table)
+        self.df[table] = pd.read_csv(file)
+        self.df[table] = self.df[table].dropna()
         grouped = self.df[table].groupby(group)
         group_name = str([table, group])
         self.group_names[group_name] = []
@@ -286,6 +293,7 @@ class DBEst:
                 [table, group])] = num_of_points_per_group
 
         for grp_name, group in grouped:
+
             self.group_names[group_name].append(grp_name)
             columnItemGroup = str(columnItem) + "-" + str(grp_name)
             self.logger.logger.debug(
@@ -317,10 +325,11 @@ class DBEst:
             #
             #
             # number of points
-
+            self.logger.logger.info(grp_name)
+            #self.logger.logger.info(group)
             qe = QueryEngine(
                 cRegression, logger_object=self.logger,
-                num_training_points=self.num_of_points[table])
+                num_training_points=int(num_of_points_per_group[str(int(grp_name))]))
             qe.density_estimation()
             self.DBEstClients[table][columnItemGroup] = qe
             self.logger.logger.info(
@@ -339,21 +348,24 @@ class DBEst:
                 group_count = re.split('\s+', group_count)
                 num_of_points[group_count[0]] = group_count[1]
                 # self.logger.logger.debug(group_count[0]+","+group_count[1])
+
         return num_of_points
 
 if __name__ == "__main__":
-    db = DBEst(dataset="tpcds", sampleSize="100k")
+    db = DBEst(dataset="tpcds", sampleSize="10k")
     # db.init_whole_range()
     num_of_points_per_group=db.read_num_of_points_per_group("../data/tpcds_1g_100k/counts.txt")
-    db.init_groupby(table="store_sales", group="ss_store_sk",
+    db.init_groupby(file="../data/tpcds_1g_100k/ss_100k.csv", #"../data/tpcDs10k/store_sales.csv",    #
+                    table="store_sales", group="ss_store_sk",
                     columnItem=["ss_wholesale_cost", "ss_list_price"],
                     num_of_points_per_group=num_of_points_per_group)
     
-    db.mass_query_simple_groupby(
+    db.query_simple_groupby(
         query="select count(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
-    db.mass_query_simple_groupby(
-        query="select avg(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
-    db.mass_query_simple_groupby(
-        query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
+    # db.mass_query_simple_groupby(
+    #     query="select avg(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
+    # db.mass_query_simple_groupby(
+    #     query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
     # # db.mass_query_simple(file="../query/power/sql/hive.sql")
     # # db.init_groupby()
+    "../data/tpcds_1g_100k/ss_10k.csv"
