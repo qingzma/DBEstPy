@@ -22,3 +22,4 @@ CRegressionRDBM.sublime-workspace
 creg/*.pyc
 results/deletable.log
 notebook
+**/*.ipynb
