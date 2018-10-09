@@ -24,4 +24,4 @@ creg/*.pyc
 results/deletable.log
 notebook/
 **/*.ipynb
-transfer/
+transfer/*
