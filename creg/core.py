@@ -32,6 +32,7 @@ import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
 import warnings
+import gc
 
 
 color1 = (0.1, 0.3, 0.1)
@@ -2600,12 +2601,19 @@ class CRegression:
         return
 
     def clear_training_data(self):
-        del self.answers_for_testing
-        del self.predictions_classified
-        del self.y_classifier_testing
-        del self.optimal_y
-        del self.optimal_error
-        del self.training_data
+        if self.answers_for_testing is not None:
+            del self.answers_for_testing
+        if self.predictions_classified is not None:
+            del self.predictions_classified
+        if self.y_classifier_testing is not None:
+            del self.y_classifier_testing
+        if self.optimal_y is not None:
+            del self.optimal_y
+        if self.optimal_error is not None:
+            del self.optimal_error
+        if self.training_data is not None:
+            del self.training_data
+        gc.collect()
         
 
 # -------------------------------------------------------------------------------------------------

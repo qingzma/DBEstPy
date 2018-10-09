@@ -1,11 +1,31 @@
-2018-10-05 22:42:38,932 - INFO - Initialising DBEst...
-2018-10-05 22:42:38,932 - INFO - 
-2018-10-05 22:42:38,932 - INFO - Start building GROUP BY for Table store_sales
-2018-10-05 22:42:41,266 - INFO - Start querying to GBoost.
-2018-10-05 22:42:41,808 - INFO - Total time spent: 0.5410 s.
-2018-10-05 22:42:41,808 - INFO - --------------------------------------------------------------------------------------------
-2018-10-05 22:42:41,808 - INFO - Start querying to XGboost.
-2018-10-05 22:42:44,015 - INFO - Total time spent: 2.2068 s.
-2018-10-05 22:42:44,015 - INFO - --------------------------------------------------------------------------------------------
-2018-10-05 22:42:45,682 - INFO - Time to fit the model is 6s.
-2018-10-05 22:42:45,683 - INFO - 1.0
+2018-10-09 15:21:11,379 - INFO - Initialising DBEst...
+2018-10-09 15:21:11,379 - INFO - Dataset contains 1 tables, which are:
+2018-10-09 15:21:11,380 - INFO - ['store_sales']
+2018-10-09 15:21:11,380 - INFO - Talbes in the dataset need [2] Column Sets.
+2018-10-09 15:21:11,672 - INFO - --------------------------------------------------
+2018-10-09 15:21:11,673 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_wholesale_cost', 'ss_list_price']
+2018-10-09 15:21:17,854 - INFO - Start querying to GBoost.
+2018-10-09 15:21:20,392 - INFO - Total time spent: 2.5378 s.
+2018-10-09 15:21:20,392 - INFO - --------------------------------------------------------------------------------------------
+2018-10-09 15:21:20,392 - INFO - Start querying to XGboost.
+2018-10-09 15:21:29,347 - INFO - Total time spent: 8.9550 s.
+2018-10-09 15:21:29,347 - INFO - --------------------------------------------------------------------------------------------
+2018-10-09 15:21:32,433 - INFO - Time to fit the model is 20s.
+2018-10-09 15:21:32,521 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_wholesale_cost', 'ss_list_price']
+2018-10-09 15:21:32,521 - INFO - --------------------------------------------------
+2018-10-09 15:21:32,521 - INFO - --------------------------------------------------
+2018-10-09 15:21:32,521 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_list_price', 'ss_wholesale_cost']
+2018-10-09 15:21:38,265 - INFO - Start querying to GBoost.
+2018-10-09 15:21:40,682 - INFO - Total time spent: 2.4166 s.
+2018-10-09 15:21:40,682 - INFO - --------------------------------------------------------------------------------------------
+2018-10-09 15:21:40,682 - INFO - Start querying to XGboost.
+2018-10-09 15:21:49,610 - INFO - Total time spent: 8.9279 s.
+2018-10-09 15:21:49,611 - INFO - --------------------------------------------------------------------------------------------
+2018-10-09 15:21:53,359 - INFO - Time to fit the model is 20s.
+2018-10-09 15:21:53,459 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_list_price', 'ss_wholesale_cost']
+2018-10-09 15:21:53,459 - INFO - --------------------------------------------------
+2018-10-09 15:21:53,460 - INFO - {'store_sales': {"['ss_wholesale_cost', 'ss_list_price']": <query_engine.QueryEngine object at 0x7ffa8c2b2828>, "['ss_list_price', 'ss_wholesale_cost']": <query_engine.QueryEngine object at 0x7ffa5ff7dd68>}}
+2018-10-09 15:21:53,460 - INFO - DBEsti has been initialised, ready to serve... (42.1s)
+2018-10-09 15:21:53,479 - INFO - Starting Query 1:
+2018-10-09 15:21:53,479 - INFO - select avg (ss_ext_discount_amt) from store_sales where ss_quantity       between 1      and 20
+

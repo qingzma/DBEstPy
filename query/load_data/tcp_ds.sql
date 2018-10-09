@@ -328,3 +328,7 @@ create table store_returns
 ROW FORMAT DELIMITED
 FIELDS TERMINATED BY '|'
 LOCATION '/user/hive/warehouse/tpcDs/store_returns';
+
+
+
+hive -e 'select ss_store_sk, count(*) from store_sales group by ss_store_sk' > ~/hahah

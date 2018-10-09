@@ -14,10 +14,14 @@ from scipy import integrate
 from datetime import datetime
 import warnings
 import generate_random
+import gc
+import dill
+import sys
 
 epsabs = 1E-01
 epsrel = 1E-03
 mesh_grid_num = 30
+limit =30
 opts = {'epsabs': epsabs, 'epsrel': epsrel, 'limit': 100}
 # opts = {'epsabs': 1.49e-03, 'epsrel': 1.49e-03, 'limit': 100}
 
@@ -54,6 +58,7 @@ class QueryEngine:
         else:
             self.logger = logs.QueryLogs().logger
         self.b_print_time_cost = b_print_time_cost
+        self.__sizeof__=None
 
         warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
@@ -73,8 +78,9 @@ class QueryEngine:
             self.training_data.features)
         # remove unecessary memory usage
         del self.training_data
-        self.cregression.clear_training_data()
-
+        # self.cregression.clear_training_data()
+        
+        gc.collect()
         return self.kde
 
     def desngity_estimation_plt2d(self):
@@ -128,7 +134,7 @@ class QueryEngine:
         plt.show()
         return True
 
-    def approximate_avg_from_to(self, x_min, x_max, x_columnID):
+    def approximate_avg_from_to(self, x_min, x_max, x_columnID,epsabs=epsabs, epsrel=epsrel,limit=limit):
         """ calculate the approximate average value between x_min and x_max
 
         Args:
@@ -194,7 +200,7 @@ class QueryEngine:
                 "Time spent for approximate AVG: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_sum_from_to(self, x_min, x_max, x_columnID):
+    def approximate_sum_from_to(self, x_min, x_max, x_columnID,epsabs=epsabs, epsrel=epsrel,limit=limit):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -233,62 +239,62 @@ class QueryEngine:
                 "Time spent for approximate SUM: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_avgx_from_to(self, x_min, x_max, x_columnID):
-        """ calculate the approximate average value between x_min and x_max
+    # def approximate_avgx_from_to(self, x_min, x_max, x_columnID):
+    #     """ calculate the approximate average value between x_min and x_max
 
-        Args:
-            x_min (TYPE): lower bound
-            x_max (TYPE): upper bound
-            x_columnID (TYPE): the index of the x to be interated
+    #     Args:
+    #         x_min (TYPE): lower bound
+    #         x_max (TYPE): upper bound
+    #         x_columnID (TYPE): the index of the x to be interated
 
-        Returns:
-            TYPE: the integeral value
-        """
-        start = datetime.now()
-        if self.dimension is 1:
-            def f_pRx(x):
-                # print(self.cregression.predict(x))
-                return np.exp(self.kde.score_samples(x)) * x
+    #     Returns:
+    #         TYPE: the integeral value
+    #     """
+    #     start = datetime.now()
+    #     if self.dimension is 1:
+    #         def f_pRx(x):
+    #             # print(self.cregression.predict(x))
+    #             return np.exp(self.kde.score_samples(x)) * x
 
-            def f_p(x):
-                return np.exp(self.kde.score_samples(x))
-            a = integrate.quad(f_pRx, x_min, x_max,
-                               epsabs=epsabs, epsrel=epsrel)[0]
-            b = integrate.quad(f_p, x_min, x_max,
-                               epsabs=epsabs, epsrel=epsrel)[0]
+    #         def f_p(x):
+    #             return np.exp(self.kde.score_samples(x))
+    #         a = integrate.quad(f_pRx, x_min, x_max,
+    #                            epsabs=epsabs, epsrel=epsrel)[0]
+    #         b = integrate.quad(f_p, x_min, x_max,
+    #                            epsabs=epsabs, epsrel=epsrel)[0]
 
-            if b:
-                result = a / b
-            else:
-                result = None
-        end = datetime.now()
-        time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
-            self.logger.info("Approximate AVG: %.4f." % result)
-            self.logger.info(
-                "Time spent for approximate AVG: %.4fs." % time_cost)
-        return result, time_cost
+    #         if b:
+    #             result = a / b
+    #         else:
+    #             result = None
+    #     end = datetime.now()
+    #     time_cost = (end - start).total_seconds()
+    #     if self.b_print_time_cost:
+    #         self.logger.info("Approximate AVG: %.4f." % result)
+    #         self.logger.info(
+    #             "Time spent for approximate AVG: %.4fs." % time_cost)
+    #     return result, time_cost
 
-    def approximate_sumx_from_to(self, x_min, x_max, x_columnID):
-        start = datetime.now()
-        if self.dimension is 1:
-            # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
-            def f_pRx(*args):
-                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
-                    * np.array(args)[0]
-            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
-                0] * self.num_training_points
-            # return result
+    # def approximate_sumx_from_to(self, x_min, x_max, x_columnID):
+    #     start = datetime.now()
+    #     if self.dimension is 1:
+    #         # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
+    #         def f_pRx(*args):
+    #             return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
+    #                 * np.array(args)[0]
+    #         result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
+    #             0] * self.num_training_points
+    #         # return result
 
         
-        time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
-            self.logger.info("Approximate SUM: %.4f." % result)
-            self.logger.info(
-                "Time spent for approximate SUM: %.4fs." % time_cost)
-        return result, time_cost
+    #     time_cost = (end - start).total_seconds()
+    #     if self.b_print_time_cost:
+    #         self.logger.info("Approximate SUM: %.4f." % result)
+    #         self.logger.info(
+    #             "Time spent for approximate SUM: %.4fs." % time_cost)
+    #     return result, time_cost
 
-    def approximate_count_from_to(self, x_min, x_max, x_columnID):
+    def approximate_count_from_to(self, x_min, x_max, x_columnID,epsabs=epsabs, epsrel=epsrel,limit=limit):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -325,7 +331,7 @@ class QueryEngine:
                 "Time spent for approximate COUNT: %.4fs." % time_cost)
         return int(result), time_cost
 
-    def approximate_variance_x_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
+    def approximate_variance_x_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0,epsabs=epsabs, epsrel=epsrel,limit=limit):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -377,7 +383,7 @@ class QueryEngine:
                 "Time spent for approximate variance x: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_variance_y_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
+    def approximate_variance_y_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0,epsabs=epsabs, epsrel=epsrel,limit=limit):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -428,7 +434,7 @@ class QueryEngine:
                     "Negtive approximate variance y: %.4f. is predicted..." % result)
         return result, time_cost
 
-    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0):
+    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0,epsabs=epsabs, epsrel=epsrel):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -590,6 +596,12 @@ class QueryEngine:
             self.logger.info(
                 "Time spent for approximate MAX: %.4fs." % time_cost)
         return max(predictions), time_cost
+
+    def get_size(self):
+        str_size=dill.dumps(self)
+        self.__sizeof__ = sys.getsizeof(str_size)
+        gc.collect()
+        return self.__sizeof__
 
 
 if __name__ == "__main__":
