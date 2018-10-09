@@ -22,6 +22,6 @@ CRegressionRDBM.sublime-workspace
 .idea/workspace.xml
 creg/*.pyc
 results/deletable.log
-notebook
+notebook/
 **/*.ipynb
-transfer
+transfer/
