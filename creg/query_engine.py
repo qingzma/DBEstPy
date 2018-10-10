@@ -59,6 +59,8 @@ class QueryEngine:
             self.logger = logs.QueryLogs().logger
         self.b_print_time_cost = b_print_time_cost
         self.__sizeof__=None
+        self.x_min = min(self.training_data.features)
+        self.x_max = max(self.training_data.features)
 
         warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
@@ -300,8 +302,9 @@ class QueryEngine:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_p(*args):
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
-            result = integrate.quad(f_p, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
-                0] * self.num_training_points
+            result = integrate.quad(f_p, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0]
+            # print("result is "+ str(result))
+            result = result * self.num_training_points
             # return result
 
         if self.dimension > 1:
@@ -434,7 +437,7 @@ class QueryEngine:
                     "Negtive approximate variance y: %.4f. is predicted..." % result)
         return result, time_cost
 
-    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0,epsabs=epsabs, epsrel=epsrel):
+    def approximate_covar_from_to(self, x_min=-np.inf, x_max=np.inf, x_columnID=0,epsabs=epsabs, epsrel=epsrel,limit=limit):
         start = datetime.now()
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
@@ -518,8 +521,12 @@ class QueryEngine:
                 "Time spent for approximate CORR: %.4fs." % time_cost)
         return result, time_cost
 
-    def approximate_percentile_from_to(self, p, q_min_boundary, q_max_boundary, x_columnID=0):
+    def approximate_percentile_from_to(self, p, x_columnID=0,q_min_boundary=None, q_max_boundary=None ):
         start = datetime.now()
+        if q_min_boundary is None:
+            q_min_boundary=self.x_min
+        if q_max_boundary is None:
+            q_max_boundary=self.x_max
         result = generate_random.percentile(
             p, self.kde, q_min_boundary, q_max_boundary, steps=500, n_bisect=20)
         end = datetime.now()

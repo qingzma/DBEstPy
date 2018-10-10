@@ -14,9 +14,9 @@ import dill
 
 logger_file = "../results/deletable.log"
 
-epsabs = 10
-epsrel = 1E-01
-limit =20
+epsabs = float(10)
+epsrel = float(1E-01)
+limit = int(20)
 class DBEst:
 
     """The implementation of DBEst, which uses regression models to 
@@ -49,6 +49,7 @@ class DBEst:
         self.df = {}
         self.DBEstClients = {}
         self.tableColumnSets = []  # store all QeuryEngines, for each table
+        self.uniqueTables =[]
 
     def init_whole_range(self,file, table, columnItems, num_of_points=None):
         """Summary
@@ -297,7 +298,7 @@ class DBEst:
             "GROUP BY has been initialised, ready to serve... (%.1fs)"
             % time_cost)
 
-    def mass_query_simple(self, file,epsabs=epsabs, epsrel=epsrel,limit=limit):
+    def mass_query_simple(self, file,epsabs=epsabs, epsrel=epsrel,limit=limit,ci=True,confidence=0.95):
         AQP_results = []
         time_costs = []
         index = 1
@@ -313,11 +314,19 @@ class DBEst:
                 # remove empty strings caused by sequential blank spaces.
                 query_list = list(filter(None, query_list))
                 func = query_list[1]
-                tbl = query_list[4]
-                x = query_list[6]
-                y = query_list[2]
-                lb = query_list[8]
-                hb = query_list[10]
+                
+                if func.lower() !="percentile":
+                    x = query_list[6]
+                    y = query_list[2]
+                    lb = query_list[8]
+                    hb = query_list[10]
+                    tbl = query_list[4]
+                    
+                else:
+                    x = query_list[2]
+                    y = "*"
+                    p = query_list[3]
+                    tbl = query_list[5]
 
                 if y == "*":
                     columnSetsInTable = self.CSinTable[tbl]
@@ -328,32 +337,77 @@ class DBEst:
                                                      str(cs))
                             y = cs[1]
                             break
+                if y == "*":
+                    self.logger.logger.error("There is no model to predict percentile!")
+                    AQP_results.append("Null")
+                    time_costs.append("Null")
+                    break
+                
                 columnItem = str([x, y])
+                DBEstClient = self.DBEstClients[tbl]
                 if func.lower() == "avg":
-                    DBEstClient = self.DBEstClients[tbl]
+                    
                     result, time = DBEstClient[columnItem].\
                         approximate_avg_from_to(float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
                     AQP_results.append(result)
                     time_costs.append(time)
                 elif func.lower() == "sum":
-                    DBEstClient = self.DBEstClients[tbl]
+                    # DBEstClient = self.DBEstClients[tbl]
                     result, time = DBEstClient[columnItem].\
                         approximate_sum_from_to(float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
                     AQP_results.append(result)
                     time_costs.append(time)
                 elif func.lower() == "count":
-                    DBEstClient = self.DBEstClients[tbl]
+                    # DBEstClient = self.DBEstClients[tbl]
+                    self.logger.logger.info("table "+ str(tbl))
+                    self.logger.logger.info("lb "+ str(lb))
+                    self.logger.logger.info("hb "+ str(hb))
                     result, time = DBEstClient[columnItem].\
-                        approximate_count_from_to(float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                        approximate_count_from_to(float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=int(limit))
                     AQP_results.append(result)
                     time_costs.append(time)
+                elif func.lower() == 'variance_x':
+                    result, time = DBEstClient[columnItem].approximate_variance_x_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    
+                elif func.lower() == 'min':
+                    result, time = DBEstClient[columnItem].approximate_min_from_to(
+                        float(lb), float(hb), 0,ci=ci, confidence=confidence)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    
+                elif func.lower() == 'max':
+                    result, time = DBEstClient[columnItem].approximate_max_from_to(
+                        float(lb), float(hb), 0,ci=ci, confidence=confidence)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    
+                elif func.lower() == 'covar':
+                    result, time = DBEstClient[columnItem].approximate_covar_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    
+                elif func.lower() == 'corr':
+                    result, time = DBEstClient[columnItem].approximate_corr_from_to(
+                        float(lb), float(hb), 0)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                elif func.lower() == 'percentile':
+                    result, time = DBEstClient[columnItem].approximate_percentile_from_to(
+                         float(p))
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    
                 else:
                     self.logger.logger.warning(
                         func + " is currently not supported!")
             self.logger.logger.info(AQP_results)
             self.logger.logger.info(time_costs)
 
-    def query_simple_groupby(self, query, output=None,epsabs=epsabs, epsrel=epsrel,limit=limit):
+    def query_simple_groupby(self, query, output=None,epsabs=epsabs, epsrel=epsrel,limit=limit,ci=True,confidence=0.95):
         AQP_results = []
         time_costs = []
         groups_results = []
@@ -368,47 +422,105 @@ class DBEst:
         # remove empty strings caused by sequential blank spaces.
         query_list = list(filter(None, query_list))
         func = query_list[1]
-        tbl = query_list[4]
-        x = query_list[6]
-        y = query_list[2]
-        lb = query_list[8]
-        hb = query_list[10]
-        grp = query_list[13]
+        if func.lower() !="percentile":
+            x = query_list[6]
+            y = query_list[2]
+            lb = query_list[8]
+            hb = query_list[10]
+            tbl = query_list[4]
+            
+        else:
+            x = query_list[2]
+            y = "*"
+            p = query_list[3]
+            tbl = query_list[5]
 
-        for grp_name in self.group_names[str([tbl, grp])]:
+        if y == "*":
+            columnSetsInTable = self.CSinTable[tbl]
+            for cs in columnSetsInTable:
+                if x == cs[0]:
+                    self.logger.logger.debug("Find a column \
+                        set in table " + tbl + " to replace *: " +
+                                             str(cs))
+                    y = cs[1]
+                    break
+        if y == "*":
+            self.logger.logger.error("There is no model to predict percentile!")
+            AQP_results.append("Null")
+            time_costs.append("Null")
+        else:
             columnItem = str([x, y])
-            columnItem = str(columnItem) + "-" + str(grp_name)
-            if func.lower() == "avg":
+
+            for grp_name in self.group_names[str([tbl, grp])]:
+                columnItem = str([x, y])
+                columnItem = str(columnItem) + "-" + str(grp_name)
                 DBEstClient = self.DBEstClients[tbl]
-                result, time = DBEstClient[columnItem].approximate_avg_from_to(
-                    float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
-                AQP_results.append(result)
-                time_costs.append(time)
-                groups_results.append(grp_name)
-            elif func.lower() == "sum":
-                DBEstClient = self.DBEstClients[tbl]
-                result, time = DBEstClient[columnItem].approximate_sum_from_to(
-                    float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
-                AQP_results.append(result)
-                time_costs.append(time)
-                groups_results.append(grp_name)
-            elif func.lower() == "count":
-                DBEstClient = self.DBEstClients[tbl]
-                result, time = DBEstClient[columnItem].\
-                    approximate_count_from_to(float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
-                AQP_results.append(result)
-                time_costs.append(time)
-                groups_results.append(grp_name)
-            else:
-                self.logger.logger.warning(
-                    func + " is currently not supported!")
-        self.logger.logger.info(groups_results)
-        self.logger.logger.info(AQP_results)
-        self.logger.logger.info(time_costs)
-        if output is not None:
-            with open(output, 'w+') as file:
-                for i in range(len(groups_results)):
-                    file.write('%s, %s\n' % (str(int(groups_results[i])), str(AQP_results[i])))
+                if func.lower() == "avg":
+                    # DBEstClient = self.DBEstClients[tbl]
+                    result, time = DBEstClient[columnItem].approximate_avg_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == "sum":
+                    # DBEstClient = self.DBEstClients[tbl]
+                    result, time = DBEstClient[columnItem].approximate_sum_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == "count":
+                    result, time = DBEstClient[columnItem].approximate_count_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'variance_x':
+                    result, time = DBEstClient[columnItem].approximate_variance_x_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'min':
+                    result, time = DBEstClient[columnItem].approximate_min_from_to(
+                        float(lb), float(hb), 0,ci=ci, confidence=confidence)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'max':
+                    result, time = DBEstClient[columnItem].approximate_max_from_to(
+                        float(lb), float(hb), 0,ci=ci, confidence=confidence)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'covar':
+                    result, time = DBEstClient[columnItem].approximate_covar_from_to(
+                        float(lb), float(hb), 0,epsabs=epsabs, epsrel=epsrel,limit=limit)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'corr':
+                    result, time = DBEstClient[columnItem].approximate_corr_from_to(
+                        float(lb), float(hb), 0)
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                elif func.lower() == 'percentile':
+                    result, time = DBEstClient[columnItem].approximate_percentile_from_to(
+                         float(p))
+                    AQP_results.append(result)
+                    time_costs.append(time)
+                    groups_results.append(grp_name)
+                else:
+                    self.logger.logger.warning(
+                        func + " is currently not supported!")
+            self.logger.logger.info(groups_results)
+            self.logger.logger.info(AQP_results)
+            self.logger.logger.info(time_costs)
+            if output is not None:
+                with open(output, 'w+') as file:
+                    for i in range(len(groups_results)):
+                        file.write('%s, %s\n' % (str(int(groups_results[i])), str(AQP_results[i])))
 
     def read_num_of_points_per_group(self, file):
         num_of_points = {}
@@ -438,7 +550,16 @@ class DBEst:
             for columnItem in self.DBEstClients[table]:
                 size = size + self.DBEstClients[table][columnItem].get_size()
         return size
-
+    def show_tables(self):
+        self.logger.logger.info("DBEst holds "+str(len(self.DBEstClients))+ " models:")
+        for model in self.DBEstClients:
+            self.logger.logger.info(model) 
+    def show_clients(self):
+        self.logger.logger.info("DBEst holds "+str(len(self.DBEstClients))+ " models:")
+        for model in self.DBEstClients:
+            self.logger.logger.info(model) 
+            for client in self.DBEstClients[model]:
+                self.logger.logger.info(client)
 
 
 def run_sample_whole_range():

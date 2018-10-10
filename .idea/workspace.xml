@@ -3,8 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="ff952b9c-7377-428e-ad81-11c6431ce6f8" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/creg/DBEst.py" beforeDir="false" afterPath="$PROJECT_DIR$/creg/DBEst.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/tpcds_1g_100k/counts.txt" beforeDir="false" afterPath="$PROJECT_DIR$/data/tpcds_1g_100k/counts.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/results/deletable.log" beforeDir="false" afterPath="$PROJECT_DIR$/results/deletable.log" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -21,10 +19,11 @@
     <session id="-1001022372">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -54,11 +53,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/creg/core.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-15">
+            <state relative-caret-position="255">
               <caret line="17" column="29" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
-              <folding>
-                <element signature="e#37#84#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -67,10 +63,7 @@
         <entry file="file://$PROJECT_DIR$/creg/DBEst.py">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="423">
-              <caret line="290" selection-start-line="290" selection-end-line="290" />
-              <folding>
-                <element signature="e#37#84#0" expanded="true" />
-              </folding>
+              <caret line="506" selection-start-line="506" selection-end-line="506" />
             </state>
           </provider>
         </entry>
@@ -114,10 +107,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="118" />
-    <option name="y" value="27" />
-    <option name="width" value="1717" />
-    <option name="height" value="1086" />
+    <option name="x" value="360" />
+    <option name="width" value="1657" />
+    <option name="height" value="1052" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
@@ -256,9 +248,8 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="27" width="1853" height="1173" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.23021583" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2080797" />
       <window_info id="Structure" order="1" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -324,11 +315,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/creg/core.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-15">
+        <state relative-caret-position="255">
           <caret line="17" column="29" selection-start-line="17" selection-start-column="29" selection-end-line="17" selection-end-column="29" />
-          <folding>
-            <element signature="e#37#84#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -342,10 +330,7 @@
     <entry file="file://$PROJECT_DIR$/creg/DBEst.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="423">
-          <caret line="290" selection-start-line="290" selection-end-line="290" />
-          <folding>
-            <element signature="e#37#84#0" expanded="true" />
-          </folding>
+          <caret line="506" selection-start-line="506" selection-end-line="506" />
         </state>
       </provider>
     </entry>
