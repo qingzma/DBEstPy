@@ -18,9 +18,9 @@ import gc
 import dill
 import sys
 
-epsabs = 1E-01
-epsrel = 1E-03
-mesh_grid_num = 30
+epsabs = 10         #1E-3
+epsrel = 1E-01      #1E-1
+mesh_grid_num = 20  #30
 limit =30
 opts = {'epsabs': epsabs, 'epsrel': epsrel, 'limit': 100}
 # opts = {'epsabs': 1.49e-03, 'epsrel': 1.49e-03, 'limit': 100}

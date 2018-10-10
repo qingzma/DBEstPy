@@ -440,8 +440,91 @@ class DBEst:
         return size
 
 
+
+def run_sample_whole_range():
+    
+    log_file= "../results/DBEsti_tpcds_100k_all.log"
+    db = DBEst(dataset="tpcds",logger_file=log_file)
+
+    table="store_sales"
+    file = '../data/tpcDs10k/store_sales.csv'
+    num_of_points={'store_sales':'2685596178'}
+    tableColumnSets = [["ss_list_price","ss_wholesale_cost"]]
+
+    db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+                    table=table,
+                    columnItems=tableColumnSets,
+                    num_of_points=num_of_points)
+    db.clear_training_data()
+
+
+
+    table="web_page"
+    file = '../data/tpcDs10k/web_page.csv'
+    num_of_points={'web_page':'3000'}
+    tableColumnSets = [["wp_char_count", "wp_link_count"]]
+
+    db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+                    table=table,
+                    columnItems=tableColumnSets,
+                    num_of_points=num_of_points)
+    db.clear_training_data()
+
+
+    db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
+
+def run_sample_group_by():
+    log_file= "../results/DBEsti_tpcds_100k_all.log"
+    db = DBEst(dataset="tpcds",logger_file=log_file)
+    file = "../data/tpcds_1g_100k/ss_100k.csv"
+    table = "store_sales"
+    group = "ss_store_sk"
+    columnItem=["ss_wholesale_cost", "ss_list_price"]
+    num_of_points_per_group = db.read_num_of_points_per_group(
+        "../data/tpcds_1g_100k/counts.txt")
+
+    
+    db.init_groupby(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+                    table=table, group=group,
+                    columnItem=columnItem,
+                    num_of_points_per_group=num_of_points_per_group)
+    db.query_simple_groupby(
+        query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk",
+        epsabs=10, epsrel=1E-1,limit=20)
+    db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
+
 if __name__ == "__main__":
-    db = DBEst(dataset="tpcds")
+    log_file= "../results/DBEsti_tpcds_100k_all.log"
+    db = DBEst(dataset="tpcds",logger_file=log_file)
+    file = "../data/tpcds5m/ss_5m.csv"
+    table = "store_sales"
+    group = "ss_store_sk"
+    columnItem=["ss_sold_date_sk", "ss_sales_price"]
+    num_of_points_per_group = db.read_num_of_points_per_group(
+        "../data/tpcds5m/num_of_points.csv")
+
+    
+    db.init_groupby(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+                    table=table, group=group,
+                    columnItem=columnItem,
+                    num_of_points_per_group=num_of_points_per_group)
+    # db.query_simple_groupby(
+    #     query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk",
+    #     epsabs=10, epsrel=1E-1,limit=20)
+    db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
+
+
+
+
+    
+    # db = DBEst(dataset="tpcds")
+    # run_sample_whole_range()
+    # run_sample_group_by()
+
+    # log_file= "../results/DBEsti_tpcds_100k_all.log"
+    # db = DBEst(dataset="tpcds",logger_file=log_file)
+
+
     # db.init_whole_range(file='../data/tpcDs10k/store_sales.csv')
     # db.init_whole_range(file='../data/tpcDs10k/store_sales.csv',
     #                     tableColumnSets=[
@@ -506,23 +589,27 @@ if __name__ == "__main__":
     # db.mass_query_simple_groupby(
     #     query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk")
     
-    tableColumnSets = [["ss_wholesale_cost","ss_list_price"],["ss_list_price","ss_wholesale_cost"]]
-    log_file= "../results/DBEsti_tpcds_100k_all.log"
-    file = '../data/tpcDs100k/store_sales.csv'
-    num_of_points={'store_sales':'2685596178'}
-    db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
-                        table="store_sales",
-                        columnItems=tableColumnSets,
-                        num_of_points=num_of_points)
-    db.clear_training_data()
 
-    # db.mass_query_simple(file="../query/tpcds/qreg/avg.qreg")
+
+
+
+    # tableColumnSets = [["ss_wholesale_cost","ss_list_price"],["ss_list_price","ss_wholesale_cost"]]
+    # log_file= "../results/DBEsti_tpcds_100k_all.log"
+    # file = '../data/tpcDs100k/store_sales.csv'
+    # num_of_points={'store_sales':'2685596178'}
+    # db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+    #                     table="store_sales",
+    #                     columnItems=tableColumnSets,
+    #                     num_of_points=num_of_points)
+    # db.clear_training_data()
+
+    # # db.mass_query_simple(file="../query/tpcds/qreg/avg.qreg")
     
-    client=db.DBEstClients["store_sales"][str(["ss_wholesale_cost","ss_list_price"])]
+    # client=db.DBEstClients["store_sales"][str(["ss_wholesale_cost","ss_list_price"])]
 
 
-    print(client.get_size())
-    print(db.get_size())
+    # print(client.get_size())
+    # print(db.get_size())
 
     # import dill
     # str1=dill.dumps(client)
