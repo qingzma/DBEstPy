@@ -25,3 +25,4 @@ results/deletable.log
 notebook/
 **/*.ipynb
 transfer/*
+*.DBEst

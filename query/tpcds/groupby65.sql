@@ -111,3 +111,21 @@ select ss_store_sk, approx_avg(ss_sales_price) from store_sales where ss_sold_da
 select ss_store_sk, approx_avg(ss_sales_price) from store_sales where ss_sold_date_sk between 2451850 and 2452214 group by ss_store_sk;
 select ss_store_sk, approx_avg(ss_sales_price) from store_sales where ss_sold_date_sk between 2451911 and 2452275 group by ss_store_sk;
 select ss_store_sk, approx_avg(ss_sales_price) from store_sales where ss_sold_date_sk between 2452031 and 2452395 group by ss_store_sk;
+
+
+
+
+
+
+
+
+
+
+
+# 9 group
+set blinkdb.sample.size=1072974;
+set blinkdb.dataset.size=2685596178;
+
+
+
+#HIVE to file

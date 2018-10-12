@@ -21,13 +21,19 @@ def make_cdf(f, lo, hi, steps=200):
 
 def bisect(target, f, lo, hi, n=30):
     'Find x between lo and hi where f(x)=target'
+    old_value = -99999
+    abs_error = 1E-2
     for i in range(n):
         mid = (hi + lo) / 2.0
         if target < f(mid):
             hi = mid
         else:
             lo = mid
-    return (hi + lo) / 2.0
+        new_value = (hi + lo) / 2.0
+        if abs(old_value - new_value) <= abs_error:
+            return new_value
+        old_value = new_value
+    return new_value
 
 
 def make_user_distribution(f, lo, hi, steps=50, n=15):
@@ -52,6 +58,7 @@ def percentile(p, f, lo, hi, steps=200, n_bisect=100):
     cdf = make_cdf(linear, lo, hi, steps)
 
     return bisect(p, cdf, lo, hi, n_bisect)
+
 
 
 if __name__ == '__main__':

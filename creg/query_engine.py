@@ -527,8 +527,13 @@ class QueryEngine:
             q_min_boundary=self.x_min
         if q_max_boundary is None:
             q_max_boundary=self.x_max
+        # self.logger.info("min: "+str(q_min_boundary))
+        # self.logger.info("max: "+str(q_max_boundary))
+        extra = 0.05*(q_max_boundary-q_min_boundary)
+        q_min_boundary=q_min_boundary-extra
+        q_max_boundary=q_max_boundary+extra
         result = generate_random.percentile(
-            p, self.kde, q_min_boundary, q_max_boundary, steps=500, n_bisect=20)
+            p, self.kde, q_min_boundary, q_max_boundary, steps=50, n_bisect=30)
         end = datetime.now()
         time_cost = (end - start).total_seconds()
         if self.b_print_time_cost:

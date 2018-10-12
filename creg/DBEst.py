@@ -49,13 +49,12 @@ class DBEst:
         self.df = {}
         self.DBEstClients = {}
         self.tableColumnSets = []  # store all QeuryEngines, for each table
-        self.uniqueTables =[]
 
     def init_whole_range(self,file, table, columnItems, num_of_points=None):
-        """Summary
+        """Build DBEst table for a table, with different combinations of column pairs.
         
         Args:
-            table (list): table names, for example: ['store_sales']
+            table (str): table names, for example: 'store_sales'
             file (str): path to the file
             columnItem (list): columnItem of each table, for example, 
                         [["ss_quantity", "ss_ext_discount_amt"],...]
@@ -308,7 +307,7 @@ class DBEst:
                 self.logger.logger.info(line)
                 index = index + 1
                 query_list = line.replace(
-                    "(", " ").replace(")", " ").replace(";", "")
+                    "(", " ").replace(")", " ").replace(";", "").replace(",", "")
                 # self.logger.logger.info(query_list)
                 query_list = re.split('\s+', query_list)
                 # remove empty strings caused by sequential blank spaces.
@@ -331,6 +330,7 @@ class DBEst:
                 if y == "*":
                     columnSetsInTable = self.CSinTable[tbl]
                     for cs in columnSetsInTable:
+                        # self.logger.logger.info("x is "+ str(x) +",  cs[0] is "+ str(cs[0]))
                         if x == cs[0]:
                             self.logger.logger.debug("Find a column \
                                 set in table " + tbl + " to replace *: " +
@@ -562,13 +562,16 @@ class DBEst:
                 self.logger.logger.info(client)
 
 
+
+
+
 def run_sample_whole_range():
     
     log_file= "../results/DBEsti_tpcds_100k_all.log"
     db = DBEst(dataset="tpcds",logger_file=log_file)
 
     table="store_sales"
-    file = '../data/tpcDs10k/store_sales.csv'
+    file = '../data/1_percent.csv' #tpcDs100k/store_sales.csv
     num_of_points={'store_sales':'2685596178'}
     tableColumnSets = [["ss_list_price","ss_wholesale_cost"]]
 
@@ -580,16 +583,16 @@ def run_sample_whole_range():
 
 
 
-    table="web_page"
-    file = '../data/tpcDs10k/web_page.csv'
-    num_of_points={'web_page':'3000'}
-    tableColumnSets = [["wp_char_count", "wp_link_count"]]
+    # table="web_page"
+    # file = '../data/tpcDs10k/web_page.csv'
+    # num_of_points={'web_page':'3000'}
+    # tableColumnSets = [["wp_char_count", "wp_link_count"]]
 
-    db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
-                    table=table,
-                    columnItems=tableColumnSets,
-                    num_of_points=num_of_points)
-    db.clear_training_data()
+    # db.init_whole_range(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+    #                 table=table,
+    #                 columnItems=tableColumnSets,
+    #                 num_of_points=num_of_points)
+    # db.clear_training_data()
 
 
     db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
@@ -614,69 +617,85 @@ def run_sample_group_by():
         epsabs=10, epsrel=1E-1,limit=20)
     db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
 
-if __name__ == "__main__":
-    log_file= "../results/DBEsti_tpcds_100k_all.log"
-    db = DBEst(dataset="tpcds",logger_file=log_file)
-    file = "../data/tpcds5m/ss_5m.csv"
-    table = "store_sales"
-    group = "ss_store_sk"
-    columnItem=["ss_sold_date_sk", "ss_sales_price"]
-    num_of_points_per_group = db.read_num_of_points_per_group(
-        "../data/tpcds5m/num_of_points.csv")
-
-    
-    db.init_groupby(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
-                    table=table, group=group,
-                    columnItem=columnItem,
-                    num_of_points_per_group=num_of_points_per_group)
-    # db.query_simple_groupby(
-    #     query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk",
-    #     epsabs=10, epsrel=1E-1,limit=20)
-    db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
-
-
-
-
-    
-    # db = DBEst(dataset="tpcds")
-    # run_sample_whole_range()
-    # run_sample_group_by()
-
-    # log_file= "../results/DBEsti_tpcds_100k_all.log"
-    # db = DBEst(dataset="tpcds",logger_file=log_file)
-
-
-    # db.init_whole_range(file='../data/tpcDs10k/store_sales.csv')
-    # db.init_whole_range(file='../data/tpcDs10k/store_sales.csv',
-    #                     tableColumnSets=[
-    #                         ["store_sales", "ss_quantity", "ss_ext_sales_price"],
-    #                         ["store_sales", "ss_quantity", "ss_ext_list_price"],
-    #                         ["store_sales", "ss_quantity", "ss_ext_tax"],
-    #                         ["store_sales", "ss_quantity", "ss_net_paid"],
-    #                         ["store_sales", "ss_quantity", "ss_net_paid_inc_tax"],
-    #                         ["store_sales", "ss_quantity", "ss_net_profit"],
-    #                         ["store_sales", "ss_quantity", "ss_list_price"],
-    #                         ["store_sales", "ss_list_price", "ss_list_price"],
-    #                         ["store_sales", "ss_coupon_amt", "ss_list_price"],
-    #                         ["store_sales", "ss_wholesale_cost", "ss_list_price"],
-    #                         ["store_sales", "ss_sales_price", "ss_quantity"],
-    #                         ["store_sales", "ss_net_profit", "ss_quantity"] #,
-    #                         #["web_page", "wp_char_count", "wp_link_count"],# *
-    #                         #["time_dim", "t_minute", "t_hour"],            # *
-    #                         # ["web_sales", "ws_sales_price", "ws_quantity"]
-    #                     ],
-    #                     num_of_points={"web_page": 2685596178})
+def run_tpcds_multi_columns():
+    db = DBEst(dataset="tpcds")
     # db.init_whole_range(file='../data/tpcDs10k/web_page.csv',
-    #                     tableColumnSets=[
-    #                         ["web_page", "wp_char_count", "wp_link_count"]],
+    #                     table="web_page",
+    #                     columnItems=[[ "wp_char_count", "wp_link_count"]],
     #                     num_of_points={"web_page": 3000})
     # db.init_whole_range(file='../data/tpcDs10k/time_dim.csv',
-    #                     tableColumnSets=[["time_dim", "t_minute", "t_hour"]],
+    #                     table="time_dim",
+    #                     columnItems=[[ "t_minute", "t_hour"]],
     #                     num_of_points={"time_dim": 86400})
     # db.init_whole_range(file='../data/tpcDs10k/web_sales.csv',
-    #                     tableColumnSets=[
-    #                         ["web_sales", "ws_sales_price", "ws_quantity"]],
+    #                     table="web_sales",
+    #                     columnItems=[["ws_sales_price", "ws_quantity"]],
     #                     num_of_points={"web_sales": 720000376})
+
+    db.init_whole_range(file='../data/tpcDs10k/store_sales.csv',
+                        table="store_sales",
+                        columnItems=[
+                            ["ss_quantity", "ss_ext_sales_price"],
+                            # ["ss_quantity", "ss_ext_list_price"],
+                            # ["ss_quantity", "ss_ext_tax"],
+                            # ["ss_quantity", "ss_net_paid"],
+                            # ["ss_quantity", "ss_net_paid_inc_tax"],
+                            # ["ss_quantity", "ss_net_profit"],
+                            # ["ss_quantity", "ss_list_price"],
+                            # ["ss_list_price", "ss_list_price"],
+                            # ["ss_coupon_amt", "ss_list_price"],
+                            # ["ss_wholesale_cost", "ss_list_price"],
+                            # ["ss_sales_price", "ss_quantity"],
+                            # ["ss_ne=t_profit", "ss_quantity"] #,
+                            #["web_page", "wp_char_count", "wp_link_count"],# *
+                            #["time_dim", "t_minute", "t_hour"],            # *
+                            # ["web_sales", "ws_sales_price", "ws_quantity"]
+                        ],
+                        num_of_points={'store_sales':'2685596178'})
+    
+    print(db.get_size())
+
+def run_powerplant_multi_columns():
+    db = DBEst(dataset="pp")
+    db.init_whole_range(file='../data/pp100k/powerplant.csv',
+        table="powerplant",
+        columnItems=[
+            [ "T", "EP"],
+            [ "AP", "EP"],
+            [ "RH", "EP"]
+        ],
+        num_of_points={'powerplant':'26000000000'})
+
+    print(db.get_size())
+
+if __name__ == "__main__":
+    # log_file= "../results/DBEsti_tpcds_100k_all.log"
+    # db = DBEst(dataset="tpcds",logger_file=log_file)
+    # file = "../data/tpcds5m/ss_5m.csv"
+    # table = "store_sales"
+    # group = "ss_store_sk"
+    # columnItem=["ss_sold_date_sk", "ss_sales_price"]
+    # num_of_points_per_group = db.read_num_of_points_per_group(
+    #     "../data/tpcds5m/num_of_points.csv")
+
+    
+    # db.init_groupby(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+    #                 table=table, group=group,
+    #                 columnItem=columnItem,
+    #                 num_of_points_per_group=num_of_points_per_group)
+    # # db.query_simple_groupby(
+    # #     query="select sum(ss_list_price) from store_sales where ss_wholesale_cost between 20 and 30  group by ss_store_sk",
+    # #     epsabs=10, epsrel=1E-1,limit=20)
+    # db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
+
+    # run_sample_whole_range()
+    # modify_df("../data/tpcds5m/groupby_test.txt","../data/tpcds5m/new_groupby.txt")
+
+
+
+
+    
+    run_powerplant_multi_columns()
 
     # db.mass_query_simple(file="../query/tpcds/qreg/avg.qreg")
 
