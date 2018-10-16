@@ -226,6 +226,7 @@ class DBEst:
         self.logger.logger.info("Start building GROUP BY for Table " + table)
         self.df[table] = pd.read_csv(file)
         self.df[table] = self.df[table].dropna()
+        # self.logger.logger.info(self.df[table]["ss_sold_date_sk"])
         # self.df[group] =pd.Series([], dtype=int)
         grouped = self.df[table].groupby(group)
         group_name = str([table, group])
@@ -241,6 +242,7 @@ class DBEst:
         else:
             self.num_of_points_per_group_tbls[str(
                 [table, group])] = num_of_points_per_group
+
 
         for grp_name, group in grouped:
 
@@ -280,7 +282,8 @@ class DBEst:
             qe = QueryEngine(
                 cRegression, logger_object=self.logger,
                 num_training_points=int(
-                    num_of_points_per_group[str(int(grp_name))]))
+                    num_of_points_per_group[str((grp_name))]))
+                    # num_of_points_per_group[str(int(grp_name))]))
             qe.density_estimation()
             cRegression.clear_training_data()
             # qe.get_size()
@@ -428,7 +431,7 @@ class DBEst:
             lb = query_list[8]
             hb = query_list[10]
             tbl = query_list[4]
-            
+            grp = query_list[13]
         else:
             x = query_list[2]
             y = "*"
@@ -668,7 +671,36 @@ def run_powerplant_multi_columns():
 
     print(db.get_size())
 
+
+def run_8_group_by():
+    log_file= "../results/DBEsti_tpcd_groupby_1m_all.log"
+    db = DBEst(dataset="tpcds",logger_file=log_file)
+    file = "../data/tpcds_groupby_few_groups/ss_100k_group.csv"
+    table = "store_sales_group_d"
+    group = "ss_store_sk"
+    columnItem=["ss_sold_date_sk", "ss_sales_price"]
+    num_of_points_per_group = db.read_num_of_points_per_group(
+        "../data/tpcds_groupby_few_groups/group_count8.csv")
+
+    
+    db.init_groupby(file=file,  # "../data/tpcDs10k/store_sales.csv",    #
+                    table=table, group=group,
+                    columnItem=columnItem,
+                    num_of_points_per_group=num_of_points_per_group)
+    db.query_simple_groupby(
+        query="select sum(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
+        epsabs=10, epsrel=1E-1,limit=20)
+    db.logger.logger.info("Total size of DBEst is "+str(db.get_size()) +" bytes.")
+
+
+
+
+
+
+
+
 if __name__ == "__main__":
+    run_8_group_by()
     # log_file= "../results/DBEsti_tpcds_100k_all.log"
     # db = DBEst(dataset="tpcds",logger_file=log_file)
     # file = "../data/tpcds5m/ss_5m.csv"
@@ -695,7 +727,7 @@ if __name__ == "__main__":
 
 
     
-    run_powerplant_multi_columns()
+    # run_powerplant_multi_columns()
 
     # db.mass_query_simple(file="../query/tpcds/qreg/avg.qreg")
 
