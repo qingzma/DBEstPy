@@ -80,8 +80,8 @@ if __name__ == '__main__':
         for index in range(1,11):
             file_name=func+str(int(index))
             ground_truth = read_results('../data/tpcds_groupby_few_groups/groundtruth/'+file_name+'.result')
-            predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_100k_new/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
-            predictions_DBEst = read_results('../data/tpcds_groupby_few_groups/DBEst_integral_100k/'+file_name+'.txt')
+            predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_1m_new/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+            predictions_DBEst = read_results('../data/tpcds_groupby_few_groups/DBEst_integral_1m/'+file_name+'.txt')
             # if index == 1 and (func =='avg'):
             #     print("groundtruth"+str(ground_truth))
             #     print("blinkdb"+str(predictions_blinkdb))
