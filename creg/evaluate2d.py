@@ -5,6 +5,7 @@ import data_loader as dl
 from query_engine import QueryEngine
 import logs
 import random
+import tools
 import pymysql
 pymysql.install_as_MySQLdb()
 import generate_random
@@ -23,13 +24,13 @@ logger_file = "../results/deletable.log"
 class Query_Engine_2d:
 
     def __init__(self, dataID, b_allow_repeated_value=True, logger_file=logger_file,
-                 num_of_points=None):
+                 num_of_points=None,base_models=[tools.app_linear]):
         self.logger = logs.QueryLogs(log=logger_file)
         # self.logger.set_no_output()
         self.data = dl.load2d(dataID)
         if not b_allow_repeated_value:
             self.data.remove_repeated_x_1d()
-        self.cRegression = CRegression(logger_object=self.logger)
+        self.cRegression = CRegression(logger_object=self.logger,base_models=base_models)
         self.cRegression.fit(self.data)
         # self.logger.set_logging(file_name=logger_file)
         if num_of_points is None:
@@ -957,7 +958,7 @@ class Query_Engine_2d:
 if __name__ == '__main__':
 
     qe2d = Query_Engine_2d("10k", num_of_points=10000,
-                           logger_file="../results/1m.log")
+                           logger_file="../results/1m.log",base_models=[tools.app_xgboost])
     qe2d.logger.set_level("DEBUG")
     # print("haha")
     # qe2d.mass_query2hive("../query/hiveql/queries10.hiveql")

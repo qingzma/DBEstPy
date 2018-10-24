@@ -1,28 +1,21 @@
-2018-10-14 21:22:27,916 - INFO - Initialising DBEst...
-2018-10-14 21:22:27,916 - INFO - Dataset contains 1 tables, which are:
-2018-10-14 21:22:27,916 - INFO - ['powerplant']
-2018-10-14 21:22:27,916 - INFO - Talbes in the dataset need [3] Column Sets.
-2018-10-14 21:22:27,992 - INFO - --------------------------------------------------
-2018-10-14 21:22:27,993 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
-2018-10-14 21:22:35,954 - INFO - Start querying to GBoost.
-2018-10-14 21:22:38,710 - INFO - Total time spent: 2.7558 s.
-2018-10-14 21:22:38,710 - INFO - --------------------------------------------------------------------------------------------
-2018-10-14 21:22:38,710 - INFO - Start querying to XGboost.
-2018-10-14 21:22:49,196 - INFO - Total time spent: 10.4853 s.
-2018-10-14 21:22:49,196 - INFO - --------------------------------------------------------------------------------------------
-2018-10-14 21:22:52,857 - INFO - Time to fit the model is 24s.
-2018-10-14 21:22:53,119 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
-2018-10-14 21:22:53,119 - INFO - --------------------------------------------------
-2018-10-14 21:22:53,119 - INFO - --------------------------------------------------
-2018-10-14 21:22:53,119 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
-2018-10-14 21:22:59,343 - INFO - Start querying to GBoost.
-2018-10-14 21:23:01,939 - INFO - Total time spent: 2.5966 s.
-2018-10-14 21:23:01,940 - INFO - --------------------------------------------------------------------------------------------
-2018-10-14 21:23:01,940 - INFO - Start querying to XGboost.
-2018-10-14 21:23:12,013 - INFO - Total time spent: 10.0732 s.
-2018-10-14 21:23:12,013 - INFO - --------------------------------------------------------------------------------------------
-2018-10-14 21:23:15,805 - INFO - Time to fit the model is 22s.
-2018-10-14 21:23:16,084 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
-2018-10-14 21:23:16,084 - INFO - --------------------------------------------------
-2018-10-14 21:23:16,084 - INFO - --------------------------------------------------
-2018-10-14 21:23:16,084 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['RH', 'EP']
+2018-10-24 10:18:20,056 - INFO - Initialising DBEst...
+2018-10-24 10:18:20,057 - INFO - Dataset contains 1 tables, which are:
+2018-10-24 10:18:20,057 - INFO - ['powerplant']
+2018-10-24 10:18:20,057 - INFO - Talbes in the dataset need [3] Column Sets.
+2018-10-24 10:18:20,076 - INFO - --------------------------------------------------
+2018-10-24 10:18:20,077 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
+2018-10-24 10:18:20,559 - INFO - Time to fit the model is 0s.
+2018-10-24 10:18:20,611 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
+2018-10-24 10:18:20,611 - INFO - --------------------------------------------------
+2018-10-24 10:18:20,611 - INFO - --------------------------------------------------
+2018-10-24 10:18:20,612 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
+2018-10-24 10:18:21,279 - INFO - Time to fit the model is 0s.
+2018-10-24 10:18:21,337 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
+2018-10-24 10:18:21,337 - INFO - --------------------------------------------------
+2018-10-24 10:18:21,337 - INFO - --------------------------------------------------
+2018-10-24 10:18:21,337 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['RH', 'EP']
+2018-10-24 10:18:21,915 - INFO - Time to fit the model is 0s.
+2018-10-24 10:18:21,968 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['RH', 'EP']
+2018-10-24 10:18:21,968 - INFO - --------------------------------------------------
+2018-10-24 10:18:21,968 - INFO - {'powerplant': {"['T', 'EP']": <query_engine.QueryEngine object at 0x7f04d3e9c6a0>, "['AP', 'EP']": <query_engine.QueryEngine object at 0x7f04b695cf28>, "['RH', 'EP']": <query_engine.QueryEngine object at 0x7f04cdd8c828>}}
+2018-10-24 10:18:21,968 - INFO - DBEsti has been initialised, ready to serve... (1.9s)

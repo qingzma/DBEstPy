@@ -207,10 +207,12 @@ class QueryEngine:
         if self.dimension is 1:
             # average = self.approximate_ave_from_to(x_min,x_max,x_columnID)
             def f_pRx(*args):
+                # print("integral is "+str(self.cregression.predict(np.array(args))))
+                # print("points is" + str(self.num_training_points))
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))\
                     * self.cregression.predict(np.array(args))
-            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[
-                0] * self.num_training_points
+            # print(integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0])
+            result = integrate.quad(f_pRx, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0] * float(self.num_training_points)
             # return result
 
         if self.dimension > 1:
@@ -304,7 +306,7 @@ class QueryEngine:
                 return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
             result = integrate.quad(f_p, x_min, x_max, epsabs=epsabs, epsrel=epsrel)[0]
             # print("result is "+ str(result))
-            result = result * self.num_training_points
+            result = result * float(self.num_training_points)
             # return result
 
         if self.dimension > 1:

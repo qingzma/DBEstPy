@@ -65,6 +65,10 @@ class CRegression:
             The names of the ensemble methods to be compared with, should be among
                     "sklearn_adaboost","sklearn_gradient_tree_boosting","xgboost"
         """
+        if len(base_models) == 1:
+            self.b_use_classifier = False
+        else:
+            self.b_use_classifier = True
         self.app_names_deployed = []
 
         self.apps_deployed = []
@@ -949,46 +953,147 @@ class CRegression:
         return clusters_NRMSEs
 
     def predict(self, x):
-        return self.get_classified_prediction(self.classifier, x)
+
+        if self.b_use_classifier:
+            return self.get_classified_prediction(self.classifier, x)
+        else:
+            return self.apps_deployed[0].predict(np.array([x]).reshape(1, -1))[0]
+
+        #     X = [x]
+        # model_number = classifier.predict(X)
+        # return self.apps_deployed[model_number[0]].predict(np.array(x).reshape(1, -1))[0]
 
     def predicts(self, xs):
         return [self.get_classified_prediction(self.classifier, x) for x in xs]
 
     def fit(self, training_data, testing_data=None, b_select_classifier=False):
         time_program_start = datetime.now()
-        #self.dataset_name = data.file
-        training_data_model, training_data_classifier = tools.split_data_to_2(
-            training_data)
+        if self.b_use_classifier: #use multiple models
+            #self.dataset_name = data.file
+            training_data_model, training_data_classifier = tools.split_data_to_2(
+                training_data)
 
-        models = self.deploy_all_models(training_data_model)
+            models = self.deploy_all_models(training_data_model)
 
-        # get predictions to build the classifier
-        answers_for_classifier = self.get_predictions_to_build_classifier(
-            training_data_classifier)
-        y_classifier, errors = self.init_classifier_training_values(answers_for_classifier,
-                                                                    # model_selection_index=index_models,
-                                                                    factor=1)
+            # get predictions to build the classifier
+            answers_for_classifier = self.get_predictions_to_build_classifier(
+                training_data_classifier)
+            y_classifier, errors = self.init_classifier_training_values(answers_for_classifier,
+                                                                        # model_selection_index=index_models,
+                                                                        factor=1)
 
-        if not b_select_classifier:
-            classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(training_data_classifier,
-                                                                                               y_classifier)
-        else:
-            classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, \
-                time_cost_to_train_the_best_classifier = \
-                self.select_classifiers(
-                    training_data_classifier, y_classifier, testing_data)
+            if not b_select_classifier:
+                classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(training_data_classifier,
+                                                                                                   y_classifier)
+            else:
+                classifier, NRMSE_classifier_selection, time_cost_to_select_classifiers, \
+                    time_cost_to_train_the_best_classifier = \
+                    self.select_classifiers(
+                        training_data_classifier, y_classifier, testing_data)
 
-        self.classifier = classifier
-        self.num_total_training_points = len(
-            training_data_model.labels) + len(training_data_classifier.labels)
-        self.num_training_points_model = len(training_data_model.labels)
+            self.classifier = classifier
+            self.num_total_training_points = len(
+                training_data_model.labels) + len(training_data_classifier.labels)
+            self.num_training_points_model = len(training_data_model.labels)
 
-        if len(np.array(training_data_model.labels).shape) is 1:       # for 2 dimensional dataset only
-            self.dimensionX = 1
-            self.averageX_training_points_model = sum(
-                training_data_model.labels) / float(len(training_data_model.labels))
-            self.variance_training_points_model = np.var(
-                training_data_model.labels)
+            if len(np.array(training_data_model.labels).shape) is 1:       # for 2 dimensional dataset only
+                self.dimensionX = 1
+                self.averageX_training_points_model = sum(
+                    training_data_model.labels) / float(len(training_data_model.labels))
+                self.variance_training_points_model = np.var(
+                    training_data_model.labels)
+        else: # use only one model
+            self.app_names_deployed = []
+            self.apps_deployed = []
+            self.time_cost_to_train_base_models = []
+            self.num_training_points=len(training_data.features)
+            self.num_total_training_points= self.num_training_points
+
+            if self.input_base_models is not None:
+                self.input_base_models = list(self.input_base_models)
+            else:
+                self.input_base_models = [tools.app_boosting, tools.app_xgboost]
+
+            if self.input_ensemble_models is not None:
+                self.input_ensemble_models = list(self.input_ensemble_models)
+            else:
+                self.input_ensemble_models = [tools.app_xgboost]
+
+            if tools.app_linear in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_linear_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_poly in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_poly_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_knn in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_knn_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_rbf in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_svr_rbf_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_decision_tree in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_decision_tree_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_mllib in self.input_base_models:
+                model, name, time = self.deploy_model_mllib_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_gaussian in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_gaussion_process_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_adaboost in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_ensemble_adaboost(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_boosting in self.input_base_models:
+                model, name, time = self.deploy_model_sklearn_ensemble_gradient_tree_boosting(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_xgboost in self.input_base_models:
+                model, name, time = self.deploy_xgboost_regression(training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
+
+            elif tools.app_pwlf in self.input_base_models:
+                model, name, time = self.deploy_model_pwlf_regression(
+                    training_data)
+                self.apps_deployed.append(model)
+                self.app_names_deployed.append(name)
+                self.time_cost_to_train_base_models.append(time)
 
         # self.averageX_training_points_model =
         self.training_data = training_data
@@ -2620,7 +2725,7 @@ class CRegression:
 if __name__ == "__main__":
     import data_loader as dl
     from pympler import asizeof
-    data = dl.load3d(5)
+    data = dl.load2d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
 
@@ -2631,10 +2736,12 @@ if __name__ == "__main__":
     '''
     #cs = CRegression(base_models=[tools.app_decision_tree,tools.app_xgboost],b_show_plot=True)
     # cr = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=False)
-    cr = CRegression(base_models=[tools.app_linear, tools.app_poly, tools.app_decision_tree,
-                                  tools.app_boosting, tools.app_xgboost],
+    cr = CRegression(base_models=[tools.app_linear],
                      b_show_plot=False)
     cr.fit(data)
+    testing_data = data.get_before(5)
+    print(testing_data.features[0])
+    print(cr.predict(testing_data.features[0]))
     print(asizeof.asizeof(cr))
     # cs.fit(training_data, testing_data)
 
