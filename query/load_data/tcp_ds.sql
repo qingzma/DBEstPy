@@ -298,8 +298,9 @@ LOCATION '/user/hive/warehouse/tpcDs/web_sales';
 
 
 #remove comma , at end of each line
-sed 's/,$//' web_page.csv > web_page.csv.nocomma
+sed -i 's/,$//' web_page.csv #> web_page.csv.nocomma
 
+sed -i 's/|/,/g' web_page.csv
 
 
 create table store_returns

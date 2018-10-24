@@ -25,6 +25,11 @@ CRegressionRDBM.sublime-workspace
 creg/*.pyc
 results/deletable.log
 notebook/
+data/tpcds5m/
+ss_1m.csv
+td_1m.csv
+wp_1m.csv
+ws_1m.csv
 **/*.ipynb
 transfer/*
 *.DBEst
