@@ -12,14 +12,15 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name='CRegression',
-    version='0.1.0',
-    description='Cregression method',
-    long_description=readme,
+    name='dbest',
+    version='2.0',
+    description='Model-based Approximate Query Processing (AQP) engine.',
+    url='https://github.com/qingzma/DBEst',
     author='Qingzhi Ma',
     author_email='Q.Ma.2@warwick.ac.uk',
-    url='https://github.com/qingzma/CRegression',
+    long_description=readme,
     license=license,
-    packages=find_packages(exclude=('tests', 'docs','results'))
+    packages=['dbest'],#find_packages(exclude=('tests', 'docs','results'))
+    zip_safe=False
 )
 

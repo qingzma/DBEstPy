@@ -28,4 +28,9 @@ data/tpcds5m/
 transfer/
 data/
 
+build/
+dist/
+dbest.egg-info/
+
+
 
