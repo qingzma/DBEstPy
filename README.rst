@@ -8,4 +8,6 @@ Currently DBEst supports various aggregate funcitons, including COUNT, SUM, AVG,
 Group By is also supported.
 
 The main function is located in creg/DBEst.py
+
+v2.0 RoadMap
 ---------------
