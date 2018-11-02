@@ -11,3 +11,7 @@ The main function is located in creg/DBEst.py
 
 v2.0 RoadMap
 ---------------
+1. Enable multi-thread training\\
+2. Enable multi-thread prediction, especially group by\\
+3. Transfer to Java
+4. DBEst over spark
