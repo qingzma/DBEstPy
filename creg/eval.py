@@ -165,8 +165,11 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
                     predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_1m_new/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
                     predictions_DBEst = read_results('../data/tpcds_groupby_few_groups/DBEst_integral_1m/'+file_name+'.txt')
             if group_num == 501:
+                # ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
+                # predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+                # predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/'+file_name+'.txt')
                 ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
-                predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+                predictions_blinkdb = read_results('../data/tpcds5m/DBEst_integral/xgboost/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
                 predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/'+file_name+'.txt')
             
             for group_id in  ground_truth:
@@ -190,11 +193,16 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
        
     print(res_per_group_DBEst)
     print(res_per_group_blinkdb)
-    return res_per_group_DBEst, res_per_group_blinkdb
+
+    
+    
     if group_num == 501:
         plt_histogram(res_per_group_DBEst[function],res_per_group_blinkdb[function])
     if group_num == 8:
         plt_bar(res_per_group_DBEst[function],res_per_group_blinkdb[function],size)
+
+    return res_per_group_DBEst, res_per_group_blinkdb
+    
 
 def plt_bar(x1,x2,size="100k"):
     plt.rcParams.update({'font.size': 12})
@@ -259,25 +267,31 @@ def plt_bar4(x1,x2,x3,x4,function="count"):
 
 
 
-def plt_histogram(x1,x2):
+def plt_histogram(x1,x2,b_cumulative=False):
 
     plt.rcParams.update({'font.size': 12})
+    x1.sort()
+    x2.sort()
 
     fig, ax = plt.subplots()
-    p1 = plt.hist(x1,501,normed=1,cumulative=True,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
-    p2 = plt.hist(x2,501,normed=1,cumulative=True,color=colors["BlinkDB_1m"],alpha=0.7, label='BlinkDB')
+    # p1 = plt.hist(x1,501,normed=1,cumulative=b_cumulative,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
+    # p2 = plt.hist(x2,501,normed=1,cumulative=b_cumulative,color=colors["BlinkDB_1m"],alpha=0.7, label='BlinkDB')
+
+    p1 = plt.hist(x1,100,normed=1,cumulative=b_cumulative,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
+    p2 = plt.hist(x2,100,normed=1,cumulative=b_cumulative,color=colors["BlinkDB_1m"],alpha=0.7, label='DBEst_XGboost')
 
     plt.legend( loc='1')
     # plt.legend((p1[0], p2[0]),
     #     ('DBEst_10k', 'BlinkDB_10k','DBEst_100k','BlinkDB_100k'), loc='1')
 
-    plt.xlim(0,0.062)
-    plt.ylim(0,1)
+    # plt.xlim(0,0.062)
+    # plt.ylim(0,1)
     formatter = FuncFormatter(to_percent)
     ax.xaxis.set_major_formatter(formatter)
-    ax.yaxis.set_major_formatter(formatter)
+    # ax.yaxis.set_major_formatter(formatter)
     plt.xlabel("Relative Error (%)")
-    plt.ylabel("Cumulative Probability")
+    # plt.ylabel("Cumulative Probability")
+    plt.ylabel("Number of Occurence")
     plt.subplots_adjust(bottom=0.12)
     plt.subplots_adjust(left=0.16)
 
@@ -288,13 +302,13 @@ def plt_histogram(x1,x2):
 
 
 if __name__ == '__main__':
+    avg_relative_errors_per_group_value(function='avg', group_num=501)
     avg_relative_errors()
 
-
     # import numpy as np
-    # DBEst_100k, blinkdb_100k = avg_relative_errors_per_group_value(group_num=8,function="avg",size="100k")
-    # DBEst_1m, blinkdb_1m = avg_relative_errors_per_group_value(group_num=8,function="avg",size="1m")
-    # function = "avg"
+    # DBEst_100k, blinkdb_100k = avg_relative_errors_per_group_value(group_num=8,function="count",size="100k")
+    # DBEst_1m, blinkdb_1m = avg_relative_errors_per_group_value(group_num=8,function="count",size="1m")
+    # function = "count"
     # plt_bar4(DBEst_100k[function],blinkdb_100k[function],DBEst_1m[function], blinkdb_1m[function])
     # print(np.var(DBEst_100k[function]))
     # print(np.var(DBEst_1m[function]))

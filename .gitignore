@@ -8,6 +8,8 @@ ethylene_CO.txt
 ethylene_methane.txt
 1_percent.csv
 ss_100k.csv
+store_sales.csv
+web_sales.csv
 time_dim.csv
 web_page.csv
 ws_100k.csv

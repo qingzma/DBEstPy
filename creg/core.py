@@ -366,7 +366,7 @@ class CRegression:
             training_data)
         return sklearn_linear_model, tools.app_linear, time_train
 
-    def deploy_model_pwlf_regression(self, training_data, num_of_segments=4):
+    def deploy_model_pwlf_regression(self, training_data, num_of_segments=10,b_cross_validation=False):
         # piecewise_linear_fit
         import pwlf
         def train_pwlf_regression(trainingData):
@@ -374,8 +374,34 @@ class CRegression:
             X = trainingData.features[:, 0]
             y = trainingData.labels
 
-            reg = pwlf.PiecewiseLinFit(X, y)
-            reg.fit(num_of_segments, disp=True)
+            if b_cross_validation:
+                regs={}
+                R2s={}
+                
+                n_segments=range(2,10)
+                for n in n_segments:
+                    print(n)
+                    my_pwlf=pwlf.PiecewiseLinFit(X, y)
+                    res=my_pwlf.fit(n)
+                    #calculate the R2
+                    ssr = my_pwlf.fit_with_breaks(my_pwlf.fit_breaks)[0]
+                    ybar = np.ones(y.size) * np.mean(y)
+                    ydiff = y - ybar
+                    sst = np.dot(ydiff, ydiff)
+                    Rsquared = 1.0 - (ssr/sst)
+
+                    regs[str(n)]=my_pwlf
+                    R2s[str(n)]=Rsquared
+
+                
+                print(R2s)
+            else:
+                reg = pwlf.PiecewiseLinFit(X, y)
+                reg.fit(num_of_segments, disp=True)
+
+
+            # reg = pwlf.PiecewiseLinFit(X, y)
+            # reg.fit(num_of_segments, disp=True)
             end = datetime.now()
             time_train = (end - start).total_seconds()
             self.logger.debug("Sucessfully deployed " + tools.app_pwlf)

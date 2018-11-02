@@ -1,21 +1,205 @@
-2018-10-24 10:18:20,056 - INFO - Initialising DBEst...
-2018-10-24 10:18:20,057 - INFO - Dataset contains 1 tables, which are:
-2018-10-24 10:18:20,057 - INFO - ['powerplant']
-2018-10-24 10:18:20,057 - INFO - Talbes in the dataset need [3] Column Sets.
-2018-10-24 10:18:20,076 - INFO - --------------------------------------------------
-2018-10-24 10:18:20,077 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
-2018-10-24 10:18:20,559 - INFO - Time to fit the model is 0s.
-2018-10-24 10:18:20,611 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['T', 'EP']
-2018-10-24 10:18:20,611 - INFO - --------------------------------------------------
-2018-10-24 10:18:20,611 - INFO - --------------------------------------------------
-2018-10-24 10:18:20,612 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
-2018-10-24 10:18:21,279 - INFO - Time to fit the model is 0s.
-2018-10-24 10:18:21,337 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['AP', 'EP']
-2018-10-24 10:18:21,337 - INFO - --------------------------------------------------
-2018-10-24 10:18:21,337 - INFO - --------------------------------------------------
-2018-10-24 10:18:21,337 - INFO - Start training Qeury Engine for Table powerplant, Column Set: ['RH', 'EP']
-2018-10-24 10:18:21,915 - INFO - Time to fit the model is 0s.
-2018-10-24 10:18:21,968 - INFO - Finish training Qeury Engine for Table powerplant, Column Set: ['RH', 'EP']
-2018-10-24 10:18:21,968 - INFO - --------------------------------------------------
-2018-10-24 10:18:21,968 - INFO - {'powerplant': {"['T', 'EP']": <query_engine.QueryEngine object at 0x7f04d3e9c6a0>, "['AP', 'EP']": <query_engine.QueryEngine object at 0x7f04b695cf28>, "['RH', 'EP']": <query_engine.QueryEngine object at 0x7f04cdd8c828>}}
-2018-10-24 10:18:21,968 - INFO - DBEsti has been initialised, ready to serve... (1.9s)
+2018-10-31 13:40:40,126 - INFO - Initialising DBEst...
+2018-10-31 13:40:40,126 - INFO - Dataset contains 1 tables, which are:
+2018-10-31 13:40:40,126 - INFO - ['web_page']
+2018-10-31 13:40:40,127 - INFO - Talbes in the dataset need [1] Column Sets.
+2018-10-31 13:40:40,146 - INFO - --------------------------------------------------
+2018-10-31 13:40:40,146 - INFO - Start training Qeury Engine for Table web_page, Column Set: ['wp_char_count', 'wp_link_count']
+2018-10-31 13:40:40,443 - INFO - Start querying to GBoost.
+2018-10-31 13:40:40,455 - INFO - Total time spent: 0.0113 s.
+2018-10-31 13:40:40,455 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:40:40,455 - INFO - Start querying to XGboost.
+2018-10-31 13:40:40,499 - INFO - Total time spent: 0.0433 s.
+2018-10-31 13:40:40,499 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:40:40,644 - INFO - Time to fit the model is 0s.
+2018-10-31 13:40:40,687 - INFO - Finish training Qeury Engine for Table web_page, Column Set: ['wp_char_count', 'wp_link_count']
+2018-10-31 13:40:40,687 - INFO - --------------------------------------------------
+2018-10-31 13:40:40,687 - INFO - {'web_page': {"['wp_char_count', 'wp_link_count']": <query_engine.QueryEngine object at 0x7f7584d276d8>}}
+2018-10-31 13:40:40,688 - INFO - DBEsti has been initialised, ready to serve... (0.6s)
+2018-10-31 13:40:40,688 - INFO - Dataset contains 2 tables, which are:
+2018-10-31 13:40:40,688 - INFO - ['time_dim', 'web_page']
+2018-10-31 13:40:40,688 - INFO - Talbes in the dataset need [1, 1] Column Sets.
+2018-10-31 13:40:40,799 - INFO - --------------------------------------------------
+2018-10-31 13:40:40,799 - INFO - Start training Qeury Engine for Table time_dim, Column Set: ['t_minute', 't_hour']
+2018-10-31 13:40:41,683 - INFO - Start querying to GBoost.
+2018-10-31 13:40:42,538 - INFO - Total time spent: 0.8549 s.
+2018-10-31 13:40:42,538 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:40:42,538 - INFO - Start querying to XGboost.
+2018-10-31 13:40:45,966 - INFO - Total time spent: 3.4277 s.
+2018-10-31 13:40:45,966 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:40:46,045 - WARNING - Warning: Only one best model is found! New query will only go to this prediction model!
+2018-10-31 13:40:46,045 - WARNING - To use more models, please change the facotr of time term to be greater than 0.
+2018-10-31 13:40:46,047 - INFO - Time to fit the model is 5s.
+2018-10-31 13:40:46,145 - INFO - Finish training Qeury Engine for Table time_dim, Column Set: ['t_minute', 't_hour']
+2018-10-31 13:40:46,145 - INFO - --------------------------------------------------
+2018-10-31 13:40:46,254 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:40:46,254 - INFO - {'web_page': {"['wp_char_count', 'wp_link_count']": <query_engine.QueryEngine object at 0x7f7584d276d8>}, 'time_dim': {"['t_minute', 't_hour']": <query_engine.QueryEngine object at 0x7f7584892d30>}}
+2018-10-31 13:40:46,254 - INFO - DBEsti has been initialised, ready to serve... (5.6s)
+2018-10-31 13:40:46,255 - INFO - Dataset contains 3 tables, which are:
+2018-10-31 13:40:46,255 - INFO - ['time_dim', 'web_sales', 'web_page']
+2018-10-31 13:40:46,255 - INFO - Talbes in the dataset need [1, 1, 1] Column Sets.
+2018-10-31 13:40:46,621 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:40:46,962 - INFO - --------------------------------------------------
+2018-10-31 13:40:46,962 - INFO - Start training Qeury Engine for Table web_sales, Column Set: ['ws_sales_price', 'ws_quantity']
+2018-10-31 13:40:51,917 - INFO - Start querying to GBoost.
+2018-10-31 13:40:54,271 - INFO - Total time spent: 2.3540 s.
+2018-10-31 13:40:54,271 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:40:54,271 - INFO - Start querying to XGboost.
+2018-10-31 13:41:03,984 - INFO - Total time spent: 9.7125 s.
+2018-10-31 13:41:03,984 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:07,988 - INFO - Time to fit the model is 21s.
+2018-10-31 13:41:08,192 - INFO - Finish training Qeury Engine for Table web_sales, Column Set: ['ws_sales_price', 'ws_quantity']
+2018-10-31 13:41:08,192 - INFO - --------------------------------------------------
+2018-10-31 13:41:08,547 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:41:08,548 - INFO - {'web_page': {"['wp_char_count', 'wp_link_count']": <query_engine.QueryEngine object at 0x7f7584d276d8>}, 'time_dim': {"['t_minute', 't_hour']": <query_engine.QueryEngine object at 0x7f7584892d30>}, 'web_sales': {"['ws_sales_price', 'ws_quantity']": <query_engine.QueryEngine object at 0x7f7584d276a0>}}
+2018-10-31 13:41:08,548 - INFO - DBEsti has been initialised, ready to serve... (22.3s)
+2018-10-31 13:41:08,548 - INFO - Dataset contains 4 tables, which are:
+2018-10-31 13:41:08,548 - INFO - ['store_sales', 'time_dim', 'web_sales', 'web_page']
+2018-10-31 13:41:08,548 - INFO - Talbes in the dataset need [13, 1, 1, 1] Column Sets.
+2018-10-31 13:41:08,778 - INFO - --------------------------------------------------
+2018-10-31 13:41:08,778 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_sales_price']
+2018-10-31 13:41:12,918 - INFO - Start querying to GBoost.
+2018-10-31 13:41:15,073 - INFO - Total time spent: 2.1543 s.
+2018-10-31 13:41:15,073 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:15,073 - INFO - Start querying to XGboost.
+2018-10-31 13:41:23,855 - INFO - Total time spent: 8.7824 s.
+2018-10-31 13:41:23,856 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:26,801 - INFO - Time to fit the model is 18s.
+2018-10-31 13:41:27,037 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_sales_price']
+2018-10-31 13:41:27,037 - INFO - --------------------------------------------------
+2018-10-31 13:41:27,037 - INFO - --------------------------------------------------
+2018-10-31 13:41:27,037 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_list_price']
+2018-10-31 13:41:31,075 - INFO - Start querying to GBoost.
+2018-10-31 13:41:33,220 - INFO - Total time spent: 2.1448 s.
+2018-10-31 13:41:33,220 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:33,220 - INFO - Start querying to XGboost.
+2018-10-31 13:41:41,957 - INFO - Total time spent: 8.7364 s.
+2018-10-31 13:41:41,957 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:44,979 - INFO - Time to fit the model is 17s.
+2018-10-31 13:41:45,208 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_list_price']
+2018-10-31 13:41:45,208 - INFO - --------------------------------------------------
+2018-10-31 13:41:45,208 - INFO - --------------------------------------------------
+2018-10-31 13:41:45,208 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_tax']
+2018-10-31 13:41:49,251 - INFO - Start querying to GBoost.
+2018-10-31 13:41:51,460 - INFO - Total time spent: 2.2086 s.
+2018-10-31 13:41:51,460 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:41:51,460 - INFO - Start querying to XGboost.
+2018-10-31 13:42:00,329 - INFO - Total time spent: 8.8683 s.
+2018-10-31 13:42:00,329 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:03,351 - INFO - Time to fit the model is 18s.
+2018-10-31 13:42:03,579 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_tax']
+2018-10-31 13:42:03,579 - INFO - --------------------------------------------------
+2018-10-31 13:42:03,579 - INFO - --------------------------------------------------
+2018-10-31 13:42:03,579 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_paid']
+2018-10-31 13:42:08,029 - INFO - Start querying to GBoost.
+2018-10-31 13:42:10,260 - INFO - Total time spent: 2.2305 s.
+2018-10-31 13:42:10,260 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:10,260 - INFO - Start querying to XGboost.
+2018-10-31 13:42:18,996 - INFO - Total time spent: 8.7363 s.
+2018-10-31 13:42:18,996 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:21,844 - INFO - Time to fit the model is 18s.
+2018-10-31 13:42:22,075 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_paid']
+2018-10-31 13:42:22,075 - INFO - --------------------------------------------------
+2018-10-31 13:42:22,075 - INFO - --------------------------------------------------
+2018-10-31 13:42:22,075 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_paid_inc_tax']
+2018-10-31 13:42:26,599 - INFO - Start querying to GBoost.
+2018-10-31 13:42:28,789 - INFO - Total time spent: 2.1903 s.
+2018-10-31 13:42:28,790 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:28,790 - INFO - Start querying to XGboost.
+2018-10-31 13:42:37,530 - INFO - Total time spent: 8.7404 s.
+2018-10-31 13:42:37,530 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:40,643 - INFO - Time to fit the model is 18s.
+2018-10-31 13:42:40,870 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_paid_inc_tax']
+2018-10-31 13:42:40,870 - INFO - --------------------------------------------------
+2018-10-31 13:42:40,870 - INFO - --------------------------------------------------
+2018-10-31 13:42:40,870 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_profit']
+2018-10-31 13:42:45,227 - INFO - Start querying to GBoost.
+2018-10-31 13:42:47,396 - INFO - Total time spent: 2.1692 s.
+2018-10-31 13:42:47,397 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:47,397 - INFO - Start querying to XGboost.
+2018-10-31 13:42:56,390 - INFO - Total time spent: 8.9931 s.
+2018-10-31 13:42:56,390 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:42:59,231 - INFO - Time to fit the model is 18s.
+2018-10-31 13:42:59,458 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_net_profit']
+2018-10-31 13:42:59,459 - INFO - --------------------------------------------------
+2018-10-31 13:42:59,459 - INFO - --------------------------------------------------
+2018-10-31 13:42:59,459 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_list_price']
+2018-10-31 13:43:03,329 - INFO - Start querying to GBoost.
+2018-10-31 13:43:05,504 - INFO - Total time spent: 2.1745 s.
+2018-10-31 13:43:05,504 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:05,504 - INFO - Start querying to XGboost.
+2018-10-31 13:43:14,100 - INFO - Total time spent: 8.5952 s.
+2018-10-31 13:43:14,100 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:16,726 - INFO - Time to fit the model is 17s.
+2018-10-31 13:43:16,959 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_list_price']
+2018-10-31 13:43:16,960 - INFO - --------------------------------------------------
+2018-10-31 13:43:16,960 - INFO - --------------------------------------------------
+2018-10-31 13:43:16,960 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_list_price', 'ss_list_price']
+2018-10-31 13:43:21,984 - INFO - Start querying to GBoost.
+2018-10-31 13:43:24,236 - INFO - Total time spent: 2.2509 s.
+2018-10-31 13:43:24,236 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:24,236 - INFO - Start querying to XGboost.
+2018-10-31 13:43:33,447 - INFO - Total time spent: 9.2113 s.
+2018-10-31 13:43:33,447 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:37,290 - INFO - Time to fit the model is 20s.
+2018-10-31 13:43:37,477 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_list_price', 'ss_list_price']
+2018-10-31 13:43:37,477 - INFO - --------------------------------------------------
+2018-10-31 13:43:37,477 - INFO - --------------------------------------------------
+2018-10-31 13:43:37,477 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_coupon_amt', 'ss_list_price']
+2018-10-31 13:43:40,813 - INFO - Start querying to GBoost.
+2018-10-31 13:43:43,048 - INFO - Total time spent: 2.2345 s.
+2018-10-31 13:43:43,048 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:43,048 - INFO - Start querying to XGboost.
+2018-10-31 13:43:50,841 - INFO - Total time spent: 7.7931 s.
+2018-10-31 13:43:50,842 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:43:53,260 - INFO - Time to fit the model is 15s.
+2018-10-31 13:43:58,387 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_coupon_amt', 'ss_list_price']
+2018-10-31 13:43:58,387 - INFO - --------------------------------------------------
+2018-10-31 13:43:58,387 - INFO - --------------------------------------------------
+2018-10-31 13:43:58,388 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_wholesale_cost', 'ss_list_price']
+2018-10-31 13:44:03,886 - INFO - Start querying to GBoost.
+2018-10-31 13:44:06,173 - INFO - Total time spent: 2.2874 s.
+2018-10-31 13:44:06,173 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:06,173 - INFO - Start querying to XGboost.
+2018-10-31 13:44:14,902 - INFO - Total time spent: 8.7280 s.
+2018-10-31 13:44:14,902 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:18,141 - INFO - Time to fit the model is 19s.
+2018-10-31 13:44:18,315 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_wholesale_cost', 'ss_list_price']
+2018-10-31 13:44:18,315 - INFO - --------------------------------------------------
+2018-10-31 13:44:18,315 - INFO - --------------------------------------------------
+2018-10-31 13:44:18,315 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_sales_price', 'ss_quantity']
+2018-10-31 13:44:22,791 - INFO - Start querying to GBoost.
+2018-10-31 13:44:24,948 - INFO - Total time spent: 2.1574 s.
+2018-10-31 13:44:24,948 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:24,948 - INFO - Start querying to XGboost.
+2018-10-31 13:44:33,642 - INFO - Total time spent: 8.6930 s.
+2018-10-31 13:44:33,642 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:36,787 - INFO - Time to fit the model is 18s.
+2018-10-31 13:44:36,967 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_sales_price', 'ss_quantity']
+2018-10-31 13:44:36,967 - INFO - --------------------------------------------------
+2018-10-31 13:44:36,967 - INFO - --------------------------------------------------
+2018-10-31 13:44:36,967 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_net_profit', 'ss_quantity']
+2018-10-31 13:44:43,423 - INFO - Start querying to GBoost.
+2018-10-31 13:44:45,710 - INFO - Total time spent: 2.2867 s.
+2018-10-31 13:44:45,711 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:45,711 - INFO - Start querying to XGboost.
+2018-10-31 13:44:54,807 - INFO - Total time spent: 9.0963 s.
+2018-10-31 13:44:54,807 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:44:58,067 - INFO - Time to fit the model is 21s.
+2018-10-31 13:44:58,288 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_net_profit', 'ss_quantity']
+2018-10-31 13:44:58,288 - INFO - --------------------------------------------------
+2018-10-31 13:44:58,288 - INFO - --------------------------------------------------
+2018-10-31 13:44:58,288 - INFO - Start training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
+2018-10-31 13:45:02,479 - INFO - Start querying to GBoost.
+2018-10-31 13:45:04,610 - INFO - Total time spent: 2.1304 s.
+2018-10-31 13:45:04,610 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:45:04,610 - INFO - Start querying to XGboost.
+2018-10-31 13:45:13,356 - INFO - Total time spent: 8.7457 s.
+2018-10-31 13:45:13,356 - INFO - --------------------------------------------------------------------------------------------
+2018-10-31 13:45:16,180 - INFO - Time to fit the model is 17s.
+2018-10-31 13:45:16,409 - INFO - Finish training Qeury Engine for Table store_sales, Column Set: ['ss_quantity', 'ss_ext_discount_amt']
+2018-10-31 13:45:16,409 - INFO - --------------------------------------------------
+2018-10-31 13:45:16,651 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:45:16,895 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:45:17,132 - INFO - This model exsits, not need to train, so just skip training! 
+2018-10-31 13:45:17,132 - INFO - {'web_page': {"['wp_char_count', 'wp_link_count']": <query_engine.QueryEngine object at 0x7f7584d276d8>}, 'time_dim': {"['t_minute', 't_hour']": <query_engine.QueryEngine object at 0x7f7584892d30>}, 'web_sales': {"['ws_sales_price', 'ws_quantity']": <query_engine.QueryEngine object at 0x7f7584d276a0>}, 'store_sales': {"['ss_quantity', 'ss_ext_sales_price']": <query_engine.QueryEngine object at 0x7f7584fdcc18>, "['ss_quantity', 'ss_ext_list_price']": <query_engine.QueryEngine object at 0x7f7584fc6320>, "['ss_quantity', 'ss_ext_tax']": <query_engine.QueryEngine object at 0x7f75848a4c88>, "['ss_quantity', 'ss_net_paid']": <query_engine.QueryEngine object at 0x7f757e933f28>, "['ss_quantity', 'ss_net_paid_inc_tax']": <query_engine.QueryEngine object at 0x7f75848c9898>, "['ss_quantity', 'ss_net_profit']": <query_engine.QueryEngine object at 0x7f75848ba5f8>, "['ss_quantity', 'ss_list_price']": <query_engine.QueryEngine object at 0x7f757e921b38>, "['ss_list_price', 'ss_list_price']": <query_engine.QueryEngine object at 0x7f7584fa7518>, "['ss_coupon_amt', 'ss_list_price']": <query_engine.QueryEngine object at 0x7f757e8fe7b8>, "['ss_wholesale_cost', 'ss_list_price']": <query_engine.QueryEngine object at 0x7f757e9217f0>, "['ss_sales_price', 'ss_quantity']": <query_engine.QueryEngine object at 0x7f757e900cc0>, "['ss_net_profit', 'ss_quantity']": <query_engine.QueryEngine object at 0x7f757eddada0>, "['ss_quantity', 'ss_ext_discount_amt']": <query_engine.QueryEngine object at 0x7f757e908240>}}
+2018-10-31 13:45:17,132 - INFO - DBEsti has been initialised, ready to serve... (248.6s)
