@@ -28,10 +28,10 @@ creg/*.pyc
 results/deletable.log
 notebook/
 data/tpcds5m/
-ss_1m.csv
-td_1m.csv
-wp_1m.csv
-ws_1m.csv
+data/tpcds1m/store_sales.csv
+data/tpcds1m/web_sales.csv
+data/tpcds1m/time_dim.csv
+data/tpcds1m/web_page.csv
 **/*.ipynb
 transfer/*
 *.DBEst
