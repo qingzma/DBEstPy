@@ -23,3 +23,4 @@ while 1:
                         lexer=SqlLexer,
                         )
     click.echo_via_pager(user_input)
+

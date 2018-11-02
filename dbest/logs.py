@@ -1,8 +1,13 @@
 #!/usr/bin/env python
 # coding=utf-8
+# import os, sys
+# script_path=os.path.dirname(__file__)
+# root_path=os.path.dirname(script_path)
+# sys.path.append(root_path)
+
 import logging.config
 import logging
-import core
+
 import os.path
 default_logger_name = "../results/deletable.log"
 
@@ -67,6 +72,7 @@ class QueryLogs:
 
 
 if __name__ == "__main__":
-    ql = QueryLogs()
-    coreQ = core.CRegression()
+    # import dbest.qreg
+    # ql = QueryLogs()
+    # coreQ = dbest.qreg.CRegression()
     print(os.path.abspath(os.path.join('.', os.pardir))+'/results/deletable.log')

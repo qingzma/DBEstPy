@@ -1,15 +1,18 @@
 #!/usr/bin/env python
 # coding=utf-8
 from __future__ import print_function, division
-import logs
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+from dbest import logs
+from dbest.tools import DataSource
+from dbest import tools
+from dbest.qreg import CRegression
+from dbest.query_engine import QueryEngine
+
 import pandas as pd
-from tools import DataSource
-import tools
-from core import CRegression
-from query_engine import QueryEngine
 from datetime import datetime
 import re
-import sys
 import gc # to delete variables
 import dill
 

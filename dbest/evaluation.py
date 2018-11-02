@@ -1,12 +1,15 @@
 from __future__ import print_function
-import tools
-import data_loader as dl
-from core import CRegression
+import os, sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+from dbest import tools
+from dbest import data_loader as dl
+from dbest import logs
+from dbest.qreg import CRegression
 import os
 import logging.config
 import json
 import logging
-import logs
+
 
 
 
