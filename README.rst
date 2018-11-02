@@ -1,12 +1,10 @@
-Sample Module Repository
+DBEst Repository
 ========================
 
-This simple project is an example repo for Python projects.
+This project implements the Approximate Query Processing engine (AQP) of DBEst.
+DBEst is a model-based AQP engine using regression models and density estimator.
 
-`Learn more <http://www.kennethreitz.org/essays/repository-structure-and-python>`_.
+Currently DBEst supports various aggregate funcitons, including COUNT, SUM, AVG, PERCENTILE, VARIANCE, STDDEV, MIN, MAX, etc.
+Group By is also supported.
 
 ---------------
-
-If you want to learn more about ``setup.py`` files, check out `this repository <https://github.com/kennethreitz/setup.py>`_.
-
-✨🍰✨
