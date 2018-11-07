@@ -4,14 +4,12 @@ from __future__ import print_function, division
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 from dbest.qreg import CRegression
-from dbest import tools
-from dbest import evaluation
+
 from dbest import logs
 from dbest import data_loader as dl
 from dbest import generate_random
 
 import numpy as np
-from scipy.stats import norm
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KernelDensity
 from scipy import integrate

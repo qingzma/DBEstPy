@@ -10,7 +10,7 @@ from dbest import tools
 
 
 import numpy as np
-import sys
+
 
 # Append pyspark  to Python Path
 #sys.path.append("/home/u1796377/Program/spark-2.1.0-bin-hadoop2.7")

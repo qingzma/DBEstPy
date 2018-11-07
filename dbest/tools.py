@@ -9,15 +9,10 @@ import random
 
 from sklearn import preprocessing
 
-# import pyspark
-# from pyspark.sql import SparkSession
-# from pyspark.mllib.regression import LabeledPoint
 
-##import findspark
-# findspark.init()
 import logging
 
-# from vispy.color import ColorArray
+
 
 # ----------------------------------------------------------------------------------------------------------------#
 # r = ColorArray('red')

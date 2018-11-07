@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# Learn more: https://github.com/kennethreitz/setup.py
-
 from setuptools import setup, find_packages
 
 
@@ -13,7 +11,7 @@ with open('LICENSE') as f:
 
 setup(
     name='dbest',
-    version='2.0',
+    version='2.1',
     description='Model-based Approximate Query Processing (AQP) engine.',
     classifiers=[
         'Development Status :: 2.0',
