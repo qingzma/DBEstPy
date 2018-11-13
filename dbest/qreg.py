@@ -3,41 +3,31 @@
 from __future__ import print_function, division
 import os, sys
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
-
+from datetime import datetime
+from collections import Counter
+import warnings
+import gc
 
 from dbest import tools
 
-
 import numpy as np
-
-
-# Append pyspark  to Python Path
-#sys.path.append("/home/u1796377/Program/spark-2.1.0-bin-hadoop2.7")
-
-
-from datetime import datetime
+from scipy import stats
 from sklearn import linear_model
 from sklearn import neighbors
 from sklearn import svm
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.model_selection import GridSearchCV
-from collections import Counter
-
 
 from xgboost import XGBRegressor
 from xgboost.sklearn import XGBRegressor as XGBRegressor_sklearn
 from xgboost.sklearn import XGBClassifier as XGBClassifier_sklearn
 
-from scipy import stats
-
+import matplotlib.pyplot as plt
 from matplotlib import gridspec
 from matplotlib.ticker import FuncFormatter
-import matplotlib.pyplot as plt
 from matplotlib import rcParams
 
-import warnings
-import gc
+
 
 
 color1 = (0.1, 0.3, 0.1)
@@ -79,10 +69,6 @@ class CRegression:
         self.apps_deployed = []
         index_of_models_in_classifier = []
 
-        # bool_time_term_in_classifier = False
-        # self.num_model_in_classifier = 10
-        # self.app_names_for_classifier = None
-        # self.apps_for_classifier = None
         self.ensemble_method_names = []
         self.ensemble_models_deployed = []
         self.classifier = None
@@ -131,29 +117,6 @@ class CRegression:
 
         # logging.basicConfig(level=logging.ERROR)
 
-    def _test_deployed_model(self, model, training_data):
-        '''
-        response = requests.post(
-            "http://localhost:1337/%s/predict" % app,
-            headers=headers,
-            data=json.dumps({
-                'input': list(get_test_point(training_data))
-            }))
-        result = response.json()
-        '''
-        result = model.predict(training_data)
-        print(result)
-
-    def get_test_point(self, training_data):
-        # print(list(training_data_model.features[1]))
-        # print(training_data)
-        # print(training_data.features)
-        # print(training_data.features[1])
-        # global sklearn_poly_model
-        # sklearn_poly_model = train_sklearn_poly_regression(training_data)
-        # print(sklearn_poly_predict_fn(training_data.features[1]))
-        # print(list(training_data[1].features))
-        return training_data.features[1]  # [13.0,1073.0, 0.663]
 
     def get_prediction(self, app, x):
         return app.predict(x)
@@ -254,24 +217,8 @@ class CRegression:
             end_i = datetime.now()
             time_classifier.append((end_i - start_i).total_seconds() * 1000.0)
             answer.modelID.append(model_number[0])
-
-            # response = requests.post(
-            #    "http://localhost:1337/%s/predict" % ClassifierClient.app_names_for_classifier[model_number[0]],
-            #    headers=headers,
-            #    data=json.dumps({
-            #        'input': list(element)
-            #    }))
-            # result = response.json()
-
-            # results.append(result["output"])
             answer.status.append(1)
-            # print(model_number[0])
-            # print(len(apps_deployed))
-            # print(element)
-            # print(list(element))
-            # print(np.array(list(element)).reshape(1,-1))
 
-            # print()
             value_tmp = self.apps_deployed[model_number[0]].predict(
                 np.array(list(element)).reshape(1, -1))
             value = value_tmp[0]
@@ -328,25 +275,6 @@ class CRegression:
         model_number = classifier.predict(X)
         return self.apps_deployed[model_number[0]].predict(np.array(x).reshape(1, -1))[0]
 
-    # # parse the data in a line
-    # def parsePoint(self, line):
-    #     values = [float(x) for x in line]
-    #     return LabeledPoint(values[3], values[0:3])
-
-    # return the traing data and tesing data, RDD values
-    def load_data(self, sc):
-        data = sc.textFile("OnlineNewsPopularity.csv")
-        filteredData = data.map(lambda x: x.replace(',', ' ')).map(lambda x: x.split()).map(
-            lambda x: (x[2], x[3], x[4], x[6]))
-        parsedData = filteredData.map(self.parsePoint)
-        query_training_data, trainingData, testingData = parsedData.randomSplit([
-                                                                                0.3, 0.3, 0.4])
-        return query_training_data, trainingData, testingData
-
-    # -------------------------------------------------------------------------------------------------
-    # def train_mllib_linear_regression_withSGD(self, trainingDataRDD):
-    #     return LinearRegressionWithSGD.train(trainingDataRDD, iterations=500, step=0.0000000000000001,
-    # convergenceTol=0.0001, intercept=True)  # ,initialWeights=np.array[1.0])
 
     def deploy_model_sklearn_linear_regression(self, training_data):
         def train_sklearn_linear_regression(trainingData):
@@ -423,9 +351,6 @@ class CRegression:
                 self.reg = reg
 
             def predict(self, x):
-                # print(x)
-                # print(self.reg.predict([x]))
-                # print(x)
                 return self.reg.predict(x)  # x[0]
 
         pwlf_model, time_train = train_pwlf_regression(training_data)
@@ -576,8 +501,11 @@ class CRegression:
             y = trainingData.labels
             start = datetime.now()
             if self.b_cross_validation:
-                parameters = {'max_depth': [1, 4, 10], 'loss': ['ls'], 'n_estimators': [100], 'learning_rate': [0.1],
-                              'min_impurity_split': [1e-1], 'learning_rate': [1e-1], 'min_samples_split': [7], 'verbose': [2], 'min_samples_leaf': [1], 'subsample': [1.0]}
+                parameters = {'max_depth': [1, 4, 10], 'loss': ['ls'], 
+                    'n_estimators': [100], 'learning_rate': [0.1],
+                    'min_impurity_split': [1e-1], 'learning_rate': [1e-1], 
+                    'min_samples_split': [7], 'verbose': [2], 
+                    'min_samples_leaf': [1], 'subsample': [1.0]}
                 clf = GridSearchCV(
                     GradientBoostingRegressor(), parameters, n_jobs=4)
                 clf.fit(X, y)
@@ -663,10 +591,6 @@ class CRegression:
         del y
         return reg, tools.app_xgboost, time_train
 
-        # self.apps_deployed.append(sklearn_decision_tree_model)
-        # self.app_names_deployed.append(app_name8)
-        # return sklearn_decision_tree_model
-        # -------------------------------------------------------------------------------------------------
 
     def deploy_all_models(self, training_data):
         self.app_names_deployed = []
@@ -1372,19 +1296,6 @@ class CRegression:
         ax1.plot(x, upper_bound, '--', label='uppper 95% CI', linewidth=2.0)
         ax1.scatter(answers.features[:, 0],
                     answers.labels, label="training data", s=2)
-        # for i in range(len(self.app_names_for_classifier)):
-        #     if answers.get_vispy_plot_data_2d(i) != []:
-        #         ax1.plot(answers.get_vispy_plot_data_2d(i)[:, 0],
-        #                  answers.get_vispy_plot_data_2d(i)[:, 1],
-        #                  symbols[i],
-        #                  label=names[i],
-        #                  linewidth=1.0)
-        # ax1.plot(answers.features[:, 0], answers.labels, symbols[5], label='training data', linewidth=0.0)
-        # lower_bound = [answers.predictions[i]-self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
-        # upper_bound = [answers.predictions[i]+self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
-        # ax1.plot(answers.features[:, 0], lower_bound, 'o', label='lower boundary', linewidth=0.0)
-        # ax1.plot(answers.features[:, 0], upper_bound, 'x', label='uppper boundary', linewidth=0.0)
-        # Now add the legend with some customizations.
         legend1 = ax1.legend(
             loc='upper right', shadow=True, fontsize=font_size)
 
@@ -1424,18 +1335,6 @@ class CRegression:
         ax1.plot(x, upper_bound, '--', label='uppper 95% PI', linewidth=2.0)
         ax1.scatter(answers.features[:, 0],
                     answers.labels, label="training data", s=2)
-        # for i in range(len(self.app_names_for_classifier)):
-        #     if answers.get_vispy_plot_data_2d(i) != []:
-        #         ax1.plot(answers.get_vispy_plot_data_2d(i)[:, 0],
-        #                  answers.get_vispy_plot_data_2d(i)[:, 1],
-        #                  label=names[i],
-        #                  linewidth=1.0)
-        # ax1.plot(answers.features[:, 0], answers.labels, symbols[5], label='training data', linewidth=0.0)
-        # lower_bound = [answers.predictions[i]-self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
-        # upper_bound = [answers.predictions[i]+self.CI(answers.features[i, 0]) for i in range(len(answers.labels))]
-        # ax1.plot(answers.features[:, 0], lower_bound, 'o', label='lower boundary', linewidth=0.0)
-        # ax1.plot(answers.features[:, 0], upper_bound, 'x', label='uppper boundary', linewidth=0.0)
-        # Now add the legend with some customizations.
         legend1 = ax1.legend(
             loc='upper right', shadow=True, fontsize=font_size)
 
@@ -1462,18 +1361,7 @@ class CRegression:
 
         fig = plt.figure()
         ax1 = plt.subplot()
-        # ax.plot(a, c, 'k--', label='Model length')
-        # ax.plot(a, d, 'k:', label='Data length')
-        # ax.plot(a, c + d, 'k', label='Total message length')
 
-        # for i in range(len(self.app_names_for_classifier)):
-        #     # print(answers.get_vispy_plot_data(i))
-        #     if answers.get_vispy_plot_data_2d(i) != []:
-        #         ax1.plot(answers.get_vispy_plot_data_2d(i)[:, 0],
-        #                  answers.get_vispy_plot_data_2d(i)[:, 1],
-        #                  symbols[i],
-        #                  label=names[i],
-        #                  linewidth=0.0)
 
         for i in range(len(self.app_names_for_classifier)):
             ax1.plot(answers_from_all_models[i].features[:, 0],
@@ -1521,9 +1409,6 @@ class CRegression:
         colors = [r, g, blue, color1, color2, color3, color4, color5]
         symbols = tools.markers_matplotlib
         for i in range(len(self.app_names_for_classifier)):
-            # print(answers.headers)
-            # print(answers.headers[0])
-            # print(answers.headers[1])
             if answers.get_vispy_plot_data_2d(i) != []:
                 fig1.plot(answers.get_vispy_plot_data_2d(i), symbol=symbols[i], width=0.0, marker_size=6.,
                           # color=colors[i],
@@ -1552,9 +1437,6 @@ class CRegression:
 
         fig = plt.figure()
         ax1 = fig.add_subplot(111, projection='3d')
-        # ax.plot(a, c, 'k--', label='Model length')
-        # ax.plot(a, d, 'k:', label='Data length')
-        # ax.plot(a, c + d, 'k', label='Total message length')
 
         for i in range(len(self.app_names_for_classifier)):
             # print(answers.get_vispy_plot_data(i))
@@ -2008,26 +1890,7 @@ class CRegression:
         # ax2.set_xlim([ll,rl_plus_1])
 
         ax2.legend()
-        # set x ticks
-        # xticks_ax2=[]
-        # for i in range(bin_num):
-        #     xticks_ax2.append("%.1f"%(bar_width*(i+1)*100)+"%")
-        # xticks_ax2.append("rest")
-        # ax2.set_xticklabels(xticks_ax2)
 
-        # for i in range(num_of_regressions-1):
-        #     plot_index=int(str(num_of_regressions)+str(1)+str(i+2))
-
-        #     ax2 = fig.add_subplot(plot_index)
-        #     # Create the histgram
-        #     n, bins, patches = ax2.hist([abs(res_to_plot[num_of_regressions-1]), abs(res_to_plot[i])],bins=num_of_bins,normed=True,label=['CRegression',xlabels[i]])
-        #     formatter = FuncFormatter(to_percent2)
-        #     plt.gca().yaxis.set_major_formatter(formatter)
-        #     formatter0 = FuncFormatter(to_percent0)
-        #     plt.gca().xaxis.set_major_formatter(formatter0)
-        #     ax2.set_ylabel("Probability")
-        #     ax2.set_xlabel("Absolute error")
-        #     ax2.legend()
         plt.show()
         return variance
 
@@ -2750,7 +2613,22 @@ class CRegression:
         if self.training_data is not None:
             del self.training_data
         gc.collect()
-        
+
+    # to be delete
+    def _test_deployed_model(self, model, training_data):
+        result = model.predict(training_data)
+        print(result)
+
+    def get_test_point(self, training_data):
+        return training_data.features[1]  # [13.0,1073.0, 0.663]
+    def load_data(self, sc):
+        data = sc.textFile("OnlineNewsPopularity.csv")
+        filteredData = data.map(lambda x: x.replace(',', ' ')).map(lambda x: x.split()).map(
+            lambda x: (x[2], x[3], x[4], x[6]))
+        parsedData = filteredData.map(self.parsePoint)
+        query_training_data, trainingData, testingData = parsedData.randomSplit([
+                                                                                0.3, 0.3, 0.4])
+        return query_training_data, trainingData, testingData
 
 # -------------------------------------------------------------------------------------------------
 if __name__ == "__main__":
