@@ -5,6 +5,6 @@ sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 import threading
 
 
-class ModelsInThreads(model):
+class ModelsInThreads():
 	pass
 

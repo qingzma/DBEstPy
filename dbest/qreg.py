@@ -497,6 +497,7 @@ class CRegression:
     def deploy_model_sklearn_ensemble_gradient_tree_boosting(self, training_data):
         from sklearn.ensemble import GradientBoostingRegressor
         def train_sklearn_ensemble_gradient_tree_boosting(trainingData):
+            warnings.filterwarnings(action='ignore', category=DeprecationWarning)
             X = trainingData.features
             y = trainingData.labels
             start = datetime.now()

@@ -28,7 +28,7 @@ setup(
     packages=['dbest'],#find_packages(exclude=('tests', 'docs','results'))
     zip_safe=False,
     install_requires=[
-          'xgboost','numpy'
+          'xgboost','numpy','dill'
       ],
     test_suite='nose.collector',
     tests_require=['nose'],
