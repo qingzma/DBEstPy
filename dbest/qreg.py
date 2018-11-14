@@ -113,7 +113,7 @@ class CRegression:
         self.dataset_name = None
         self.b_cross_validation = b_cross_validation
 
-        warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+        # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
         # logging.basicConfig(level=logging.ERROR)
 
@@ -504,11 +504,12 @@ class CRegression:
             if self.b_cross_validation:
                 parameters = {'max_depth': [1, 4, 10], 'loss': ['ls'], 
                     'n_estimators': [100], 'learning_rate': [0.1],
-                    'min_impurity_split': [1e-1], 'learning_rate': [1e-1], 
+                    # 'min_impurity_split': [1e-1], 
+                    'learning_rate': [1e-1], 
                     'min_samples_split': [7], 'verbose': [2], 
                     'min_samples_leaf': [1], 'subsample': [1.0]}
                 clf = GridSearchCV(
-                    GradientBoostingRegressor(), parameters, n_jobs=4)
+                    GradientBoostingRegressor(), parameters, n_jobs=4,cv=3)
                 clf.fit(X, y)
                 reg = clf.best_estimator_
             else:
@@ -542,7 +543,7 @@ class CRegression:
             if self.b_cross_validation:
                 parameters = {'max_depth': range(3, 20)}
                 clf = GridSearchCV(DecisionTreeRegressor(),
-                                   parameters, n_jobs=4)
+                                   parameters, n_jobs=4,cv=3)
                 clf.fit(X, y)
                 reg = clf.best_estimator_
             else:
@@ -574,7 +575,7 @@ class CRegression:
         start = datetime.now()
         if self.b_cross_validation:
             parameters = {'max_depth': [1, 8, 12]}
-            clf = GridSearchCV(XGBRegressor_sklearn(), parameters, n_jobs=4,verbose=0)
+            clf = GridSearchCV(XGBRegressor_sklearn(), parameters, n_jobs=4,verbose=0,cv=3)
             clf.fit(X, y)
             reg = clf.best_estimator_
         else:
@@ -858,7 +859,7 @@ class CRegression:
             if self.b_cross_validation:
                 parameters = {'max_depth': [1, 4, 8, 12]}
                 clf = GridSearchCV(XGBClassifier_sklearn(),
-                                   parameters, n_jobs=4)
+                                   parameters, n_jobs=4,cv=3)
                 clf.fit(training_data_classifier.features, y_classifier)
                 classifier = clf.best_estimator_
             else:

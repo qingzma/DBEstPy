@@ -67,7 +67,7 @@ class DBEst:
         self.modelCatalog = {}
         self.tableColumnSets = []  # store all QeuryEngines, for each table
         self.base_models = base_models
-        warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+        # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
     def generate_model_catalog_string(self, client, table_name, columnPairs, groupbyID=None, groupby_value=None):
         """Generate the string holding the model catalog information, each model has a unique model catalog
@@ -636,10 +636,10 @@ class DBEst:
             del self.df
         gc.collect()
 
-    def del_client(self, table, columnItem):
-        # self.DBEstClients[table][str(columnItem)]=None
-        del self.DBEstClients[table][str(columnItem)]
-        gc.collect()
+    # def del_client(self, table, columnItem):
+    #     # self.DBEstClients[table][str(columnItem)]=None
+    #     del self.DBEstClients[table][str(columnItem)]
+    #     gc.collect()
 
     def get_size(self):
         size = 0

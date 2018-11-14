@@ -16,7 +16,7 @@ from scipy import integrate
 from datetime import datetime
 import warnings
 import gc
-import dill
+import pickle
 
 
 epsabs = 10         #1E-3
@@ -63,7 +63,7 @@ class QueryEngine:
         self.x_min = min(self.training_data.features)
         self.x_max = max(self.training_data.features)
 
-        warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+        # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
     def density_estimation(self, kernel=None):
         """Estimate the density of points.
@@ -613,7 +613,11 @@ class QueryEngine:
         return max(predictions), time_cost
 
     def get_size(self):
-        str_size=dill.dumps(self)
+        # str_size=dill.dumps(self)
+        # self.__sizeof__ = sys.getsizeof(str_size)
+        # gc.collect()
+        # return self.__sizeof__
+        str_size=pickle.dumps(self)
         self.__sizeof__ = sys.getsizeof(str_size)
         gc.collect()
         return self.__sizeof__
