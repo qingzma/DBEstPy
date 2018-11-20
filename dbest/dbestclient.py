@@ -15,8 +15,8 @@ import pandas as pd
 from datetime import datetime
 import re
 import gc  # to delete variables
-import dill
 import warnings
+import pickle
 
 logger_file = "../results/deletable.log"
 
@@ -641,11 +641,14 @@ class DBEst:
     #     del self.DBEstClients[table][str(columnItem)]
     #     gc.collect()
 
-    def get_size(self):
-        size = 0
-        for table in self.DBEstClients:
-            for columnItem in self.DBEstClients[table]:
-                size = size + self.DBEstClients[table][columnItem].get_size()
+    def get_size(self, b_models_only=True):
+        if b_models_only:
+            size = 0.0
+            for table in self.DBEstClients:
+                for columnItem in self.DBEstClients[table]:
+                    size = size + self.DBEstClients[table][columnItem].get_size()
+        else:
+            size = sys.getsizeof(pickle.dumps(self))
         return size
 
     def show_tables(self):
@@ -750,7 +753,7 @@ def run_tpcds_multi_columns():
     #                     num_of_points={'store_sales': '2685596178'})
 
     print(db.get_size())
-
+    # print(db.get_size(b_models_only=False))
 
 def run_powerplant_multi_columns():
     db = DBEst(dataset="pp")
