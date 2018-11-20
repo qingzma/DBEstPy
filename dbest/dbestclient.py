@@ -134,7 +134,7 @@ class DBEst:
         if client_identifier in self.DBEstClients:
             del self.DBEstClients[client_identifier]
         else:
-            self.logger.logger.info("No such model in DBEst, so could not operate the delete operation.")
+            self.logger.logger.info("No such model in DBEst, so could not operate the deletion operation.")
 
     def init_whole_range(self, file, table, columnItems, num_of_points=None):
         """Build DBEst table for a table, with different combinations of column pairs.
@@ -648,7 +648,8 @@ class DBEst:
                 for columnItem in self.DBEstClients[table]:
                     size = size + self.DBEstClients[table][columnItem].get_size()
         else:
-            size = sys.getsizeof(pickle.dumps(self))
+            str_size=pickle.dumps(self)
+            size = sys.getsizeof(str_size)            
         return size
 
     def show_tables(self):
@@ -752,7 +753,7 @@ def run_tpcds_multi_columns():
     #                     ],
     #                     num_of_points={'store_sales': '2685596178'})
 
-    print(db.get_size())
+    print(db.get_size(b_models_only=False))
     # print(db.get_size(b_models_only=False))
 
 def run_powerplant_multi_columns():
