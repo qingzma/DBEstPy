@@ -19,7 +19,7 @@ import warnings
 import pickle
 
 logger_file = "../results/deletable.log"
-
+line_break="-----------------------------------------------------------------------------------------"
 
 # epsabs = 10         #1E-3
 # epsrel = 1E-01      #1E-1
@@ -54,7 +54,7 @@ class DBEst:
         uniqueTCS (list): Description
     """
 
-    def __init__(self, dataset="tpcds", logger_file=logger_file, base_models=[tools.app_xgboost]):
+    def __init__(self, dataset, logger_file=logger_file, base_models=[tools.app_xgboost]): 
         self.dataset = dataset
         self.logger = logs.QueryLogs(log=logger_file)
         self.logger.set_level("INFO")
@@ -64,24 +64,26 @@ class DBEst:
         self.num_of_points = {}
         self.df = {}
         self.DBEstClients = {}
-        self.modelCatalog = {}
+        self.model_catalog = {}
         self.tableColumnSets = []  # store all QeuryEngines, for each table
         self.base_models = base_models
+        self.logger.logger.info("Ready to server queries!")
+        self.logger.logger.info(line_break)
         # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
-    def generate_model_catalog_string(self, client, table_name, columnPairs, groupbyID=None, groupby_value=None):
+    def generate_model_catalog_string(self, table_name, columnPair, groupbyID=None, groupby_value=None):
         """Generate the string holding the model catalog information, each model has a unique model catalog
 
         Args:
             client (TYPE):  DBEst client, consists of a regrssion model and a density estimator
             table_name (String): the table name
-            columnPairs (List): the coolumn pair for a query
+            columnPair (List): the coolumn pair for a query
             groupbyID (None, String): groupby attribute
             groupby_value (None, String): groupby value, for example, group by month, you should input 'January', etc.
         Returns:
             String: the model catalog
         """
-        client_identifier = str(columnPairs)
+        client_identifier = str(columnPair)
         if groupbyID != None:
             # Check if the groupby_value is provided.
             if groupby_value == None:
@@ -91,13 +93,13 @@ class DBEst:
             client_identifier += str([groupbyID, groupby_value])
         return client_identifier
 
-    def check_and_add_client(self, client, table_name, columnPairs, groupbyID=None, groupby_value=None):
+    def check_and_add_client(self, client, table_name, columnPair, groupbyID=None, groupby_value=None):
         """Summary
 
         Args:
             client (TYPE): DBEst client, consists of a regrssion model and a density estimator
             table_name (String): the table name
-            columnPairs (List): the coolumn pair for a query
+            columnPair (List): the coolumn pair for a query
             groupbyID (None, String): groupby attribute
             groupby_value (None, String): groupby value, for example, group by month, you should input 'January', etc.
         """
@@ -113,30 +115,94 @@ class DBEst:
                 self.logger.logger.warning("Please provide the groupby_value!")
                 return
         client_identifier = self.generate_model_catalog_string(
-            client, table_name, columnPairs, groupbyID, groupby_value)
+            table_name, columnPair, groupbyID, groupby_value)
         if client_identifier not in self.DBEstClients:
             self.DBEstClients[table_name][client_identifier]=client
         else:
             self.logger.logger.info(client_identifier+" exists in DBEst, so ignore adding it.")
 
-    def del_client(self,client, table_name, columnPairs, groupbyID=None, groupby_value=None):
+    def del_client(self,client, table_name, columnPair, groupbyID=None, groupby_value=None):
         """ delete a DBEst client
         
         Args:
             client (TYPE): DBEst client, consists of a regrssion model and a density estimator
             table_name (String): the table name
-            columnPairs (List): the coolumn pair for a query
+            columnPair (List): the coolumn pair for a query
             groupbyID (None, String): groupby attribute
             groupby_value (None, String): groupby value, for example, group by month, you should input 'January', etc.
         """
         client_identifier = self.generate_model_catalog_string(
-            client, table_name, columnPairs, groupbyID, groupby_value)
+            table_name, columnPair, groupbyID, groupby_value)
         if client_identifier in self.DBEstClients:
             del self.DBEstClients[client_identifier]
         else:
             self.logger.logger.info("No such model in DBEst, so could not operate the deletion operation.")
 
-    def init_whole_range(self, file, table, columnItems, num_of_points=None):
+    def add_pair_client(self, file, table_name, columnPair, num_of_points, groupbyID=None, groupby_value=None):
+        start_time = datetime.now()
+        # check if the table exists in model catalog, if not, create one.
+        if table_name not in self.model_catalog:
+            self.model_catalog[table_name]={}
+            self.df[table_name]={}
+
+        model_index = self.generate_model_catalog_string(table_name, columnPair, groupbyID, groupby_value)
+        if model_index in self.model_catalog[table_name]:
+            self.logger.logger.warning(model_index +" already in DBEst, skip training!")
+            self.logger.logger.info(line_break)
+            return
+        else:
+            self.logger.logger.info("Start training "+model_index)
+
+            self.df[table_name][model_index] = pd.read_csv(file)
+            self.df[table_name][model_index] = self.df[table_name][model_index].dropna()
+            headerX = columnPair[0]
+            headerY = columnPair[1]
+            x = self.df[table_name][model_index][[headerX]].values
+            y = self.df[table_name][model_index][[headerY]].values.reshape(-1)
+
+            data = DataSource()
+            data.features = x
+            data.labels = y
+            data.headers = columnPair
+            data.file = file
+            # self.data.removeNAN()
+
+            cRegression = CRegression(
+                logger_object=self.logger, base_models=self.base_models)
+            cRegression.fit(data)
+
+            qe = QueryEngine(
+                cRegression, logger_object=self.logger,
+                num_training_points=num_of_points)
+            qe.density_estimation()
+            cRegression.clear_training_data()
+            # qe.get_size()
+            self.model_catalog[table_name][model_index] = qe
+
+            self.logger.logger.info("Finish training model "+model_index + " for Table "+table_name)
+            end_time = datetime.now()
+            time_cost = (end_time - start_time).total_seconds()
+            self.logger.logger.info("Ready to serve... (%.1fs)"% time_cost)
+            self.logger.logger.info(line_break)
+            return qe
+            
+    def del_pair_client(self, table_name, columnPair,  groupbyID=None, groupby_value=None):
+        model_index = self.generate_model_catalog_string(table_name, columnPair, groupbyID, groupby_value)
+        del self.model_catalog[table_name][model_index]
+        self.logger.logger.info(model_index+" has been deleted from model catalog.")
+        self.logger.logger.info(line_break)
+
+
+
+
+
+
+
+
+
+
+
+    def init_whole_range(self, file, table, columnItems, num_of_points):
         """Build DBEst table for a table, with different combinations of column pairs.
 
         Args:
@@ -155,8 +221,8 @@ class DBEst:
                            for i in range(len(columnItems))]
         # self.logger.logger.info(tableColumnSets)
 
-        if not hasattr(self, 'df'):
-            self.df = {}
+        # if not hasattr(self, 'df'):
+        #     self.df = {}
 
         if self.dataset == "tpcds":
             # initialise the column set, tables in TPC-DS dataset.
@@ -665,6 +731,61 @@ class DBEst:
             self.logger.logger.info(model)
             for client in self.DBEstClients[model]:
                 self.logger.logger.info(client)
+    def serialize_model(self,model):
+        str_=pickle.dumps(model)
+        # print(sys.getsizeof(str_))
+        return str_
+    def deserialize_model(self,model_str):
+        return pickle.loads(model_str)
+
+def run_add_pair_client():
+    log_file = "../results/DBEsti_tpcds_100k_all.log"
+    db = DBEst(dataset="tpcds", logger_file=log_file)
+    db.add_pair_client(file='../data/tpcDs10k/store_sales.csv', table_name="store_sales",
+        columnPair=["ss_quantity", "ss_ext_sales_price"],num_of_points=2685596178)
+    db.add_pair_client(file='../data/tpcDs10k/store_sales.csv', table_name="store_sales",
+        columnPair=["ss_quantity", "ss_ext_list_price"],num_of_points=2685596178)
+    db.add_pair_client(file='../data/tpcDs10k/store_sales.csv', table_name="store_sales",
+        columnPair=["ss_quantity", "ss_ext_sales_price"],num_of_points=2685596178)
+
+    db.del_pair_client(table_name="store_sales",
+        columnPair=["ss_quantity", "ss_ext_sales_price"])
+    db.add_pair_client(file='../data/tpcDs10k/store_sales.csv', table_name="store_sales",
+        columnPair=["ss_quantity", "ss_ext_sales_price"],num_of_points=2685596178)
+
+def test_serialize():
+    log_file = "../results/DBEsti_tpcds_100k_all.log"
+    db = DBEst(dataset="tpcds", logger_file=log_file)
+    model=db.add_pair_client(file='../data/5m.csv', table_name="store_sales",
+        columnPair=["ss_list_price","ss_wholesale_cost"],num_of_points=2685596178)
+    print(model.cregression.predict([20]))
+    model_str=db.serialize_model(model)
+    model=db.deserialize_model(model_str)
+    print(model.cregression.predict([20]))
+
+
+
+
+
+    # db.init_whole_range(file='../data/tpcDs10k/store_sales.csv',
+    #                     table="store_sales",
+    #                     columnItems=[
+    #                         ["ss_quantity", "ss_ext_sales_price"],
+    #                         ["ss_quantity", "ss_ext_list_price"],
+    #                         ["ss_quantity", "ss_ext_tax"],
+    #                         ["ss_quantity", "ss_net_paid"],
+    #                         ["ss_quantity", "ss_net_paid_inc_tax"],
+    #                         ["ss_quantity", "ss_net_profit"],
+    #                         ["ss_quantity", "ss_list_price"],
+    #                         ["ss_list_price", "ss_list_price"],
+    #                         ["ss_coupon_amt", "ss_list_price"],
+    #                         ["ss_wholesale_cost", "ss_list_price"],
+    #                         ["ss_sales_price", "ss_quantity"],
+    #                         ["ss_net_profit", "ss_quantity"],
+    #                         ["ss_quantity", "ss_ext_discount_amt"],
+    #                     ],
+    #                     num_of_points={'store_sales': '2685596178'})
+
 
 
 def run_sample_whole_range():
@@ -814,8 +935,9 @@ def run_501_group_by():
 
 
 if __name__ == "__main__":
-    warnings.filterwarnings(action='ignore', category=DeprecationWarning)
-    run_tpcds_multi_columns()
+    # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
+    # run_add_pair_client()
+    test_serialize()
     # log_file= "../results/DBEsti_tpcds_100k_all.log"
     # db = DBEst(dataset="tpcds",logger_file=log_file)
     # file = "../data/tpcds5m/ss_5m.csv"

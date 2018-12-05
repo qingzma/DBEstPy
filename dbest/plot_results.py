@@ -1738,7 +1738,303 @@ def plt_group_by_memory_usage_xgboost():
 
     plt.show()
 
+def plt_qreg_5d_all_gboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.258380136,1.15068287,1.268301136,1.733106718,1.304683412,1.047334284,1,1.12319753]
+    y2=[1.104369805,1.121203432,1.030391071,1.707040062,1.226973796,1.023649057,1,1.057215493]
+    # X = np.arange(2)
 
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('XGboost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,1.8])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/5d_all_gboost.pdf", bbox_inches='tight')
+
+def plt_qreg_5d_all_xgboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.33016406,1.203790881,1.226169949,8.725116227,1.398625775,1.046487533,1.000312056,1.145814976]
+    y2=[1.094605234,1.031325017,1.201777986,1.011646806,1.036660731,1.022319881,1,1.031595393]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('GBoost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,1.8])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/5d_all_xgboost.pdf", bbox_inches='tight')
+
+def plt_qreg_4d_all_gboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.255179409,1.144666109,1.171040158,1.719770663,1.172163909,1.029519354,1.0,1.129121701]
+    y2=[1.111063072,1.103036824,1.062702969,1.70154241,1.079607725,1.014047491,1.0,1.057749707]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('XGboost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,1.8])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/4d_all_gboost.pdf", bbox_inches='tight')
+
+def plt_qreg_4d_all_xgboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.328834625,1.188130648,1.152159565,8.144936446,1.160754681,1.028199225,1.000312522,1.140370554]
+    y2=[1.078060376,1.046809325,1.072493416,1.009619958,1.076673209,1.014322855,1,1.032626243]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('GBoost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,1.8])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/4d_all_xgboost.pdf", bbox_inches='tight')
+
+# -----------------------------------------------------------------------------------
+
+def plt_qreg_5d_20_gboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[6.262674613,1.408869412,2.571591463,1.733106718,2.098165628,1.203151256,1.0,1.240643516]
+    y2=[1.018527856,1.299619899,1.045053009,1.707040062,1.809182459,1.095678729,1.0,1.133271403]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('XGboost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,3])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/5d_20_gboost.pdf", bbox_inches='tight')
+
+def plt_qreg_5d_20_xgboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.350480679,1.760293749,1.804700949,15.75397076,2.978374011,1.218450222,1.000399372,1.384219496]
+    y2=[1.065880997,1.071900781,1.708882995,1.00589506,1.161744503,1.080354967,1,1.087235847]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('GBoost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,3])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/5d_20_xgboost.pdf", bbox_inches='tight')
+
+def plt_qreg_4d_20_gboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[8.7049404,1.385833011,1.968796846,1.719770663,1.693530178,1.114288095,1.0,1.215151202]
+    y2=[1.020434842,1.237549681,1.191694511,1.70154241,1.311740762,1.030646717,1.0,1.124459639]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('XGboost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,2])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/4d_20_gboost.pdf", bbox_inches='tight')
+
+def plt_qreg_4d_20_xgboost_win_NRMSE():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    x = np.arange(1,9)
+    y1=[1.337221096,1.707164074,1.629248301,14.06955886,1.773262497,1.095319195,1.000399552,1.353009814]
+    y2=[1.03650826,1.114213952,1.297107356,1.00625691,1.34056072,1.046021968,1,1.073025246]
+    # X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(x, y1, color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(x+width, y2, color=colors["BlinkDB_10k"], width=width, alpha=alpha['5'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    # p1[1].set_color(colors["BlinkDB_10k"])
+    plt.legend((p1[0], p2[0]),
+               ('GBoost', 'QReg',), loc='upper right', prop={'size': 15})
+
+    plt.xticks(x, ("1", '2', '3', '4','5','6','7','8'))
+    ax.set_ylabel("NRMSE Ratio")
+    ax.set_xlabel("Dataset ID")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.18)
+    plt.subplots_adjust(left=0.18)
+    plt.ylim([1,2])
+
+    plt.show()
+    fig.savefig(
+        "/Users/qingzhima/Desktop/NRMSE/4d_20_xgboost.pdf", bbox_inches='tight')
 ##----------------------------------------------------------------------------------------##
 if __name__ == "__main__":
-    plt_ccpp_multi_cp_response_time_xgboost()
+    plt_qreg_5d_20_gboost_win_NRMSE()

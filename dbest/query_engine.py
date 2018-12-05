@@ -622,6 +622,15 @@ class QueryEngine:
         gc.collect()
         return self.__sizeof__
 
+    def set_name(name):
+        self.name = name
+
+    def get_name(self):
+        if hasattr(self, 'name'):
+            return self.name
+        else:
+            return None
+
 
 if __name__ == "__main__":
     import generate_random
