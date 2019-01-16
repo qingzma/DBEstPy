@@ -78,7 +78,7 @@ class CRegression:
         self.predictions_testing = None
 
         if not logger_object:
-            import logs
+            from dbest import logs
             logger_object = logs.QueryLogs()
         self.logger = logger_object.logger
         self.logger_name = logger_object.logger_name
@@ -2496,7 +2496,7 @@ class CRegression:
             NRMSE_comparisons.append(NRMSE_comparisons_i)
 
         # compute the NRMSE total for base models
-        error_reversed = map(list, zip(*error_models))
+        error_reversed = list(map(list, zip(*error_models)))
         NRMSE_total = []
         for i in range(len(self.apps_deployed) + 1):
             errors_model_i = error_reversed[i]
@@ -2633,9 +2633,10 @@ class CRegression:
         return query_training_data, trainingData, testingData
 
 # -------------------------------------------------------------------------------------------------
-if __name__ == "__main__":
+
+def removable():
     import data_loader as dl
-    from pympler import asizeof
+    # from pympler import asizeof
     data = dl.load2d(5)
 
     # training_data, testing_data = tools.split_data_to_2(data, 0.66667)
@@ -2653,7 +2654,7 @@ if __name__ == "__main__":
     testing_data = data.get_before(5)
     print(testing_data.features[0])
     print(cr.predict(testing_data.features[0]))
-    print(asizeof.asizeof(cr))
+    # print(asizeof.asizeof(cr))
     # cs.fit(training_data, testing_data)
 
     # cs = CRegression(base_models=[tools.app_linear,tools.app_poly,tools.app_pwlf],b_show_plot=True)
@@ -2679,3 +2680,17 @@ if __name__ == "__main__":
     # cr.boxplot_with_barplot(proportion_to_show=0.1, bar_width=0.01,cumulative=True,\
     #     b_show_rest=False,y_limit=[0,1.1])
     # cr.boxplot_with_hist_percent(proportion_to_show=0.40, bin_percent=0.01)
+
+if __name__ == "__main__":
+    import logs
+    import data_loader
+    logger=logs.QueryLogs("1.log")
+    data=data_loader.load4d(5)
+    # data.to_csv("/home/u1796377/Workspace/DBEst/data/5d/8.csv")
+    cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],
+            #tools.app_boosting,tools.app_xgboost],\
+            ensemble_models=[tools.app_adaboost,tools.app_boosting, tools.app_xgboost],
+            b_show_plot=True, logger_object=logger)
+    cr.run(data)
+
+

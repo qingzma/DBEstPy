@@ -17,7 +17,7 @@ from dbest import logs
 
 
 class Confidence:
-    def __init__(self,file,headerX,headerY, qreg=None):
+    def __init__(self,file,headerX,headerY, qreg=None,bucket_size=10,data_size=2685596178):
         self.data=pd.read_csv(file)
         self.data.dropna(subset=[headerX,headerY])
         self.data=self.data[~self.data[headerX].isin(["nan"])]
@@ -28,15 +28,124 @@ class Confidence:
         self.headerX=headerX
         self.headerY=headerY
         self.qreg=qreg
+        self.bucket_size=bucket_size
+        self.data_size=2685596178
+        self.sample_size=len(self.x)
         # self.x=[1,1,1.1,2,2,2,3,3,4,5,5]
         # self.y=[1,1,1.1,2,2,2,3,3,4,5,5]
+        # self.x=np.linspace(0,100,1000)
+        # self.y=np.linspace(0,200,1000)
 
-    def fit1(self):
-        backet_size=2
+    def fit_count(self):
+        # backet_size=2
         self.x, self.y = zip(*sorted(zip(self.x, self.y)))
         # print(self.x)
         # print(self.y)
-        generate_bucket(self.x, self.y, bucket_size=backet_size, func='count')
+        self.buckets_count=generate_bucket_count(self.x, self.y, bucket_size=self.bucket_size)
+        # self.buckets_count.print()
+
+    def predict_count_point(self,x):
+        index_left=0
+        index_right=len(self.buckets_count.buckets)-1
+        index = int(len(self.buckets_count.buckets)/2)
+        loop_count=0
+        index_last=5
+        while True:
+            loop_count+=1
+
+            #check if within the last buckets
+            if self.buckets_count.buckets[len(self.buckets_count.buckets)-1].interval.if_contains(x)==0:
+                index=len(self.buckets_count.buckets)-1
+                return self.buckets_count.buckets[index].count,index,None, None
+            else:
+
+                # print(index)
+
+                if self.buckets_count.buckets[index].interval.if_contains(x)==0:
+                    # print(self.buckets_count.buckets[index].name)
+                    return self.buckets_count.buckets[index].count,index,None, None
+                    
+                # less 
+                elif self.buckets_count.buckets[index].interval.if_contains(x)==-1:
+                    # print("less")
+                    index_right=index
+                    index=int((index_left+index_right)/2)
+                # higher
+                else:
+                    # print("higher")
+                    index_left=index
+                    index=int((index_left+index_right)/2)
+                    # print(index)
+                    # print(index_right)
+                    index=min(index,len(self.x)-1)
+                    # print(index)
+
+                if index_last==index:
+                    # print("Info---No records! return None!")
+                    return None, None,self.buckets_count.buckets[index].count,index
+                
+
+                if loop_count>200:
+                    print("maximum loop reached!")
+                    return None, None,self.buckets_count.buckets[index].count,index  #self.buckets_count.buckets[index].count,index
+                index_last=index
+
+
+
+    def predict_count_range(self,x1,x2):
+        count_low,index_low,count_low_right,index_low_right=self.predict_count_point(x1)
+        if count_low==None:
+            count_low=0
+        if x1==x2:
+            if self.buckets_count.buckets[index_low].unique:
+                return count_low, 0.00
+            else:
+                return count_low/2, 0.50
+        
+        count_high,index_high,count_high_right,index_high_right=self.predict_count_point(x2)
+        if count_high ==None:
+            count_high=0
+        # print(index_low)
+        # print(index_high)
+        counts=0
+        error=0
+        if index_low is not None:
+            if self.buckets_count.buckets[index_low].unique:
+                counts=count_low
+                error=0
+            else:
+                counts+=count_low/2
+                error+=count_low/2
+        else: 
+            counts+=0
+            error+=0
+            index_low = index_low_right 
+
+        if index_high is not None:
+            if self.buckets_count.buckets[index_high].unique:
+                counts+=count_high
+                error=0
+            else:
+                counts+=count_high/2
+                error+=count_high/2
+        else: 
+            counts+=0
+            error+=0
+            index_high=index_high_right
+
+        
+
+
+        for index in range(index_low+1,index_high):
+            counts+= self.buckets_count.buckets[index].count
+
+        return int(counts*self.data_size/self.sample_size), error/counts
+            
+
+
+
+
+
 
 
 
@@ -126,18 +235,24 @@ class Interval:
         self.right=right
     def name(self):
         return str('['+str(self.left)+', '+str(self.right)+')')
-    def b_in(self, x):
+    def if_contains(self, x):
+
         if x>=self.left and x<self.right:
-            return True
+            return 0
         if self.left == self.right and self.left ==x:
-            return True
-        return False
+            return 0
+        if x<self.left:
+            return -1
+        if x>=self.right:
+            return 1
+        
 class Bucket:
-    def __init__(self,interval_i, count_i,sum_i):
+    def __init__(self,interval_i, count_i,sum_i, unique=False):
         self.interval=interval_i
         self.count=count_i
         self.sum=sum_i
         self.name=interval_i.name()
+        self.unique=unique
 
 
 class Buckets:
@@ -159,7 +274,7 @@ class Buckets:
 
 
 
-def generate_bucket(x,y,bucket_size,func='count'):
+def generate_bucket_count(x,y,bucket_size):
     if len(x) != len(y):
         print('size mismatch in generate_bucket(), quit!')
         return
@@ -169,9 +284,75 @@ def generate_bucket(x,y,bucket_size,func='count'):
     b_last_is_unique=False
 
     buckets = Buckets()
-    # mins={}
-    left_end = min(x)
-    right_end = max(x)
+
+
+    if len(x)<=bucket_size:
+        # print('Only one bucket is needed to hold all data!')
+        buckets.add_bucket(Interval(min(x),max(x)),len(x),sum(x))
+        
+    index_low=0
+    index_high=bucket_size-1
+    while index_high < len(x)-1:
+        b_unique=False
+        #check if bucket contains only unique x
+        if x[index_low] == x[index_high]:
+            b_unique=True
+            count_unique +=1
+            index_high+=1
+            while x[index_low] == x[index_high]:
+                index_high+=1
+                if  index_high ==len(x):
+                    b_last_is_unique=True
+                    break
+            index_high-=1
+
+        # check if x should go to the next bucket
+        elif x[index_high] == x[index_high+1]:
+            index_high-=1
+            while x[index_high] == x[index_high+1]:
+                index_high-=1
+            # print('bucket shrinks, low and high are [{},{})'.format(x[index_low],x[index_high]))
+            count_not_full+=1
+  
+        # return
+        if  b_last_is_unique:
+            # index_low=index_high+1
+            # print("insert last unique bucket")
+            index_high=index_low+bucket_size-1
+            # print(index_low)
+            # print(index_high)
+            interval = Interval(x[index_low], x[len(x)-1] )
+            bucket = Bucket(interval,len(x)-index_low,sum(y[index_low:len(x)]),b_unique)
+            buckets.add_bucket(bucket)
+            break
+        else:
+            interval = Interval(x[index_low], x[index_high] )
+            bucket = Bucket(interval,index_high-index_low+1,sum(y[index_low:index_high+1]),b_unique)
+            buckets.add_bucket(bucket)
+
+            #update the index, for next loop
+            index_low=index_high+1
+            index_high=index_low+bucket_size-1
+    if not b_last_is_unique: 
+        # print("insert last simple bucket")
+        interval = Interval(x[index_low], x[len(x)-1] )
+        bucket = Bucket(interval,len(x)-index_low,sum(y[index_low:len(x)]),b_unique)
+        buckets.add_bucket(bucket)
+    return buckets
+    
+def generate_bucket_sum(x,y,max_proportion=0.02):
+    if len(x) != len(y):
+        print('size mismatch in generate_bucket(), quit!')
+        return
+
+    count_not_full=0
+    count_unique=0
+    b_last_is_unique=False
+
+    buckets = Buckets()
+    total_sum=sum(y)
+    bucket_max_sum=total_sum*max_proportion
+
 
     if len(x)<=bucket_size:
         print('Only one bucket is needed to hold all data!')
@@ -179,46 +360,18 @@ def generate_bucket(x,y,bucket_size,func='count'):
         
     index_low=0
     index_high=bucket_size-1
-    # index = 0
     while index_high < len(x)-1:
         #check if bucket contains only unique x
-        # print("index_low {}".format(index_low))
-        # print("index_high {}".format(index_high))
-        if x[index_low] == x[index_high]:# and index_high <=len(x)-2:
+        if x[index_low] == x[index_high]:
             count_unique +=1
             index_high+=1
-            # print(index_high)
             while x[index_low] == x[index_high]:
                 index_high+=1
-                # print("in "+str(index_high))
                 if  index_high ==len(x):
-                    # index_high =len(x)-1
                     b_last_is_unique=True
                     break
-                # if index_high==len(x)-1:
-                #     b_last_is_unique=True
-                #     print('index_high '+str(index_high))
-
-                #     break
             index_high-=1
-        # if x[index_low] == x[index_high] and index_high<len(x)-2:
-        #     index_high +=1
-        #     print(index_low)
-        #     print(index_high)
-        #     print(len(x))
-        #     # print(x[index_low] )
-        #     # print(x[index_high])
-        #     while x[index_low] == x[index_high] and index_high<len(x)-2:
-        #         index_high +=1
-        #         print(index_high)
-        #         if x[index_low] == x[index_high] and index_high==len(x)-1:
-        #             index_high +=1
-        #             break
-        #     index_high -=1
-        #     print('bucket contains unique x, low and high are [{},{})'.format(x[index_low],x[index_high]))
-        #     count_unique+=1
-        #     # print(index_low)
-        #     # print(index_high)
+
         # check if x should go to the next bucket
         elif x[index_high] == x[index_high+1]:
             index_high-=1
@@ -226,10 +379,7 @@ def generate_bucket(x,y,bucket_size,func='count'):
                 index_high-=1
             print('bucket shrinks, low and high are [{},{})'.format(x[index_low],x[index_high]))
             count_not_full+=1
-            
-        
-
-        
+  
         # return
         if  b_last_is_unique:
             # index_low=index_high+1
@@ -245,11 +395,8 @@ def generate_bucket(x,y,bucket_size,func='count'):
             interval = Interval(x[index_low], x[index_high] )
             bucket = Bucket(interval,index_high-index_low+1,sum(y[index_low:index_high+1]))
             buckets.add_bucket(bucket)
-            # print(bucket.name)
-            # print(bucket.count)
-            # print(bucket.sum)
-            # print('---------')
 
+            #update the index, for next loop
             index_low=index_high+1
             index_high=index_low+bucket_size-1
     if not b_last_is_unique: 
@@ -257,8 +404,6 @@ def generate_bucket(x,y,bucket_size,func='count'):
         interval = Interval(x[index_low], x[len(x)-1] )
         bucket = Bucket(interval,len(x)-index_low,sum(y[index_low:len(x)]))
         buckets.add_bucket(bucket)
-    
-        
 
 
     
@@ -321,9 +466,47 @@ def run():
     # print("Response Time: {} microseconds.".format(confidence.ci_range(20,60,func='count')[1]))
     # print('----------------------------------------------')
     # print(to_cummulative([1,2,3,4,0]))
+def run_tpcds():
+    confidence =  Confidence(file='../data/tpcDs100k/store_sales.csv',headerX='ss_quantity',headerY='ss_list_price',bucket_size=10)
+    confidence.fit_count()
+
+    print(confidence.predict_count_range(0    , 5))
+    print(confidence.predict_count_range(6    , 10))
+    print(confidence.predict_count_range(11   , 15))
+    print(confidence.predict_count_range(16   , 20))
+    print(confidence.predict_count_range(21   , 25))
+    print(confidence.predict_count_range(26   , 30))
+    confidence =  Confidence(file='../data/tpcDs100k/store_sales.csv',headerX='ss_list_price',headerY='ss_list_price',bucket_size=10)
+    confidence.fit_count()
+    print(confidence.predict_count_range(90 ,100 ))
+    print(confidence.predict_count_range(70 ,80   ))
+    print(confidence.predict_count_range(80 ,90  ))
+    print(confidence.predict_count_range(100, 110))
+    print(confidence.predict_count_range(110, 120))
+    print(confidence.predict_count_range(120, 130))
+
+    confidence =  Confidence(file='../data/tpcDs100k/store_sales.csv',headerX='ss_coupon_amt',headerY='ss_list_price',bucket_size=10)
+    confidence.fit_count()
+    print(confidence.predict_count_range(7000    , 8000  ))
+    print(confidence.predict_count_range(8000    , 9000  ))
+    print(confidence.predict_count_range(9000    , 10000))
+    print(confidence.predict_count_range(10000   , 11000))
+    print(confidence.predict_count_range(11000   , 12000))
+    print(confidence.predict_count_range(12000   , 13000))
+
+
+    confidence =  Confidence(file='../data/tpcDs100k/store_sales.csv',headerX='ss_wholesale_cost',headerY='ss_list_price',bucket_size=10)
+    confidence.fit_count()
+    print(confidence.predict_count_range(10     , 30))
+    print(confidence.predict_count_range(20     , 40))
+    print(confidence.predict_count_range(30     , 50))
+    print(confidence.predict_count_range(40     , 60))
+    print(confidence.predict_count_range(50     , 70))
+    print(confidence.predict_count_range(60     , 80))
+
 if __name__=="__main__":
+    run_tpcds()
     # run()
-    confidence =  Confidence(file='../data/tpcDs10k/store_sales.csv',headerX='ss_quantity',headerY='ss_ext_sales_price')
-    confidence.fit1()
+    
 
     

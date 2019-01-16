@@ -438,7 +438,9 @@ class DataSource:
         mypoints = np.array(tmp.values())
         # print(mypoints)
         # print(len(self.features))
-        self.features = mypoints[:, 0].reshape(-1, 1)
+        print(type(mypoints))
+        print(mypoints[0,0])
+        self.features = mypoints[:, 0]#.reshape(-1, 1)
         self.labels = mypoints[:, 1]
         # print(len(self.features))
         # exit(1)
@@ -549,6 +551,13 @@ class DataSource:
                 indexs.append(index)
             self.labels=np.delete(self.labels,indexs)
             self.features=np.delete(self.features,indexs)
+    def to_csv(self,file):
+        with open(file,'w+') as f:
+            for xs,y in zip(self.features,self.labels):
+                for item_x in xs:
+                    f.write(str(item_x)+",")
+                f.write(str(y)+"\n")
+
 
 
 
