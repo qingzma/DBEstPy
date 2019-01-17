@@ -30,6 +30,7 @@ from matplotlib import rcParams
 
 
 
+
 color1 = (0.1, 0.3, 0.1)
 color2 = (0.4, 0.4, 0.3)
 color3 = (0.6, 0.7, 0.5)
@@ -1898,7 +1899,7 @@ class CRegression:
 
     def run2d(self, data):
         self.dataset_name = data.file
-        data.remove_repeated_x_1d()
+        # data.remove_repeated_x_1d()
         if self.b_disorder:
             data.disorder2d()
 
@@ -2080,7 +2081,7 @@ class CRegression:
 
     def run3d(self, data):
         self.dataset_name = data.file
-        data.remove_repeated_x_2d()
+        # data.remove_repeated_x_2d()
 
         if self.b_disorder:
             data.disorderNd()
@@ -2685,12 +2686,13 @@ if __name__ == "__main__":
     import logs
     import data_loader
     logger=logs.QueryLogs("1.log")
-    data=data_loader.load4d(5)
+    data=data_loader.load3d(5)
     # data.to_csv("/home/u1796377/Workspace/DBEst/data/5d/8.csv")
     cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],
             #tools.app_boosting,tools.app_xgboost],\
-            ensemble_models=[tools.app_adaboost,tools.app_boosting, tools.app_xgboost],
-            b_show_plot=True, logger_object=logger)
-    cr.run(data)
+            ensemble_models=[#tools.app_adaboost,
+            tools.app_boosting, tools.app_xgboost],
+            b_show_plot=False, logger_object=logger)
+    cr.run3d(data)
 
 

@@ -439,7 +439,7 @@ class DataSource:
         # print(mypoints)
         # print(len(self.features))
         print(type(mypoints))
-        print(mypoints[0,0])
+        print(mypoints[:,0])
         self.features = mypoints[:, 0]#.reshape(-1, 1)
         self.labels = mypoints[:, 1]
         # print(len(self.features))
