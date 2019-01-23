@@ -333,3 +333,48 @@ LOCATION '/user/hive/warehouse/tpcDs/store_returns';
 
 
 hive -e 'select ss_store_sk, count(*) from store_sales group by ss_store_sk' > ~/hahah
+
+
+
+
+
+
+### DBEst mysql
+# group by
+CREATE table store_sales_5m ( 
+ss_sold_date_sk           INT,
+ss_sold_time_sk           INT,
+ss_item_sk                INT,
+ss_customer_sk            INT,
+ss_cdemo_sk               INT,
+ss_hdemo_sk               INT,
+ss_addr_sk                INT,
+ss_store_sk               INT,
+ss_promo_sk               INT,
+ss_ticket_number          INT,
+ss_quantity               INT,
+ss_wholesale_cost         DOUBLE,
+ss_list_price             DOUBLE,
+ss_sales_price            DOUBLE,
+ss_ext_discount_amt       DOUBLE,
+ss_ext_sales_price        DOUBLE,
+ss_ext_wholesale_cost     DOUBLE,
+ss_ext_list_price         DOUBLE,
+ss_ext_tax                DOUBLE,
+ss_coupon_amt             DOUBLE,
+ss_net_paid               DOUBLE,
+ss_net_paid_inc_tax       DOUBLE,
+ss_net_profit             DOUBLE
+);
+
+
+# copy the table to the directory to be submitted to mysql
+sudo mv /data/tpc/tpc-ds/ss_5m.csv /var/lib/mysql-files/ss_5m.csv
+# load the file;
+LOAD DATA INFILE "/var/lib/mysql-files/ss_5m.csv"
+INTO TABLE store_sales_5m
+COLUMNS TERMINATED BY ','
+LINES TERMINATED BY '\n';
+
+#query to mysql
+mysql -u root -p dbest < 1.sql >1.log

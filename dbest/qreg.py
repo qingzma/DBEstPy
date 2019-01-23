@@ -1897,7 +1897,7 @@ class CRegression:
         plt.show()
         return variance
 
-    def run2d(self, data):
+    def run2d(self, data,test_data=None):
         self.dataset_name = data.file
         # data.remove_repeated_x_1d()
         if self.b_disorder:
@@ -1907,6 +1907,8 @@ class CRegression:
 
         training_data_model, training_data_classifier, testing_data = tools.split_data(
             data)
+        if test_data is not None:
+            testing_data = test_data
 
         # for plot CI
         self.num_total_training_points = len(
@@ -2079,7 +2081,7 @@ class CRegression:
         # self.matplotlib_plot_2D_all_models(predictions_classified,answers_for_testing)
         return statistics
 
-    def run3d(self, data):
+    def run3d(self, data,test_data=None):
         self.dataset_name = data.file
         # data.remove_repeated_x_2d()
 
@@ -2090,6 +2092,8 @@ class CRegression:
 
         training_data_model, training_data_classifier, testing_data = tools.split_data(
             data)
+        if test_data is not None:
+            testing_data = test_data
 
         training_data_model = training_data_model  # .get_before(300000)
         # .get_before(300000)
@@ -2251,7 +2255,7 @@ class CRegression:
         self.predictions_testing = answers_for_testing
         return statistics
 
-    def run(self, data):
+    def run(self, data,test_data=None):
         self.dataset_name = data.file
         if self.b_disorder:
             data.disorderNd()
@@ -2260,6 +2264,8 @@ class CRegression:
 
         training_data_model, training_data_classifier, testing_data = tools.split_data(
             data)
+        if test_data is not None:
+            testing_data = test_data
 
         training_data_model = training_data_model  # .get_before(300000)
         # .get_before(300000)
@@ -2686,13 +2692,26 @@ if __name__ == "__main__":
     import logs
     import data_loader
     logger=logs.QueryLogs("1.log")
-    data=data_loader.load3d(5)
-    # data.to_csv("/home/u1796377/Workspace/DBEst/data/5d/8.csv")
-    cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],
-            #tools.app_boosting,tools.app_xgboost],\
-            ensemble_models=[#tools.app_adaboost,
-            tools.app_boosting, tools.app_xgboost],
-            b_show_plot=False, logger_object=logger)
-    cr.run3d(data)
+    data=data_loader.load5d(1)
+    data.print_headers()
+    data=data_loader.load5d(3)
+    data.print_headers()
+    data=data_loader.load5d(4)
+    data.print_headers()
+    data=data_loader.load5d(5)
+    data.print_headers()
+    data=data_loader.load5d(6)
+    data.print_headers()
+    data=data_loader.load5d(7)
+    data.print_headers()
+    data=data_loader.load5d(8)
+    data.print_headers()
+    # data.to_csv("/home/u1796377/Workspace/DBEst/data/5d/5.csv")
+    # cr = CRegression(base_models=[  tools.app_linear,tools.app_poly,tools.app_decision_tree],
+    #         #tools.app_boosting,tools.app_xgboost],\
+    #         ensemble_models=[#tools.app_adaboost,
+    #         tools.app_boosting, tools.app_xgboost],
+    #         b_show_plot=False, logger_object=logger)
+    # cr.run3d(data)
 
 

@@ -557,6 +557,15 @@ class DataSource:
                 for item_x in xs:
                     f.write(str(item_x)+",")
                 f.write(str(y)+"\n")
+    def print_headers(self):
+        output = ""
+        for header in self.headers:
+            output=output+str(header)+","
+        output=output[:-1]
+        print(output)
+
+
+
 
 
 

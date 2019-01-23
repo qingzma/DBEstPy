@@ -25,6 +25,34 @@ file5 =  "/home/u1796377/Workspace/DBEst/data/5CCPP/5Folds5x2_pp.csv"
 file6 =  "/home/u1796377/Workspace/DBEst/data/6YearPredictionMSD_with_header.csv"
 file7 =  "/home/u1796377/Workspace/DBEst/data/7/7ethylene_methane_with_header.csv"
 file8 =  "/home/u1796377/Workspace/DBEst/data/8data.txt"
+
+file1_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/1.csv"
+file2_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/2.csv"
+file3_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/3.csv"
+file4_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/4.csv"
+file5_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/5.csv"
+file6_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/6.csv"
+file7_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/7.csv"
+file8_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/8.csv"
+
+file1_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/1.csv"
+file2_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/2.csv"
+file3_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/3.csv"
+file4_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/4.csv"
+file5_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/5.csv"
+file6_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/6.csv"
+file7_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/7.csv"
+file8_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/8.csv"
+
+file1_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/1.csv"
+file2_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/2.csv"
+file3_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/3.csv"
+file4_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/4.csv"
+file5_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/5.csv"
+file6_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/6.csv"
+file7_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/7.csv"
+file8_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/8.csv"
+
 file9 =  "/home/u1796377/Workspace/DBEst/data/1m.csv"
 file10 = "/home/u1796377/Workspace/DBEst/data/5m.csv"
 file11 = "/home/u1796377/Workspace/DBEst/data/10k.csv"
@@ -36,7 +64,7 @@ etrade_price_comm_100k = "../data/etrade_price_comm_100k.csv"
 etrade_price_comm_10k = "../data/etrade_price_comm_10k.csv"
 etrade_price_comm_1k = "../data/etrade_price_comm_1k.csv"
 
-def load2d(dataID):
+def load2d(dataID,sample_size=None):
     if dataID == 1:
         # Number 1 dataset
 
@@ -50,20 +78,51 @@ def load2d(dataID):
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         # fields = ['bitrate','framerate', 'utime']
         # y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file1, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file1, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file1_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file1_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file1_qreg_sample_1m, fields, y_column)
+        else:
+            return None
+
+
     if dataID == 2:
         # Number 2 dataset
         fields = ["RMSD", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9"]
         fields = ["RMSD", "F2"]
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file2, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file2, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file2_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file2_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file2_qreg_sample_1m, fields, y_column)
+        else:
+            return None
+        # data = tools.load_csv(file2, fields, y_column)
     if dataID == 3:
         # Number 3 dataset
 
         fields = ['year', 'month', 'day', 'hour', 'pm2.5', 'DEWP', 'TEMP', 'PRES', 'Iws', 'Is', 'Ir']
         fields = ['pm2.5', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file3, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file3, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file3_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file3_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file3_qreg_sample_1m, fields, y_column)
+        else:
+            return None
+        # data = tools.load_csv(file3, fields, y_column)
     if dataID == 4:
         # Number 4 dataset
 
@@ -73,7 +132,17 @@ def load2d(dataID):
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # fields = ['n_unique_tokens', 'n_non_stop_unique_tokens']
         # y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file4, fields, y_column)
+        # data = tools.load_csv(file4, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file4, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file4_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file4_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file4_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 5:
         # Number 5 dataset
         # '''
@@ -81,7 +150,17 @@ def load2d(dataID):
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
         fields = ['Relative_Humidity', 'energy_output']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file5, fields, y_column)
+        # data = tools.load_csv(file5, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file5, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file5_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file5_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file5_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 6:
         # Number 6 dataset
 
@@ -100,7 +179,17 @@ def load2d(dataID):
                   'c78', 'c79', 'c80', 'c81', 'c82', 'c83', 'c84', 'c85', 'c86', 'c87', 'c88', 'c89', 'c90']
         fields = ['year', 'c1']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file6, fields, y_column)
+        # data = tools.load_csv(file6, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file6, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file6_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file6_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file6_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 7:
         # Number 7 dataset
 
@@ -113,7 +202,17 @@ def load2d(dataID):
         fields = ['c1', 'c2']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        # data = tools.load_csv(file7, fields, y_column, sep=' ')
+        if sample_size is None:
+            data = tools.load_csv(file7, fields, y_column, sep=' ')
+        elif sample_size== "10k":
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 8:
         # Number 8 dataset
 
@@ -127,7 +226,20 @@ def load2d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['timestamp', 'energy']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file8, fields, y_column, sep=',')
+        # data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(file8, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            fields = ['Global_intensity', 'energy']
+            data = tools.load_csv(file8_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            fields = ['Global_intensity', 'energy']
+            data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            fields = ['Global_intensity', 'energy']
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
 
     if dataID == "1m":
         fields = ['ss_list_price', 'ss_wholesale_cost']
@@ -180,7 +292,7 @@ def load2d(dataID):
     return data
 
 
-def load3d(dataID):
+def load3d(dataID,sample_size=None):
     if dataID == 1:
         # Number 1 dataset
 
@@ -189,7 +301,16 @@ def load3d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['i_size', 'umem', 'utime']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file1, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file1, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file1_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file1_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file1_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
@@ -200,7 +321,16 @@ def load3d(dataID):
         fields = ["RMSD", "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file2, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file2, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file2_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file2_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file2_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
@@ -212,7 +342,16 @@ def load3d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file3, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file3, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file3_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file3_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file3_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
@@ -225,7 +364,16 @@ def load3d(dataID):
         fields = ['n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file4, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file4, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file4_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file4_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file4_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
@@ -241,7 +389,16 @@ def load3d(dataID):
         # fields = ['Temperature', 'Exhaust_Vacuum', 'energy_output']
 
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file5, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file5, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file5_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file5_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file5_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
@@ -265,7 +422,16 @@ def load3d(dataID):
         # fields = ['year', 'c2', 'c4']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file6, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file6, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file6_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file6_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file6_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
@@ -282,7 +448,17 @@ def load3d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        # data = tools.load_csv(file7, fields, y_column, sep=' ')
+        if sample_size is None:
+            data = tools.load_csv(file7, fields, y_column, sep=' ')
+        elif sample_size== "10k":
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
@@ -295,12 +471,21 @@ def load3d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'energy']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(file8, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(file8_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/8data.txt"
     return data
 
 
-def load4d(dataID):
+def load4d(dataID,sample_size=None):
     if dataID == 1:
         # Number 1 dataset
 
@@ -309,7 +494,16 @@ def load4d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['duration', 'i_size', 'umem', 'utime']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file1, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file1, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file1_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file1_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file1_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
@@ -321,7 +515,16 @@ def load4d(dataID):
         fields = ["RMSD", 'F3', "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file2, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file2, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file2_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file2_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file2_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
@@ -333,7 +536,16 @@ def load4d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'TEMP', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file3, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file3, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file3_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file3_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file3_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
@@ -343,7 +555,16 @@ def load4d(dataID):
 
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file4, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file4, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file4_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file4_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file4_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
@@ -359,7 +580,16 @@ def load4d(dataID):
         # fields = ['Temperature', 'Exhaust_Vacuum', 'energy_output']
 
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file5, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file5, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file5_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file5_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file5_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
@@ -383,7 +613,16 @@ def load4d(dataID):
         fields = ['year', 'c2', 'c2', 'c3']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file6, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file6, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file6_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file6_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file6_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
@@ -401,7 +640,16 @@ def load4d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2', 'c3']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        if sample_size is None:
+            data = tools.load_csv(file7, fields, y_column, sep=' ')
+        elif sample_size== "10k":
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/7/7ethylene_methane_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
@@ -414,12 +662,21 @@ def load4d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'Voltage', 'energy']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(file8, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(file8_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/8data.txt"
     return data
 
 
-def load5d(dataID):
+def load5d(dataID,sample_size=None):
     if dataID == 1:
         # Number 1 dataset
 
@@ -428,7 +685,16 @@ def load5d(dataID):
                   'b_size', 'size', 'o_bitrate', 'o_framerate', 'o_width', 'o_height', 'umem', 'utime']
         fields = ['duration', 'width', 'i_size', 'umem', 'utime']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file1, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file1, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file1_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file1_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file1_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
@@ -441,7 +707,16 @@ def load5d(dataID):
         fields = ["RMSD", 'F2', 'F3', "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file2, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file2, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file2_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file2_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file2_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
@@ -453,7 +728,16 @@ def load5d(dataID):
         fields = ['pm2.5', 'TEMP', 'Iws']  # good vision
         fields = ['pm2.5', 'DEWP', 'TEMP', 'PRES', 'Iws']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file3, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file3, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file3_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file3_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file3_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/3PRSA_data.csv"
     if dataID == 4:
         # Number 4 dataset
@@ -463,7 +747,16 @@ def load5d(dataID):
 
         # fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file4, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file4, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file4_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file4_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file4_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/4OnlineNewsPopularity1.csv"
     if dataID == 5:
         # Number 5 dataset
@@ -480,7 +773,16 @@ def load5d(dataID):
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
 
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file5, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file5, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file5_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file5_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file5_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/5CCPP/5Folds5x2_pp.csv"
     if dataID == 6:
         # Number 6 dataset
@@ -504,7 +806,16 @@ def load5d(dataID):
         # fields = ['year', 'c2', 'c4']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file6, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file6, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file6_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file6_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file6_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/6YearPredictionMSD_with_header.csv"
     if dataID == 7:
         # Number 7 dataset
@@ -522,7 +833,16 @@ def load5d(dataID):
         fields = ['Methane_conc_(ppm)', 'c1', 'c2', 'c3', 'c4']
         y_column = 2  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        if sample_size is None:
+            data = tools.load_csv(file7, fields, y_column, sep=' ')
+        elif sample_size== "10k":
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/7/7ethylene_methane_with_header.csv"
     if dataID == 8:
         # Number 8 dataset
@@ -535,12 +855,21 @@ def load5d(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         fields = ['Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity', 'energy']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(file8, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(file8_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/8data.txt"
     return data
 
 
-def loadNd(dataID):
+def loadNd(dataID,sample_size=None):
     if dataID == 1:
         # Number 1 dataset
 
@@ -550,7 +879,16 @@ def loadNd(dataID):
         # fields = ['i_size', 'umem','utime']
         fields = ['duration', 'bitrate', 'framerate', 'size', 'umem', 'utime']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file1, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file1, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file1_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file1_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file1_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/1online_video_dataset/1transcoding_mesurment.csv"
     if dataID == 2:
         # Number 2 dataset
@@ -561,7 +899,16 @@ def loadNd(dataID):
         fields = ["RMSD", "F4", "F5"]
 
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file2, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file2, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file2_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file2_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file2_qreg_sample_1m, fields, y_column)
+        else:
+            return None
         # "../data/2CASP.csv"
     if dataID == 3:
         # Number 3 dataset
@@ -574,7 +921,16 @@ def loadNd(dataID):
         # fields = ['pm2.5', 'TEMP', 'Iws'] # good vision
         # fields = ['pm2.5', 'PRES', 'Iws']
         # y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file3, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file3, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file3_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file3_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file3_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 4:
         # Number 4 dataset
 
@@ -587,14 +943,32 @@ def loadNd(dataID):
         # fields = ['n_tokens_content', 'n_unique_tokens','n_non_stop_unique_tokens']
         # #fields = [ 'n_tokens_content', 'n_unique_tokens', 'n_non_stop_unique_tokens']
         # y_column = 1  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file4, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file4, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file4_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file4_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file4_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 5:
         # Number 5 dataset
         # '''
         # load the data
         fields = ['Temperature', 'Exhaust_Vacuum', 'Ambient_Pressure', 'Relative_Humidity', 'energy_output']
         y_column = 4  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file5, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file5, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file5_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file5_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file5_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 6:
         # Number 6 dataset
 
@@ -613,7 +987,16 @@ def loadNd(dataID):
                   'c78', 'c79', 'c80', 'c81', 'c82', 'c83', 'c84', 'c85', 'c86', 'c87', 'c88', 'c89', 'c90']
         fields = ['year', 'c1', 'c2', 'c3']
         y_column = 0  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file6, fields, y_column)
+        if sample_size is None:
+            data = tools.load_csv(file6, fields, y_column)
+        elif sample_size== "10k":
+            data = tools.load_csv(file6_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file6_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file6_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 7:
         # Number 7 dataset
 
@@ -629,7 +1012,16 @@ def loadNd(dataID):
         fields = ['Methane_conc_(ppm)', 'Ethylene_conc_(ppm)', 'c1', 'c2', 'c3', 'c4']
         y_column = 3  # should be the order in the input file, not in the "fields" order.
         # data = tools.load_csv("datasets/1online_video_dataset/1transcoding_mesurment.csv",fields,y_column)
-        data = tools.load_csv(file7, fields, y_column, sep=' ')
+        if sample_size is None:
+            data = tools.load_csv(file7, fields, y_column, sep=' ')
+        elif sample_size== "10k":
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     if dataID == 8:
         # Number 8 dataset
 
@@ -641,7 +1033,16 @@ def loadNd(dataID):
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
         # fields = ['Global_active_power', 'Global_reactive_power', 'energy']
         y_column = 8  # should be the order in the input file, not in the "fields" order.
-        data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(file8, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(file8_qreg_sample_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
     return data
 
 def save_2d(dataID):

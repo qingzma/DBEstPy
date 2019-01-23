@@ -40,7 +40,7 @@ alpha = {
 def to_percent(y, pos):
     return '%.1f%%' % (y * 100)
 
-def read_results(file, b_remove_null=True):
+def read_results(file, b_remove_null=True, counts_group_in_sample=None,counts_group_in_original=None,func=None):
     """read the group by value and the corresponding aggregate within
     a given range, used to compare the accuracy.the
 
@@ -63,9 +63,34 @@ def read_results(file, b_remove_null=True):
                 key_value = re.split('\s+', key_value)
                 # remove empty strings caused by sequential blank spaces.
                 key_value = list(filter(None, key_value))
-                key_values[key_value[0]] = key_value[1]
+                if key_value[0] !='0':
+                    if counts_group_in_sample == None:
+                        key_values[key_value[0]] = key_value[1]
+                    else:
+                        # print(key_value[0])
+                        # print(counts_group_in_sample)
+                        count_sample=float(counts_group_in_sample[key_value[0]])
+                        count_original=float(counts_group_in_original[key_value[0]])
+                        if func == 'avg':
+                            key_values[key_value[0]] = float(key_value[1])
+                        else:
+                            # print(float(key_value[1]))
+                            # print("-----------------")
+                            key_values[key_value[0]] = float(key_value[1])*count_original/count_sample
+                        # print(count)
+                        # print(key_value[1])
+                        # print(count*key_value[1])
+                        # print("--------------------------------")
+                        # return
+                        
+                        # print(key_values[key_value[0]])
+                        # return
+                else:
+                    continue
     if ('NULL' in key_values) and b_remove_null:
         key_values.pop('NULL', None)
+    if ('0' in key_values) and b_remove_null:
+        key_values.pop('0', None)
 
 
     key_values.pop('9.0', None)
@@ -83,12 +108,12 @@ def avg_relative_error(ground_truth, predictions):
     Returns:
         float: the average relative error 
     """
-    if len(ground_truth) != len(predictions):
-        print("Length mismatch!")
-        print("Length of ground_truth is " + str(len(ground_truth)))
-        print("Length of predictions is " + str(len(predictions)))
-        print("System aborts!")
-        sys.exit(1)
+    # if len(ground_truth) != len(predictions):
+    #     print("Length mismatch!")
+    #     print("Length of ground_truth is " + str(len(ground_truth)))
+    #     print("Length of predictions is " + str(len(predictions)))
+    #     print("System aborts!")
+    #     sys.exit(1)
 
     relative_errors = []
     # ground_truth.pop('9.0', None)
@@ -110,15 +135,29 @@ def avg_relative_error(ground_truth, predictions):
 def avg_relative_errors():
     averag_errors_blinkdb=[]
     averag_errors_DBEst=[]
+    averag_errors_mysql=[]
+    # read the counts of each group in the sample
+    # counts_group_in_sample={}
+    # for index in range(1,11):
+    #     counts_group_in_sample[str(index)] = read_results('../data/tpcds5m/mysql/count'+str(index)+'.txt')
+
+    counts_group_in_sample = read_results('../data/tpcds5m/mysql/group_count_in_sample.txt')
+    counts_group_in_original = read_results('../data/tpcds5m/num_of_points.csv')
+
     for func in ['count','sum','avg']:
         print("---------------------"+func+"---------------------")
         errors_blinkdb = []
         errors_DBEst = []
+        errors_mysql = []
         for index in range(1,11):
             file_name=func+str(int(index))
             ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
             predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
             predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/xgboost/'+file_name+'.txt')
+            predictions_mysql = read_results('../data/tpcds5m/mysql/'+file_name+'.txt',
+                counts_group_in_sample=counts_group_in_sample,
+                counts_group_in_original=counts_group_in_original,
+                func=func)
             # if index == 1 and (func =='avg'):
             #     print("groundtruth"+str(ground_truth))
             #     print("blinkdb"+str(predictions_blinkdb))
@@ -130,9 +169,11 @@ def avg_relative_errors():
 
             errors_blinkdb.append(avg_relative_error(ground_truth,predictions_blinkdb))
             errors_DBEst.append(avg_relative_error(ground_truth,predictions_DBEst))
+            errors_mysql.append(avg_relative_error(ground_truth,predictions_mysql))
             # print("averge is "+str(sum(errors_DBEst)/len(errors_DBEst)))
         averag_errors_blinkdb.append(sum(errors_blinkdb)/len(errors_blinkdb))
         averag_errors_DBEst.append(sum(errors_DBEst)/len(errors_DBEst))
+        averag_errors_mysql.append(sum(errors_mysql)/len(errors_mysql))
         
         # print(errors_blinkdb)
         # print("errors_DBEst"+str(errors_DBEst))
@@ -141,6 +182,7 @@ def avg_relative_errors():
         # print(sum(errors_blinkdb)/len(errors_blinkdb))
     print(averag_errors_blinkdb)
     print(averag_errors_DBEst)
+    print(averag_errors_mysql)
 
 def avg_relative_errors_per_group_value(group_num=501,function='count',size="100k"):
     res_per_group_DBEst={}
