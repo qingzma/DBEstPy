@@ -67,7 +67,7 @@ class DBEst:
         self.model_catalog = {}
         self.tableColumnSets = []  # store all QeuryEngines, for each table
         self.base_models = base_models
-        self.logger.logger.info("Ready to server queries!")
+        self.logger.logger.info("Ready to serve queries!")
         self.logger.logger.info(line_break)
         # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
@@ -219,6 +219,7 @@ class DBEst:
 
         tableColumnSets = [[table] + columnItems[i]
                            for i in range(len(columnItems))]
+
         # self.logger.logger.info(tableColumnSets)
 
         # if not hasattr(self, 'df'):
@@ -275,7 +276,26 @@ class DBEst:
                 ]
             self.tableColumnSets = self.tableColumnSets + tableColumnSets
 
+        if self.dataset == "zipf":
+            if num_of_points is None:
+                num_of_points = {}
+                num_of_points["zipf"] = 100000000
+            # merge dict num_of_points to self.num_of_points
+            self.num_of_points = {**self.num_of_points, **num_of_points}
+
+            if tableColumnSets is None:
+                tableColumnSets = [
+                    # ["store_sales", "ss_quantity", "*"],
+                    ["zipf", "x", "y"]
+                ]
+            self.tableColumnSets = self.tableColumnSets + tableColumnSets
+
+
         tables = [sublist[0] for sublist in self.tableColumnSets]
+        
+        
+
+        
         self.uniqueTables = list(set(tables))
         self.logger.logger.info(
             "Dataset contains " + str(len(self.uniqueTables)) +

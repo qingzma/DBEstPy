@@ -158,6 +158,7 @@ def avg_relative_errors():
                 counts_group_in_sample=counts_group_in_sample,
                 counts_group_in_original=counts_group_in_original,
                 func=func)
+            save_dic(predictions_mysql, file='../data/tpcds5m/mysql/5m_predictions.txt')
             # if index == 1 and (func =='avg'):
             #     print("groundtruth"+str(ground_truth))
             #     print("blinkdb"+str(predictions_blinkdb))
@@ -215,7 +216,7 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
                 predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/'+file_name+'.txt')
             
             for group_id in  ground_truth:
-                print(group_id)
+                # print(group_id)
                 if index == 1:  #initialize the error as an empty list, so as to contain further error for the same group
                     re_per_group_DBEst[group_id] = []
                     re_per_group_blinkdb[group_id] =[]
@@ -233,13 +234,13 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
         # averag_errors_DBEst.append(sum(errors_DBEst)/len(errors_DBEst))
         
        
-    print(res_per_group_DBEst)
-    print(res_per_group_blinkdb)
+    # print(res_per_group_DBEst)
+    # print(res_per_group_blinkdb)
 
     
     
     if group_num == 501:
-        plt_histogram(res_per_group_DBEst[function],res_per_group_blinkdb[function])
+        plt_histogram2(res_per_group_DBEst[function],res_per_group_blinkdb[function])
     if group_num == 8:
         plt_bar(res_per_group_DBEst[function],res_per_group_blinkdb[function],size)
 
@@ -309,7 +310,7 @@ def plt_bar4(x1,x2,x3,x4,function="count"):
 
 
 
-def plt_histogram(x1,x2,b_cumulative=False):
+def plt_histogram2(x1,x2,b_cumulative=False):
 
     plt.rcParams.update({'font.size': 12})
     x1.sort()
@@ -342,10 +343,65 @@ def plt_histogram(x1,x2,b_cumulative=False):
     plt.show()
     # fig.savefig("/home/u1796377/Desktop/figures/group_by_histgram.pdf", bbox_inches='tight')
 
+def save_dic(dic,file):
+    with open(file,mode='w+') as f:
+        for key in dic:
+            f.write(key+'\t'+str(dic[key])+'\n')
+
+def process_mysql_result(file,sample_size, data_size):
+    index = 0
+    results=[]
+    with open(file,mode='r') as f:
+        for line in f:
+            if "(y)" not in line:
+                line=line.replace("\n","")
+                results.append(float(line))
+    # print(results[0:36])
+    counts = [count * data_size / sample_size for count in results[0:36]]
+    # print(results[36:72])
+    sums = [sum_i * data_size / sample_size for sum_i in results[36:72]]
+    print("-------------------------------------")
+    print(file)
+    print(counts)
+    print(sums)
+    print(results[72:108])
+    print("-------------------------------------")
+    print()
+    return results
+def process_mysql_results():
+    files=[
+        "../query/zipf/mysql/plain0.1_100k.dbest.result",
+        "../query/zipf/mysql/plain0.1_10k.dbest.result",
+        "../query/zipf/mysql/plain0.1_1m.dbest.result",
+        "../query/zipf/mysql/plain1_100k.dbest.result",
+        "../query/zipf/mysql/plain1_10k.dbest.result",
+        "../query/zipf/mysql/plain1_1m.dbest.result",
+        "../query/zipf/mysql/sharp0.1_100k.dbest.result",
+        "../query/zipf/mysql/sharp0.1_10k.dbest.result",
+        "../query/zipf/mysql/sharp0.1_1m.dbest.result",
+        "../query/zipf/mysql/sharp1_100k.dbest.result",
+        "../query/zipf/mysql/sharp1_10k.dbest.result",
+        "../query/zipf/mysql/sharp1_1m.dbest.result",
+    ]
+    for file in files:
+        sample_size=file.split("_")[1].split(".")[0]
+        if sample_size =="10k":
+            sample_size = 1.0E4
+        if sample_size =="100k":
+            sample_size = 1.0E5
+        if sample_size =="1m":
+            sample_size = 1.0E6
+
+        process_mysql_result(file,sample_size, 1E8 )
+
+
+
+
+
 
 if __name__ == '__main__':
-    avg_relative_errors_per_group_value(function='avg', group_num=501)
-    avg_relative_errors()
+    # avg_relative_errors_per_group_value(function='avg', group_num=501)
+    # avg_relative_errors()
 
     # import numpy as np
     # DBEst_100k, blinkdb_100k = avg_relative_errors_per_group_value(group_num=8,function="count",size="100k")
@@ -356,4 +412,6 @@ if __name__ == '__main__':
     # print(np.var(DBEst_1m[function]))
     # print(np.var(blinkdb_100k[function]))
     # print(np.var(blinkdb_1m[function]))
+    # process_mysql_result('../query/zipf/mysql/plain0.1_1m.dbest.result',1E4,1E8)
+    process_mysql_results()
 

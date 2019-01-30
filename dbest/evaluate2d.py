@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 # coding=utf-8
-from core import CRegression
-import data_loader as dl
-from query_engine import QueryEngine
+
+from __future__ import print_function, division
+import os
+import sys
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
+
+
+from dbest.qreg import CRegression
+import dbest.data_loader as dl
+from dbest.query_engine import QueryEngine
 import logs
 import random
 import tools
