@@ -451,13 +451,14 @@ class DBEst:
             #
             #
             # number of points
+            # self.logger.logger.info(num_of_points_per_group)
             self.logger.logger.info(grp_name)
             # self.logger.logger.info(group)
             qe = QueryEngine(
                 cRegression, logger_object=self.logger,
                 num_training_points=int(
                     num_of_points_per_group[str((int(grp_name)))]))
-            # num_of_points_per_group[str(int(grp_name))]))
+                # num_of_points_per_group[str(int(grp_name))]))
             qe.density_estimation()
             cRegression.clear_training_data()
             # qe.get_size()

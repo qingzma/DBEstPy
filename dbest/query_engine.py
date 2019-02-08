@@ -197,7 +197,7 @@ class QueryEngine:
                 result = None
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate AVG: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate AVG: %.4fs." % time_cost)
@@ -238,7 +238,7 @@ class QueryEngine:
                 0] * self.num_training_points
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate SUM: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate SUM: %.4fs." % time_cost)
@@ -331,7 +331,7 @@ class QueryEngine:
                 0] * self.num_training_points
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate count: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate COUNT: %.4fs." % time_cost)
@@ -383,7 +383,7 @@ class QueryEngine:
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate variance x: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate variance x: %.4fs." % time_cost)
@@ -431,7 +431,7 @@ class QueryEngine:
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate variance y: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate variance y: %.4fs." % time_cost)
@@ -489,7 +489,7 @@ class QueryEngine:
         #     result = integrate.nquad(f_p, bounds, opts=opts)[0]*self.num_training_points
         end = datetime.now()
         time_cost = (end - start).total_seconds()
-        if self.b_print_time_cost:
+        if self.b_print_time_cost and result != None:
             self.logger.info("Approximate COVAR: %.4f." % result)
             self.logger.info(
                 "Time spent for approximate COVAR: %.4fs." % time_cost)

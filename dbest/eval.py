@@ -40,7 +40,7 @@ alpha = {
 def to_percent(y, pos):
     return '%.1f%%' % (y * 100)
 
-def read_results(file, b_remove_null=True, counts_group_in_sample=None,counts_group_in_original=None,func=None):
+def read_results(file, b_remove_null=True, counts_group_in_sample=None,counts_group_in_original=None,func=None,split_char="\s"):
     """read the group by value and the corresponding aggregate within
     a given range, used to compare the accuracy.the
 
@@ -58,13 +58,18 @@ def read_results(file, b_remove_null=True, counts_group_in_sample=None,counts_gr
             # ignore empty lines
             if  line.strip():
                 key_value = line.replace(
-                    "(", " ").replace(")", " ").replace(";", "").replace(",", "")
+                    "(", " ").replace(")", " ").replace(";", "").replace("\n","")#.replace(",", "")
                 # self.logger.logger.info(key_value)
-                key_value = re.split('\s+', key_value)
+                key_value = re.split(split_char, key_value)
+                if key_value[0] == "":
+                    continue
                 # remove empty strings caused by sequential blank spaces.
                 key_value = list(filter(None, key_value))
                 if key_value[0] !='0':
                     if counts_group_in_sample == None:
+                        # print(key_value[0])
+                        # print(key_value[1])
+                        key_value[0]=key_value[0].replace(",","")
                         key_values[key_value[0]] = key_value[1]
                     else:
                         # print(key_value[0])
@@ -118,6 +123,8 @@ def avg_relative_error(ground_truth, predictions):
     relative_errors = []
     # ground_truth.pop('9.0', None)
     # ground_truth.pop('NULL', None)
+    # print(ground_truth)
+    # print(predictions)
     for key_gt, value_gt in ground_truth.items():
         if (ground_truth[key_gt] != 0):
             re = abs(float(ground_truth[key_gt]) -
@@ -133,57 +140,50 @@ def avg_relative_error(ground_truth, predictions):
     return sum(relative_errors) / len(relative_errors)
 
 def avg_relative_errors():
-    averag_errors_blinkdb=[]
+    # averag_errors_blinkdb=[]
     averag_errors_DBEst=[]
-    averag_errors_mysql=[]
-    # read the counts of each group in the sample
-    # counts_group_in_sample={}
-    # for index in range(1,11):
-    #     counts_group_in_sample[str(index)] = read_results('../data/tpcds5m/mysql/count'+str(index)+'.txt')
-
-    counts_group_in_sample = read_results('../data/tpcds5m/mysql/group_count_in_sample.txt')
-    counts_group_in_original = read_results('../data/tpcds5m/num_of_points.csv')
+    # averag_errors_mysql=[]
+    averag_errors_verdict=[]
+    
+    # counts_group_in_sample = read_results('../data/tpcds5m/mysql/group_count_in_sample.txt')
+    # counts_group_in_original = read_results('../data/tpcds5m/num_of_points.csv')
 
     for func in ['count','sum','avg']:
         print("---------------------"+func+"---------------------")
-        errors_blinkdb = []
+        # errors_blinkdb = []
         errors_DBEst = []
-        errors_mysql = []
+        # errors_mysql = []
+        errors_verdict = []
         for index in range(1,11):
             file_name=func+str(int(index))
-            ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
-            predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
-            predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/xgboost/'+file_name+'.txt')
-            predictions_mysql = read_results('../data/tpcds5m/mysql/'+file_name+'.txt',
-                counts_group_in_sample=counts_group_in_sample,
-                counts_group_in_original=counts_group_in_original,
-                func=func)
-            save_dic(predictions_mysql, file='../data/tpcds5m/mysql/5m_predictions.txt')
-            # if index == 1 and (func =='avg'):
-            #     print("groundtruth"+str(ground_truth))
-            #     print("blinkdb"+str(predictions_blinkdb))
-            #     print("DBEst"+str(predictions_DBEst))
-            #     print(len(ground_truth))
-            #     print(len(predictions_blinkdb))
-            #     print(len(predictions_DBEst))
+            ground_truth = read_results('../data/tpcds40g/groundtruth/'+file_name+'.txt',split_char=',')
+            # predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+            predictions_DBEst = read_results('../data/tpcds40g/dbest/'+file_name+'.txt',split_char=',')
+            # predictions_mysql = read_results('../data/tpcds5m/mysql/'+file_name+'.txt',
+                # counts_group_in_sample=counts_group_in_sample,
+                # counts_group_in_original=counts_group_in_original,
+                # func=func)
+            # save_dic(predictions_mysql, file='../data/tpcds5m/mysql/5m_predictions.txt')
+            
+            predictions_verdict = read_results('../data/tpcds40g/verdictdb6m/'+file_name+'.txt',split_char=",")
 
 
-            errors_blinkdb.append(avg_relative_error(ground_truth,predictions_blinkdb))
+            # errors_blinkdb.append(avg_relative_error(ground_truth,predictions_blinkdb))
             errors_DBEst.append(avg_relative_error(ground_truth,predictions_DBEst))
-            errors_mysql.append(avg_relative_error(ground_truth,predictions_mysql))
+            # errors_mysql.append(avg_relative_error(ground_truth,predictions_mysql))
+            errors_verdict.append(avg_relative_error(ground_truth,predictions_verdict))
+
             # print("averge is "+str(sum(errors_DBEst)/len(errors_DBEst)))
-        averag_errors_blinkdb.append(sum(errors_blinkdb)/len(errors_blinkdb))
+        # averag_errors_blinkdb.append(sum(errors_blinkdb)/len(errors_blinkdb))
         averag_errors_DBEst.append(sum(errors_DBEst)/len(errors_DBEst))
-        averag_errors_mysql.append(sum(errors_mysql)/len(errors_mysql))
+        # averag_errors_mysql.append(sum(errors_mysql)/len(errors_mysql))
+        averag_errors_verdict.append(sum(errors_verdict)/len(errors_verdict))
         
-        # print(errors_blinkdb)
-        # print("errors_DBEst"+str(errors_DBEst))
-        # print(sum(errors_DBEst)/len(errors_DBEst))
-        # print("errors_Blinkdb"+str(errors_blinkdb))
-        # print(sum(errors_blinkdb)/len(errors_blinkdb))
-    print(averag_errors_blinkdb)
+        
+    # print(averag_errors_blinkdb)
     print(averag_errors_DBEst)
-    print(averag_errors_mysql)
+    # print(averag_errors_mysql)
+    print(averag_errors_verdict)
 
 def avg_relative_errors_per_group_value(group_num=501,function='count',size="100k"):
     res_per_group_DBEst={}
@@ -201,7 +201,8 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
             if group_num == 8:
                 if size=="100k":
                     ground_truth = read_results('../data/tpcds_groupby_few_groups/groundtruth/'+file_name+'.result')
-                    predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_100k_new/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+                    # predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_100k_new/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+                    predictions_blinkdb = read_results('../data/tpcds_groupby_few_groups/blinkdb_100k_new/'+file_name+'.txt')
                     predictions_DBEst = read_results('../data/tpcds_groupby_few_groups/DBEst_integral_100k/'+file_name+'.txt')
                 if size=="1m":
                     ground_truth = read_results('../data/tpcds_groupby_few_groups/groundtruth/'+file_name+'.result')
@@ -211,9 +212,10 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
                 # ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
                 # predictions_blinkdb = read_results('../data/tpcds5m/blinkdb/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
                 # predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/'+file_name+'.txt')
-                ground_truth = read_results('../data/tpcds5m/groundtruth/'+file_name+'.result')
-                predictions_blinkdb = read_results('../data/tpcds5m/DBEst_integral/xgboost/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
-                predictions_DBEst = read_results('../data/tpcds5m/DBEst_integral/'+file_name+'.txt')
+                ground_truth = read_results('../data/tpcds40g/groundtruth/'+file_name+'.txt',split_char=',')
+                # predictions_blinkdb = read_results('../data/tpcds5m/DBEst_integral/xgboost/'+file_name+'.txt') #../data/tpcds5m/blinkdb/sum1.txt
+                predictions_blinkdb = read_results('../data/tpcds40g/verdictdb6m/'+file_name+'.txt',split_char=',')
+                predictions_DBEst = read_results('../data/tpcds40g/dbest/'+file_name+'.txt',split_char=',')
             
             for group_id in  ground_truth:
                 # print(group_id)
@@ -240,7 +242,7 @@ def avg_relative_errors_per_group_value(group_num=501,function='count',size="100
     
     
     if group_num == 501:
-        plt_histogram2(res_per_group_DBEst[function],res_per_group_blinkdb[function])
+        plt_histogram2(res_per_group_DBEst[function],res_per_group_blinkdb[function],title=function)
     if group_num == 8:
         plt_bar(res_per_group_DBEst[function],res_per_group_blinkdb[function],size)
 
@@ -310,7 +312,7 @@ def plt_bar4(x1,x2,x3,x4,function="count"):
 
 
 
-def plt_histogram2(x1,x2,b_cumulative=False):
+def plt_histogram2(x1,x2,b_cumulative=False,title=None):
 
     plt.rcParams.update({'font.size': 12})
     x1.sort()
@@ -319,9 +321,9 @@ def plt_histogram2(x1,x2,b_cumulative=False):
     fig, ax = plt.subplots()
     # p1 = plt.hist(x1,501,normed=1,cumulative=b_cumulative,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
     # p2 = plt.hist(x2,501,normed=1,cumulative=b_cumulative,color=colors["BlinkDB_1m"],alpha=0.7, label='BlinkDB')
-
-    p1 = plt.hist(x1,100,normed=1,cumulative=b_cumulative,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
-    p2 = plt.hist(x2,100,normed=1,cumulative=b_cumulative,color=colors["BlinkDB_1m"],alpha=0.7, label='DBEst_XGboost')
+    n_bar=57
+    p1 = plt.hist(x1,n_bar,normed=1,cumulative=b_cumulative,color=colors["DBEst_1m"],alpha=0.3, label='DBEst')
+    p2 = plt.hist(x2,n_bar,normed=1,cumulative=b_cumulative,color=colors["BlinkDB_1m"],alpha=0.7, label='VerdictDB')
 
     plt.legend( loc='1')
     # plt.legend((p1[0], p2[0]),
@@ -337,6 +339,8 @@ def plt_histogram2(x1,x2,b_cumulative=False):
     plt.ylabel("Number of Occurence")
     plt.subplots_adjust(bottom=0.12)
     plt.subplots_adjust(left=0.16)
+    if title !=None:
+        plt.title(title)
 
 
     
@@ -400,7 +404,7 @@ def process_mysql_results():
 
 
 if __name__ == '__main__':
-    # avg_relative_errors_per_group_value(function='avg', group_num=501)
+    avg_relative_errors_per_group_value(function='avg', group_num=501)
     # avg_relative_errors()
 
     # import numpy as np
@@ -413,5 +417,5 @@ if __name__ == '__main__':
     # print(np.var(blinkdb_100k[function]))
     # print(np.var(blinkdb_1m[function]))
     # process_mysql_result('../query/zipf/mysql/plain0.1_1m.dbest.result',1E4,1E8)
-    process_mysql_results()
+    # process_mysql_results()
 

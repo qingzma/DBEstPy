@@ -378,3 +378,26 @@ LINES TERMINATED BY '\n';
 
 #query to mysql
 mysql -u root -p dbest < 1.sql >1.log
+
+
+
+
+
+
+
+#verdict
+
+CREATE external TABLE store_sales ( ss_sold_date_sk       INT, ss_sold_time_sk       INT, ss_item_sk            INT, ss_customer_sk        INT, ss_cdemo_sk           INT, ss_hdemo_sk           INT, ss_addr_sk            INT, ss_store_sk           INT, ss_promo_sk           INT, ss_ticket_number      INT, ss_quantity           INT, ss_wholesale_cost     DOUBLE,ss_list_price         DOUBLE,ss_sales_price        DOUBLE,ss_ext_discount_amt   DOUBLE,ss_ext_sales_price    DOUBLE,ss_ext_wholesale_cost DOUBLE,ss_ext_list_price     DOUBLE,ss_ext_tax            DOUBLE,ss_coupon_amt         DOUBLE,ss_net_paid           DOUBLE,ss_net_paid_inc_tax   DOUBLE,ss_net_profit         DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/user/hive/warehouse/tpcDs/store_sales';
+
+CREATE EXTERNAL TABLE time_dim (    t_time_sk                 INT,    t_time_id                 char(16),    t_time                    INT,    t_hour                    INT,    t_minute                  INT,    t_second                  INT,    t_am_pm                   char(2),    t_shift                   char(20),    t_sub_shift               char(20),    t_meal_time               char(20)) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/user/hive/warehouse/tpcDs/time_dim'
+
+
+
+
+create external table web_page(wp_web_page_sk      INT     ,    wp_web_page_id      char(16),    wp_rec_start_date   date    ,    wp_rec_end_date     date    ,    wp_creation_date_sk INT     ,    wp_access_date_sk   INT     ,    wp_autogen_flag     char(1) ,    wp_customer_sk      INT     ,    wp_url              varchar(100),    wp_type             char(50), wp_char_count       INT,    wp_link_count       INT,    wp_image_count      INT,    wp_max_ad_count     INT)ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/user/hive/warehouse/tpcDs/web_page'
+
+create external table web_sales(ws_sold_date_sk       INT,    ws_sold_time_sk       INT,    ws_ship_date_sk       INT,    ws_item_sk            INT,    ws_bill_customer_sk   INT,    ws_bill_cdemo_sk      INT,    ws_bill_hdemo_sk      INT,    ws_bill_addr_sk       INT,    ws_ship_customer_sk   INT,    ws_ship_cdemo_sk      INT,    ws_ship_hdemo_sk      INT,    ws_ship_addr_sk       INT,    ws_web_page_sk        INT,    ws_web_site_sk        INT,    ws_ship_mode_sk       INT,    ws_warehouse_sk       INT,    ws_promo_sk           INT,    ws_order_number       INT,    ws_quantity           INT,    ws_wholesale_cost     DOUBLE,    ws_list_price         DOUBLE,    ws_sales_price        DOUBLE,    ws_ext_discount_amt   DOUBLE,    ws_ext_sales_price    DOUBLE,    ws_ext_wholesale_cost DOUBLE,    ws_ext_list_price     DOUBLE,    ws_ext_tax            DOUBLE,    ws_coupon_amt         DOUBLE,    ws_ext_ship_cost      DOUBLE,    ws_net_paid           DOUBLE,    ws_net_paid_inc_tax   DOUBLE,    ws_net_paid_inc_ship  DOUBLE,    ws_net_paid_inc_ship_tax  DOUBLE,    ws_net_profit   DOUBLE)ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/user/hive/warehouse/tpcDs/web_sales/'
+
+
+
+create table store_returns(sr_returned_date_sk       int,    sr_return_time_sk         int,    sr_item_sk                int,    sr_customer_sk            int,    sr_cdemo_sk               int,    sr_hdemo_sk               int,    sr_addr_sk                int,    sr_store_sk               int,    sr_reason_sk              int,    sr_ticket_number          int,    sr_return_quantity        int,    sr_return_amt             DOUBLE, sr_return_tax             DOUBLE,    sr_return_amt_inc_tax     DOUBLE,    sr_fee                    DOUBLE,    sr_return_ship_cost       DOUBLE,    sr_refunded_cash          DOUBLE,    sr_reversed_charge        DOUBLE,    sr_store_credit           DOUBLE,    sr_net_loss               DOUBLE) ROW FORMAT DELIMITED FIELDS TERMINATED BY '|' LOCATION '/user/hive/warehouse/tpcDs/store_returns'
