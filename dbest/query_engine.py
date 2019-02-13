@@ -150,12 +150,17 @@ class QueryEngine:
         """
         start = datetime.now()
         if self.dimension is 1:
-            def f_pRx(x):
-                # print(self.cregression.predict(x))
-                return np.exp(self.kde.score_samples(x)) * self.cregression.predict(x)
+            # def f_pRx(x):
+            #     return np.exp(self.kde.score_samples(x)) * self.cregression.predict(x)
 
-            def f_p(x):
-                return np.exp(self.kde.score_samples(x))
+            # def f_p(x):
+            #     return np.exp(self.kde.score_samples(x))
+            def f_pRx(*args):
+                # print(self.cregression.predict(x))
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1))) * self.cregression.predict(np.array(args))
+
+            def f_p(*args):
+                return np.exp(self.kde.score_samples(np.array(args).reshape(1, -1)))
             a = integrate.quad(f_pRx, x_min, x_max,
                                epsabs=epsabs, epsrel=epsrel)[0]
             b = integrate.quad(f_p, x_min, x_max,
