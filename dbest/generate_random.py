@@ -22,7 +22,8 @@ def make_cdf(f, lo, hi, steps=200):
 def bisect(target, f, lo, hi, n=30):
     'Find x between lo and hi where f(x)=target'
     old_value = -99999
-    abs_error = 1E-2
+    abs_error = 1#1E-2
+    rel_error= 5E-2
     for i in range(n):
         mid = (hi + lo) / 2.0
         if target < f(mid):
@@ -31,6 +32,8 @@ def bisect(target, f, lo, hi, n=30):
             lo = mid
         new_value = (hi + lo) / 2.0
         if abs(old_value - new_value) <= abs_error:
+            return new_value
+        if abs(old_value - new_value)/abs(old_value) <=rel_error:
             return new_value
         old_value = new_value
     return new_value

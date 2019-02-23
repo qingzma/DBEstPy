@@ -724,6 +724,7 @@ def load_csv(filename, fields=None, y_column=None, sep=','):
     """ Read the csv file."""
     input = pd.read_csv(filename, skipinitialspace=True,
                         usecols=fields, sep=sep, low_memory=False)
+    input = input.dropna(subset=fields)
     # dtype={"ss_list_price": float, "ss_wholesale_cost": float}
     input_data = input.values
     data = DataSource()

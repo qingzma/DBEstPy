@@ -404,7 +404,7 @@ def process_mysql_results():
 
 
 if __name__ == '__main__':
-    avg_relative_errors_per_group_value(function='avg', group_num=501)
+    avg_relative_errors_per_group_value(function='count', group_num=501)
     # avg_relative_errors()
 
     # import numpy as np

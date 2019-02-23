@@ -18,9 +18,10 @@ import gc  # to delete variables
 import warnings
 import pickle
 
-import threading
-from multiprocessing.pool import ThreadPool
+# import threading
+# from multiprocessing.pool import ThreadPool
 from multiprocessing import Process
+import multiprocessing as mp
 
 
 logger_file = "../results/deletable.log"
@@ -75,6 +76,8 @@ class DBEst:
         self.logger.logger.info("Ready to serve queries!")
         self.logger.logger.info(line_break)
         self.n_jobs=n_jobs
+        self.warehouse=[]
+        self.warehouse_serielize=[]
         # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
 
     def generate_model_catalog_string(self, table_name, columnPair, groupbyID=None, groupby_value=None):
@@ -511,10 +514,13 @@ class DBEst:
                     lb = query_list[8]
                     hb = query_list[10]
                     tbl = query_list[4]
+                    p=None
 
                 else:
                     x = query_list[2]
                     y = "*"
+                    lb=None
+                    hb=None
                     p = query_list[3]
                     tbl = query_list[5]
 
@@ -537,70 +543,139 @@ class DBEst:
 
                 columnItem = str([x, y])
                 DBEstClient = self.DBEstClients[tbl]
-                if func.lower() == "avg":
 
-                    result, time = DBEstClient[columnItem].\
-                        approximate_avg_from_to(float(lb), float(
-                            hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
-                    AQP_results.append(result)
-                    time_costs.append(time)
-                elif func.lower() == "sum":
-                    # DBEstClient = self.DBEstClients[tbl]
-                    result, time = DBEstClient[columnItem].\
-                        approximate_sum_from_to(float(lb), float(
-                            hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
-                    AQP_results.append(result)
-                    time_costs.append(time)
-                elif func.lower() == "count":
-                    # DBEstClient = self.DBEstClients[tbl]
-                    # self.logger.logger.info("table "+ str(tbl))
-                    # self.logger.logger.info("lb "+ str(lb))
-                    # self.logger.logger.info("hb "+ str(hb))
-                    result, time = DBEstClient[columnItem].\
-                        approximate_count_from_to(float(lb), float(
-                            hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
-                    AQP_results.append(result)
-                    time_costs.append(time)
-                elif func.lower() == 'variance_x':
-                    result, time = DBEstClient[columnItem].approximate_variance_x_from_to(
-                        float(lb), float(hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
-                    AQP_results.append(result)
-                    time_costs.append(time)
+                result,time=querySQL(DBEstClient,columnItem,func,lb,hb,p)
+                AQP_results.append(result)
+                time_costs.append(time)
+                # if func.lower() == "avg":
 
-                elif func.lower() == 'min':
-                    result, time = DBEstClient[columnItem].approximate_min_from_to(
-                        float(lb), float(hb), 0, ci=ci, confidence=confidence)
-                    AQP_results.append(result)
-                    time_costs.append(time)
+                #     result, time = DBEstClient[columnItem].\
+                #         approximate_avg_from_to(float(lb), float(
+                #             hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
+                # elif func.lower() == "sum":
+                #     # DBEstClient = self.DBEstClients[tbl]
+                #     result, time = DBEstClient[columnItem].\
+                #         approximate_sum_from_to(float(lb), float(
+                #             hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
+                # elif func.lower() == "count":
+                #     # DBEstClient = self.DBEstClients[tbl]
+                #     # self.logger.logger.info("table "+ str(tbl))
+                #     # self.logger.logger.info("lb "+ str(lb))
+                #     # self.logger.logger.info("hb "+ str(hb))
+                #     result, time = DBEstClient[columnItem].\
+                #         approximate_count_from_to(float(lb), float(
+                #             hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
+                # elif func.lower() == 'variance_x':
+                #     result, time = DBEstClient[columnItem].approximate_variance_x_from_to(
+                #         float(lb), float(hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
 
-                elif func.lower() == 'max':
-                    result, time = DBEstClient[columnItem].approximate_max_from_to(
-                        float(lb), float(hb), 0, ci=ci, confidence=confidence)
-                    AQP_results.append(result)
-                    time_costs.append(time)
+                # elif func.lower() == 'min':
+                #     result, time = DBEstClient[columnItem].approximate_min_from_to(
+                #         float(lb), float(hb), 0, ci=ci, confidence=confidence)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
 
-                elif func.lower() == 'covar':
-                    result, time = DBEstClient[columnItem].approximate_covar_from_to(
-                        float(lb), float(hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
-                    AQP_results.append(result)
-                    time_costs.append(time)
+                # elif func.lower() == 'max':
+                #     result, time = DBEstClient[columnItem].approximate_max_from_to(
+                #         float(lb), float(hb), 0, ci=ci, confidence=confidence)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
 
-                elif func.lower() == 'corr':
-                    result, time = DBEstClient[columnItem].approximate_corr_from_to(
-                        float(lb), float(hb), 0)
-                    AQP_results.append(result)
-                    time_costs.append(time)
-                elif func.lower() == 'percentile':
-                    result, time = DBEstClient[columnItem].approximate_percentile_from_to(
-                        float(p))
-                    AQP_results.append(result)
-                    time_costs.append(time)
+                # elif func.lower() == 'covar':
+                #     result, time = DBEstClient[columnItem].approximate_covar_from_to(
+                #         float(lb), float(hb), 0, epsabs=epsabs, epsrel=epsrel, limit=limit)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
 
-                else:
-                    self.logger.logger.warning(
-                        func + " is currently not supported!")
+                # elif func.lower() == 'corr':
+                #     result, time = DBEstClient[columnItem].approximate_corr_from_to(
+                #         float(lb), float(hb), 0)
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
+                # elif func.lower() == 'percentile':
+                #     result, time = DBEstClient[columnItem].approximate_percentile_from_to(
+                #         float(p))
+                #     AQP_results.append(result)
+                #     time_costs.append(time)
+
+                # else:
+                #     self.logger.logger.warning(
+                #         func + " is currently not supported!")
             self.logger.logger.info(AQP_results)
             self.logger.logger.info(time_costs)
+    def mass_query_simple_parallel(self, file, epsabs=epsabs, epsrel=epsrel, limit=limit, ci=True, confidence=0.95):
+        AQP_results = []
+        time_costs = []
+        index = 1
+        queries=[]
+        with open(file) as fin:
+            for line in fin:
+                queries.append(line)
+
+        width = int(len(queries)/self.n_jobs)
+        subgroups=[queries[inde:inde+width] for inde in range(0,len(queries),width)]
+        if len(queries)%self.n_jobs !=0:
+            subgroups[self.n_jobs-1]=subgroups[self.n_jobs-1]+subgroups[self.n_jobs]
+            del subgroups[-1]
+        # self.logger.logger.info(subgroups)
+
+        # 
+
+
+        # clients=pickle.dumps(self.DBEstClients)
+
+        # for fin in subgroups:
+            
+        start_time=datetime.now()
+        # print(querySQLs(queries,self.DBEstClients,self.CSinTable))
+        processes=[]
+        times_in_group=[]
+        # for idx,subgroup in enumerate(subgroups):
+
+        for subgroup in subgroups:
+            # print("group is "+ str(idx))
+            
+            predictions=[]
+            time_costs=[]
+            time=0.0
+            # clientss=pickle.loads(clients)
+            # t = threading.Thread(target=querySQLgroups, args=(subgroup,DBEstClient,columnItem,func,x,y,lb,hb,p,results_parallel,index_in_groups[idx]))
+            t = Process(target=querySQLsWithReturnValues, args=(subgroup,self.DBEstClients,self.CSinTable,predictions,time_costs,time))
+            processes.append(t)
+            t.start()
+            times_in_group.append(time)
+        start_time=datetime.now()
+        # for t in processes:
+        #     t.start()
+        for t in processes:
+            t.join()
+
+        # print("Finished!")
+        end_time=datetime.now()
+        time_cost = (end_time - start_time).total_seconds()
+        self.logger.logger.info(
+            "Query response time is (%.4fs)"
+            % time_cost)
+        self.logger.logger.info(times_in_group)
+        self.logger.logger.info("_______________________________________________________________________________")
+        return time_cost
+            
+
+
+
+
+            
+                
+        #     self.logger.logger.info(AQP_results)
+        #     self.logger.logger.info(time_costs)
 
     def query_simple_groupby(self, query, output=None, epsabs=epsabs, epsrel=epsrel, limit=limit, ci=True, confidence=0.95):
         
@@ -745,12 +820,65 @@ class DBEst:
     def get_size(self, b_models_only=True):
         if b_models_only:
             size = 0.0
+            idx=0
+            filenames=[]
+
             for table in self.DBEstClients:
                 for columnItem in self.DBEstClients[table]:
+                    filename="models/"+str(idx)+".txt"
+                    filenames.append(filename)
+                    self.warehouse.append(self.DBEstClients[table][columnItem])
                     size = size + self.DBEstClients[table][columnItem].get_size()
+            start_time=datetime.now()
+            for model in self.warehouse:
+                self.warehouse_serielize.append(pickle.dumps(model))
+            end_time=datetime.now()
+            
+            for model in self.warehouse_serielize:
+                model=pickle.loads(model)
+            end_time1=datetime.now()
+            t1=(end_time-start_time).total_seconds()
+            t2=(end_time1-end_time).total_seconds()
+            self.logger.logger.info("size is "+str(size))
+            self.logger.logger.info("time to serielize : " +str(t1))
+            self.logger.logger.info("time to deserielize : " +str(t2))
+
+
+
+            # for disk io 
+            start_time=datetime.now()
+            for idx,model in enumerate(self.warehouse):
+                pickle_out = open(filenames[idx],"wb")
+                pickle.dump(model,pickle_out)
+                pickle_out.close()
+            end_time=datetime.now()
+            
+            for filename in filenames:
+                pickle_in = open(filename,"rb")
+                model=pickle.load(pickle_in)
+            end_time1=datetime.now()
+            t1=(end_time-start_time).total_seconds()
+            t2=(end_time1-end_time).total_seconds()
+            self.logger.logger.info("size is "+str(size))
+            self.logger.logger.info("time to serielize : " +str(t1))
+            self.logger.logger.info("time to deserielize : " +str(t2))
+
+            # time_before_write=datetime.now()
+            # for idx,model in enumerate(self.warehouse_serielize):
+            #     filename=str(idx)+"txt"
+            #     with open()
         else:
+            start_time=datetime.now()
             str_size=pickle.dumps(self)
-            size = sys.getsizeof(str_size)            
+            end_time=datetime.now()
+            size = sys.getsizeof(str_size)
+            model=pickle.loads(str_size)
+            end_time1=datetime.now()
+            t1=(end_time-start_time).total_seconds()
+            t2=(end_time1-end_time).total_seconds()
+            self.logger.logger.info("size is "+str(size))
+            self.logger.logger.info("time to serielize : " +str(t1))
+            self.logger.logger.info("time to deserielize : " +str(t2))           
         return size
 
     def show_tables(self):
@@ -861,6 +989,69 @@ def querySQL(DBEstClient,columnItem,func,lb=None,hb=None,p=None):
         return
     return result,time
 
+def querySQLsWithReturnValues(queries,DBEstClients,CSinTable,predictions, times, time):
+    start_time=datetime.now()
+    predictions, times=querySQLs(queries,DBEstClients,CSinTable)
+    end_time=datetime.now()
+    times=(end_time-start_time).total_seconds()
+    print("______________________________________________________")
+    print(times)
+    print("______________________________________________________")
+
+
+def querySQLs(queries,DBEstClients,CSinTable):
+
+    AQP_results=[]
+    time_costs=[]
+    for line in queries:
+        query_list = line.replace(
+            "(", " ").replace(")", " ").replace(";", "").replace(",", "")
+        # self.logger.logger.info(query_list)
+        query_list = re.split('\s+', query_list)
+        # remove empty strings caused by sequential blank spaces.
+        query_list = list(filter(None, query_list))
+        func = query_list[1]
+
+        if func.lower() != "percentile":
+            x = query_list[6]
+            y = query_list[2]
+            lb = query_list[8]
+            hb = query_list[10]
+            tbl = query_list[4]
+            p=None
+
+        else:
+            x = query_list[2]
+            y = "*"
+            lb=None
+            hb=None
+            p = query_list[3]
+            tbl = query_list[5]
+
+        if y == "*":
+            columnSetsInTable = CSinTable[tbl]
+            for cs in columnSetsInTable:
+                if x == cs[0]:
+                    print("Find a column \
+                        set in table " + tbl + " to replace *: " +
+                                             str(cs))
+                    y = cs[1]
+                    break
+        if y == "*":
+            print(
+                "There is no model to predict percentile!")
+            AQP_results.append("Null")
+            time_costs.append("Null")
+            break
+
+        columnItem = str([x, y])
+        DBEstClient = DBEstClients[tbl]
+
+        result,time=querySQL(DBEstClient,columnItem,func,lb,hb,p)
+        AQP_results.append(result)
+        time_costs.append(time)
+    return AQP_results,time_costs
+
 
 def run_add_pair_client():
     log_file = "../results/DBEsti_tpcds_100k_all.log"
@@ -886,6 +1077,31 @@ def test_serialize():
     model_str=db.serialize_model(model)
     model=db.deserialize_model(model_str)
     print(model.cregression.predict([20]))
+
+def test_batch_query():
+    log_file="../results/pm25.log"
+    dataset="tpcds"
+
+    filess='../data/pm25/10k.csv'
+    db = DBEst(dataset=dataset,logger_file=log_file,
+                       base_models=[tools.app_boosting],
+                       n_jobs=1)
+    db.init_whole_range(file=filess,
+                            table="pm_10k",
+                            columnItems=[
+                                ['TEMP','pm25'],
+                                ['DEWP','pm25'],
+                                ['PRES','pm25'],
+                            ],
+                            num_of_points={'pm_10k':'100000000'})#115203420#110022652
+    times=[]
+    for core in [1,2,4]:#[1,2,3,4,5,6,7,8]:
+        db.n_jobs=core
+        times.append(db.mass_query_simple_parallel(file="../query/pm25/10k.sql"))
+        db.logger.logger.info(str(core))
+        db.logger.logger.info("_____________********************_________________________*****************")
+    print(core)
+    print(times)
 
 
 
@@ -1080,15 +1296,13 @@ def run_8_groupby():
                     table=table, group=group,
                     columnItem=columnItem,
                     num_of_points_per_group=num_of_points_per_group)
-    db.query_simple_groupby(
-        query="select count(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
-        epsabs=10, epsrel=1E-1, limit=20)
     # db.query_simple_groupby(
-    #     query="select sum(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
+    #     query="select count(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
     #     epsabs=10, epsrel=1E-1, limit=20)
-    db.query_simple_groupby(
-        query="select avg(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
-        epsabs=10, epsrel=1E-1, limit=20)
+    
+    # db.query_simple_groupby(
+    #     query="select avg(ss_sales_price)   from store_sales_group_d where ss_sold_date_sk between 2451484 and 2451849 group by ss_store_sk",
+    #     epsabs=10, epsrel=1E-1, limit=20)
     db.logger.logger.info("Total size of DBEst is " +
                           str(db.get_size()) + " bytes.")
 
@@ -1159,11 +1373,14 @@ def run_60_groupby():
 
 
 if __name__ == "__main__":
+    mp.set_start_method('forkserver')
+    run_501_group_by()
     # warnings.filterwarnings(action='ignore', category=DeprecationWarning)
     # run_add_pair_client()
     # test_serialize()
     # run_8_groupby()
-    get_join_size()
+    # get_join_size()
+    # test_batch_query()
     # run_sample_whole_range()
     # log_file= "../results/DBEsti_tpcds_100k_all.log"
     # db = DBEst(dataset="tpcds",logger_file=log_file)

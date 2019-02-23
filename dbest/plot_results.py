@@ -192,10 +192,15 @@ def plt_tpcds_multi_cp_response_time():
 def plt_tpcds_multi_cp_training_time():
     plt.rcParams.update({'font.size': 22})
     width = 0.30
+    # data = [
+    #     [281.5, 286],  # , 0.0486],
+    #     [39.8,  278.3],  # , 0.0335],
+    #     [2328,  2342]
+    # ]
     data = [
-        [281.5, 286],  # , 0.0486],
-        [39.8,  278.3],  # , 0.0335],
-        [2328,  2342]
+        [67.49972558, 68],
+        [0.653846154, 4.961538462],
+        [108.8538909, 107.7999105] 
     ]
 
     X = np.arange(2)
@@ -208,15 +213,17 @@ def plt_tpcds_multi_cp_training_time():
     p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width,alpha=0.9)
 
     plt.legend((p1[0], p2[0], p3[0]),
-               ('DBEst Sampling', 'DBEst training', 'BlinkDB Sampling', 'BlinkDB_100k'), loc='center', prop={'size': 18})
+               ('DBEst Sampling', 'DBEst Training', 'VerdictDB Sampling', 'BlinkDB_100k'), loc='lower center', prop={'size': 18})
 
     plt.xticks(X + 0.5 * width, ("10k", '100k', 'AVG', 'OVERALL'))
     ax.set_ylabel("Total Training Time (s)")
+    ax.set_xlabel("Sample Size")
     # ax.set_yscale('log')
     formatter = FuncFormatter(to_percent)
     # ax.yaxis.set_major_formatter(formatter)
-    plt.subplots_adjust(bottom=0.09)
-    plt.subplots_adjust(left=0.23)
+    plt.subplots_adjust(bottom=0.16)
+    plt.subplots_adjust(left=0.20)
+    plt.ylim([0,120])
 
     plt.show()
 
@@ -224,10 +231,16 @@ def plt_tpcds_multi_cp_training_time():
 def plt_tpcds_multi_cp_memory_usage():
     plt.rcParams.update({'font.size': 22})
     width = 0.30
+    # data = [
+    #     [5.9959, 22.195],  # , 0.0486],
+    #     [1024,  1340],  # , 0.0335],
+    # ]
     data = [
-        [5.9959, 22.195],  # , 0.0486],
-        [1024,  1340],  # , 0.0335],
+        [0.192,   1.684], 
+        [1.7,       9.7], 
     ]
+
+
 
     X = np.arange(2)
 
@@ -240,14 +253,15 @@ def plt_tpcds_multi_cp_memory_usage():
     # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
 
     plt.legend((p1[0], p2[0]),
-               ('DBEst', 'BlinkDB', 'BlinkDB Sampling', 'BlinkDB_100k'), loc='center', prop={'size': 18})
+               ('DBEst', 'VerdictDB', 'BlinkDB Sampling', 'BlinkDB_100k'), loc='center', prop={'size': 18})
 
     plt.xticks(X + 0.5 * width, ("10k", '100k', 'AVG', 'OVERALL'))
-    ax.set_ylabel("Memory Usage (MB)")
-    ax.set_yscale('log')
+    ax.set_ylabel("Space Overhead (MB)")
+    ax.set_xlabel("Sample Size")
+    # ax.set_yscale('log')
     formatter = FuncFormatter(to_percent)
     # ax.yaxis.set_major_formatter(formatter)
-    plt.subplots_adjust(bottom=0.10)
+    plt.subplots_adjust(bottom=0.18)
     plt.subplots_adjust(left=0.18)
 
     plt.show()
@@ -260,14 +274,27 @@ def plt_tpcds_multi_cp_memory_usage():
 def plt_tpcds_single_cp_sample_size_response_time():
     plt.rcParams.update({'font.size': 12})
     width = 0.20
+    # data = [
+    #     [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+    # data = [
+    #     [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 1.2,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 24,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 0, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+
     data = [
-        [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
-        [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
-        [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
-        [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+        [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179],
+        [0.09, 1.2,   0.22,  0.23, 0.22, 0.29             ],
+        [1.13, 24,  3.07, 3.08, 3.01, 4.66                ]  ,
+        [7.07, 0, 21.07,  21.13, 19.07, 26.44             ],
     ]
 
-    X = np.arange(8)
+    X = np.arange(6)
 
     fig, ax = plt.subplots()
 
@@ -300,14 +327,20 @@ def plt_tpcds_single_cp_sample_size_response_time():
 def plt_tpcds_single_cp_sample_size_relative_error():
     plt.rcParams.update({'font.size': 12})
     width = 0.20
+    # data = [
+    #     [0.0607,  0.01, 0.0704,  0.0151,  0.0831,  0.0397,  0.3092,  0.1971],
+    #     [0.0259,  0.00607, 0.0103,  0.0045,  0.0248, 0.00620,  0.3021,  0.204],
+    #     [0.0099,  0.00360, 0.0092,  0.0039,  0.0103,  0.0021,  0.3139,  0.2088],
+    #     [0.0048,  0.0035, 0.009,  0.0038,  0.0051,  0.0015,  0.3163,  0.2104],
+    # ]
     data = [
-        [0.0607,  0.01, 0.0704,  0.0151,  0.0831,  0.0397,  0.3092,  0.1971],
-        [0.0259,  0.00607, 0.0103,  0.0045,  0.0248, 0.00620,  0.3021,  0.204],
-        [0.0099,  0.00360, 0.0092,  0.0039,  0.0103,  0.0021,  0.3139,  0.2088],
-        [0.0048,  0.0035, 0.009,  0.0038,  0.0051,  0.0015,  0.3163,  0.2104],
+        [0.0607,  0.01, 0.0704,  0.0151,  0.0831,     0.0397],
+        [0.0259,  0.00607, 0.0103,  0.0045,  0.0248, 0.00620],
+        [0.0099,  0.00360, 0.0092,  0.0039,  0.0103,  0.0021],
+        [0.0048,  0.0035, 0.009,  0.0038,  0.0051,    0.0015],
     ]
 
-    X = np.arange(8)
+    X = np.arange(6)
 
     fig, ax = plt.subplots()
 
@@ -426,21 +459,29 @@ def plt_tpcds_single_cp_sample_size_response_time_blinkdb():
 def plt_tpcds_single_cp_training_time_comparison():
     plt.rcParams.update({'font.size': 22})
     fig, ax = plt.subplots()
-    y1 = [411, 421.295, 442.629, 779.5,   3847,    17228]
-    y2 = [2321,    2326,    2343,    2342,    2355,    2378]
-    x = [1E3, 1E4, 1E5, 1E6, 5E6, 26E6]
+    # y1 = [411, 421.295, 442.629, 779.5,   3847,    17228]
+    # y2 = [2321,    2326,    2343,    2342,    2355,    2378]
+    # x = [1E3, 1E4, 1E5, 1E6, 5E6, 26E6]
+
+    y1 = [67.1,    68.15357173, 72.96153846, 154]
+    y2 = [107, 108.8538909, 110.7999105, 122.7593984]
+    x = [1E3, 1E4, 1E5, 1E6]
+
+
+
+
     p1 = plt.plot(x, y1, 'rx-')
     p2 = plt.plot(x, y2, 'gh-')
 
     plt.legend((p1[0], p2[0]),
-               ('DBEst', 'BlinkDB'), loc='1')
+               ('DBEst', 'VerdictDB'), loc='1')
 
     ax.set_xlabel("Sample Size")
     ax.set_ylabel("Training Time (s)")
 
-    plt.xticks([5E6, 26E6], ('5m', '26m'))
+    plt.xticks([5E6, 1E6], ('5m', '26m'))
     ax.set_xscale('log')
-    ax.set_yscale('log')
+    # ax.set_yscale('log')
 
     plt.subplots_adjust(bottom=0.16)
     plt.subplots_adjust(left=0.18)
@@ -451,8 +492,13 @@ def plt_tpcds_single_cp_training_time_comparison():
 def plt_tpcds_single_cp_memory_cost_comparison():
     plt.rcParams.update({'font.size': 22})
     fig, ax = plt.subplots()
-    y2 = [78, 99, 208, 787.6923077, 4096]
+    # y2 = [78, 99, 208, 787.6923077, 4096]
+    # y1 = [0.486134,   1.995219,   20.265429,  94.901193,  484.876566]
+    # x = [1E4, 1E5, 1E6, 5E6, 26E6]
+
     y1 = [0.486134,   1.995219,   20.265429,  94.901193,  484.876566]
+    y2 = [78, 99, 208, 787.6923077, 4096]
+    
     x = [1E4, 1E5, 1E6, 5E6, 26E6]
     p1 = plt.plot(x, y1, 'rx-')
     p2 = plt.plot(x, y2, 'gh-')
@@ -481,8 +527,13 @@ def plt_tpcds_single_cp_query_range_relative_error():
         [0.0260,  0.0061,  0.0107,  0.0047,  0.0248,  0.0062,  0.3021, 0.2040],
         [0.0111,  0.0061,  0.0092,  0.0039,  0.0113,  0.0033,  0.2883, 0.1886],
     ]
+    data = [
+        [0.0364,  0.0061,  0.0360,  0.0178,  0.0363,  0.0085],
+        [0.0260,  0.0061,  0.0107,  0.0047,  0.0248,  0.0062],
+        [0.0111,  0.0061,  0.0092,  0.0039,  0.0113,  0.0033],
+    ]
 
-    X = np.arange(8)
+    X = np.arange(6)
 
     fig, ax = plt.subplots()
 
@@ -514,22 +565,28 @@ def plt_tpcds_single_cp_query_range_relative_error():
 def plt_tpcds_single_cp_query_range_response_time():
     plt.rcParams.update({'font.size': 12})
     width = 0.25
+    shift=1
+    # data = [
+    #     [0.0873, 1.2,  0.2465,  0.2480,  0.1449,  0.2223,  0.0532,  0.0530],
+    #     [0.0866, 1.2,  0.2200,  0.2300,  0.2184,  0.2885,  0.0530,  0.0530],
+    #     [0.1823, 1.2,  0.5837,  0.5800,  0.6567,  0.9072,  0.0568,  0.0573],
+    # ]
     data = [
-        [0.0873, 3.1000,  0.2465,  0.2480,  0.1449,  0.2223,  0.0532,  0.0530],
-        [0.0866, 3.1000,  0.2200,  0.2300,  0.2184,  0.2885,  0.0530,  0.0530],
-        [0.1823, 3.1000,  0.5837,  0.5800,  0.6567,  0.9072,  0.0568,  0.0573],
+        [0.0873, 1.2,  0.2465,  0.2480,  0.1449,  0.2223],
+        [0.0866, 1.2,  0.2200,  0.2300,  0.2184,  0.2885],
+        [0.1823, 1.2,  0.5837,  0.5800,  0.6567,  0.9072],
     ]
 
-    X = np.arange(8)
+    X = np.arange(6)
 
     fig, ax = plt.subplots()
 
     p1 = plt.bar(
-        X + 0.00, data[0], color=colors["lightgreen"], width=width, alpha=alpha['2'])
-    p2 = plt.bar(X + 0.20, data[1], color=colors["green"],
+        X + 0.00+shift*width, data[0], color=colors["lightgreen"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(X + width+shift*width, data[1], color=colors["green"],
                  width=width, alpha=alpha['4'])
     p3 = plt.bar(
-        X + 0.40, data[2], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+        X + 2*width+shift*width, data[2], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
     # p4 = plt.bar(X + 0.60, data[3], color=colors["BlinkDB_5m"], width=width)
 
     plt.legend((p1[0], p2[0], p3[0]),
@@ -538,7 +595,7 @@ def plt_tpcds_single_cp_query_range_response_time():
     plt.xticks(X + 1.5 * width, ("COUNT", 'PERCENTILE',
                                  'VARIANCE', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
     ax.set_ylabel("Query Response Time (s)")
-    ax.set_yscale('log')
+    # ax.set_yscale('log')
     formatter = FuncFormatter(to_percent)
     # ax.yaxis.set_major_formatter(formatter)
 
@@ -585,6 +642,224 @@ def plt_ccpp_multi_cp_relative_error():
     ax.yaxis.set_major_formatter(formatter)
     plt.subplots_adjust(bottom=0.08)
     # plt.subplots_adjust(left=0.13)
+
+    plt.show()
+def plt_ccpp_multi_cp_relative_error_verdict_10k():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.20
+    data = [
+        [0.051461925, 0.050878425, 0.00192856 ,0.034756303],
+        [0.174683727, 0.177441235, 0.005118666,0.119081209],
+        [0.15574034 , 0.156995274, 0.006549603,0.106428406],
+        [0.164854974, 0.165270941, 0.005731419,0.111952445] 
+    ]
+    # no MySQL
+    data = [
+        [0.051461925, 0.050878425, 0.00192856 ,0.034756303],
+        # [0.174683727, 0.177441235, 0.005118666,0.119081209],
+        [0.15574034 , 0.156995274, 0.006549603,0.106428406],
+        # [0.164854974, 0.165270941, 0.005731419,0.111952445] 
+    ]
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['3'])
+    # p3 = plt.bar(
+    #     X + 0.40, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 0.40, data[2], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0]),
+               ('DBEst_10k', 'MySQL_10k'), loc='1')
+
+    plt.xticks(X + 1.0 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.08)
+    plt.subplots_adjust(left=0.15)
+
+    plt.show()
+def plt_ccpp_multi_cp_response_time_verdict_10k():
+    plt.rcParams.update({'font.size': 18})
+    width = 0.20
+    data = [
+        [0.0120  ,0.0181  ,0.0171  ,0.0136 ],
+        [13.9600 ,14.1800 ,14.3500 ,14.1633],
+        [0.0067  ,0.0067  ,0.0068  ,0.0067 ],
+        [0.8652  ,0.6366  ,0.6185  ,0.7068 ] 
+    ]
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 0.40, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0],p3[0],p4[0]),
+               ('DBEst_10k','BlinkDB_10k','MySQL_10k', 'VerdictDB_10k'), loc='upper left')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Qeury Response Time (s)")
+    ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.08)
+    plt.subplots_adjust(left=0.17)
+
+    plt.show()
+
+def plt_ccpp_multi_cp_response_time_verdict_100k():
+    plt.rcParams.update({'font.size': 18})
+    width = 0.20
+    data = [
+        [0.1695  ,0.272  ,0.2731  ,0.2381 ],
+        [18.4900 ,20.1900 ,19.2100 ,19.2967 ],
+        [0.0639  ,0.0623  ,0.0628  ,0.0630 ],
+        [0.5939  ,0.5915  ,0.5838  ,0.5897 ] 
+    ]
+
+
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 0.40, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0],p3[0],p4[0]),
+               ('DBEst_100k','BlinkDB_100k','MySQL_100k', 'VerdictDB_100k'), loc='upper left')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Qeury Response Time (s)")
+    ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.08)
+    plt.subplots_adjust(left=0.17)
+
+    plt.show()
+
+def plt_ccpp_multi_cp_relative_error_verdict_100k():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.20
+    data = [
+        [0.027136681, 0.027507043, 0.000903558, 0.018515761],
+        [0.073711447, 0.074260957, 0.001724737, 0.049899047],
+        [0.065931394, 0.064697144, 0.0023057  , 0.044311413],
+        [0.050935661, 0.050739747, 0.001832127, 0.034502512] 
+    ]
+
+    data = [
+        [0.027136681, 0.027507043, 0.000903558, 0.018515761],
+        # [0.073711447, 0.074260957, 0.001724737, 0.049899047],
+        [0.065931394, 0.064697144, 0.0023057  , 0.044311413],
+        # [0.050935661, 0.050739747, 0.001832127, 0.034502512] 
+    ]
+
+
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['3'])
+    # p3 = plt.bar(
+    #     X + 0.40, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 0.40, data[2], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0]),
+               ('DBEst_100k', 'MySQL_100k'), loc='1')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.08)
+    plt.subplots_adjust(left=0.15)
+
+    plt.show()
+def plt_tpcds_multi_cp_relative_error_verdict_combined():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.20
+    data = [
+        [0.027136681, 0.027507043, 0.000903558, 0.018515761],
+        [0.073711447, 0.074260957, 0.001724737, 0.049899047],
+        [0.065931394, 0.064697144, 0.0023057  , 0.044311413],
+        [0.050935661, 0.050739747, 0.001832127, 0.034502512] 
+    ]
+
+    data=[
+    [0.037773051,0.107663034, 0.012524812,0.0527],
+    [0.146994078,0.145764373, 0.018608432,0.1038],
+    [0.032786002,0.05248726 , 0.011889626,0.0324],
+    [0.038593217,0.059797881, 0.012760796,0.0371]
+    ]
+
+       
+
+
+
+
+
+
+
+
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 0.40, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0], p3[0],p4[0]),
+               ('DBEst_10k', 'VerdictDB_10k', 'DBEst_100k', 'VerdictDB_100k'), loc='1')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.08)
+    plt.subplots_adjust(left=0.15)
 
     plt.show()
 
@@ -692,7 +967,7 @@ def plt_ccpp_multi_cp_memory_usage():
 
 
 def plt_ccpp_multi_cp_relative_error_xgboost():
-    plt.rcParams.update({'font.size': 22})
+    plt.rcParams.update({'font.size': 12})
     width = 0.20
     data = [
         [0.0478 , 0.0481 , 0.0017 , 0.0325 ],  # , 0.0486],
@@ -733,7 +1008,7 @@ def plt_ccpp_multi_cp_relative_error_xgboost():
 
 
 def plt_ccpp_multi_cp_response_time_xgboost():
-    plt.rcParams.update({'font.size': 22})
+    plt.rcParams.update({'font.size': 12})
     width = 0.20
     data = [
         [0.012 ,  0.180,  0.190 , 0.127 ],  # , 0.0486],
@@ -774,7 +1049,7 @@ def plt_ccpp_multi_cp_response_time_xgboost():
 
 
 def plt_ccpp_multi_cp_training_time_xgboost():
-    plt.rcParams.update({'font.size': 22})
+    plt.rcParams.update({'font.size': 12})
     width = 0.30
     data = [
         [4468.49, 4506],  # , 0.0486],
@@ -813,7 +1088,7 @@ def plt_ccpp_multi_cp_training_time_xgboost():
 
 
 def plt_ccpp_multi_cp_memory_usage_xgboost():
-    plt.rcParams.update({'font.size': 22})
+    plt.rcParams.update({'font.size': 12})
     width = 0.30
     data = [
         [0.333, 2.4156],  # , 0.0486],
@@ -834,7 +1109,7 @@ def plt_ccpp_multi_cp_memory_usage_xgboost():
                ('DBEst', 'DBEst_XGBoost', 'BlinkDB Sampling', 'BlinkDB_100k'), loc='center left', prop={'size': 18})
 
     plt.xticks(X + 0.5 * width, ("10k", '100k', 'AVG', 'OVERALL'))
-    ax.set_ylabel("Memory Usage (MB)")
+    ax.set_ylabel("Space Overhead (MB)")
     ax.set_xlabel("Sample Size")
     # ax.set_yscale('log')
     formatter = FuncFormatter(to_percent)
@@ -881,6 +1156,45 @@ def plt_group_by_relative_error():
     # plt.subplots_adjust(left=0.23)
 
     plt.show()
+def plt_group_by_relative_error_verdict():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.20
+    # data = [
+    #     [0.0670,  0.0672,  0.0161,  0.0501],  # , 0.0486],
+    #     [0.0389,  0.0421,  0.0169,  0.0326],  # , 0.0335],
+    # ]
+
+    data = [
+        [0.05,   0.058425871, 0.021159024, 0.044343787], 
+        [0.16,   0.163163671, 0.036915332, 0.120475894], 
+    ]
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['6'])
+    # p3 = plt.bar(X + 0.40, data[2], color=colors["DBEst_100k"], width=width)
+    # p4 = plt.bar(X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width)
+
+    plt.legend((p1[0], p2[0]),
+               ('DBEst', 'VerdictDB', 'DBEst_100k', 'BlinkDB_100k'), loc='1')
+
+    plt.xticks(X + 0.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.10)
+    plt.subplots_adjust(left=0.24)
+    # plt.subplots_adjust(left=0.23)
+
+    plt.show()
 
 
 def plt_group_by_response_time():
@@ -909,6 +1223,44 @@ def plt_group_by_response_time():
     ax.set_ylabel("Response Time (s)")
     ax.set_yscale('log')
     formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.10)
+    plt.subplots_adjust(left=0.18)
+
+    plt.show()
+def plt_group_by_response_time_verdict():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.30
+    data = [
+        [205.31, 209.30,  214.89,  209.83],  # , 0.0486],
+        [8.90, 23.10,  29.90,  20.63],  # , 0.0335],
+    ]
+
+    data = [
+        [0.90,    1.32       , 1.5       ,  1.24],  # , 0.0486],
+        [1.16,    0.700424022, 0.599106285, 0.820077781],  # , 0.0335],
+    ]
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + width, data[1], color=colors["BlinkDB_10k"], width=width, alpha=alpha['6'])
+    # p3 = plt.bar(X + 0.40, data[2], color=colors["DBEst_100k"], width=width)
+    # p4 = plt.bar(X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width)
+
+    plt.legend((p1[0], p2[0]),
+               ('DBEst', 'VerdictDB', 'DBEst_100k', 'BlinkDB_100k'), loc='lower left')
+
+    plt.xticks(X + 0.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Response Time (s)")
+    # ax.set_yscale('log')
+    # formatter = FuncFormatter(to_percent)
     # ax.yaxis.set_major_formatter(formatter)
     plt.subplots_adjust(bottom=0.10)
     plt.subplots_adjust(left=0.18)
@@ -951,6 +1303,47 @@ def plt_group_by_training_time():
 
     plt.show()
 
+def plt_group_by_training_time_verdict():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.40
+    data = [
+        [1525.3,   0],  # , 0.0486],
+        [502,      0],  # , 0.0335],
+        [2405.467, 0]
+    ]
+
+    data = [
+        [68,   0],  # , 0.0486],
+        [43.6,      0],  # , 0.0335],
+        [120, 0]
+    ]
+
+    X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["orange"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(X + 0, data[1], color=colors["red"],
+                 width=width, bottom=data[0], alpha=alpha['4'])
+    p3 = plt.bar(X + 1, data[2], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['6'])
+    p1[1].set_color(colors["BlinkDB_10k"])
+
+    plt.legend((p1[0], p2[0], p3[0]),
+               ('DBEst Sampling', 'DBEst Training', 'VerdictDB Sampling', 'BlinkDB_100k'), loc='lower center', prop={'size': 18})
+
+    plt.xticks(X, ("DBEst", 'VerdictDB', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Total Training Time (s)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.09)
+    plt.subplots_adjust(left=0.23)
+    plt.xlim(-0.5, 1.5)
+
+    plt.show()
+
 
 def plt_group_by_memory_usage():
     plt.rcParams.update({'font.size': 22})
@@ -982,6 +1375,38 @@ def plt_group_by_memory_usage():
     # ax.yaxis.set_major_formatter(formatter)
     plt.subplots_adjust(bottom=0.10)
     plt.subplots_adjust(left=0.18)
+
+    plt.show()
+def plt_group_by_memory_usage_verdict():
+    plt.rcParams.update({'font.size': 22})
+    width = 0.40
+    data = [
+        [11.15, 67],  # , 0.0486],
+        # [66.4,  102.4 ],#, 0.0335],
+    ]
+
+    X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(X, data[0], color=colors["DBEst_10k"], width=width)
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    p1[1].set_color(colors["BlinkDB_10k"])
+
+    plt.xticks(X, ("DBEst", 'VerdictDB', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Space Overhead (MB)")
+    # ax.set_xlabel("Sample Size")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.10)
+    plt.subplots_adjust(left=0.16)
 
     plt.show()
 
@@ -2035,6 +2460,621 @@ def plt_qreg_4d_20_xgboost_win_NRMSE():
     plt.show()
     fig.savefig(
         "/Users/qingzhima/Desktop/NRMSE/4d_20_xgboost.pdf", bbox_inches='tight')
+
+
+def plt_tpcds_multi_cp_relative_error_verdictdb_10k():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.14
+    # data = [
+    #     [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+    # data = [
+    #     [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 1.2,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 24,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 0, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+
+    data = [
+        [0.036729392, 0.147053419 ,0.01226814],
+        [0.180193022, 0.19294517  ,0.016050075],
+        [0.035590202, 0.085750906 ,0.010402393],
+        [0.153588479, 0.10440603  ,0.021930002],
+        [0.040999558, 0.090184777 ,0.014903902],
+        [0.107200732, 0.139941919 ,0.017845218],
+    ]
+
+
+
+    X = np.arange(3)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    p5 = plt.bar(
+        X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0], p2[0], p3[0],p4[0],p5[0]),
+               ('DBEst_0.1%', 'VerdictDB_0.1%', 'DBEst_0.5%', 'VerdictDB_0.5%','DBEst_1%', 'VerdictDB_1%'), loc='1')
+
+    plt.xticks(X + 2.5 * width, ("COUNT", 'SUM',
+                                 'AVG', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Average Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+
+    plt.show()
+
+def plt_tpcds_multi_cp_relative_error_verdictdb_100k():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.14
+    # data = [
+    #     [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+    # data = [
+    #     [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 1.2,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 24,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 0, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+
+    data = [
+        [0.013098367, 0.046292902, 0.015467639],
+        [0.063509021, 0.097632026, 0.012282212],
+        [0.040278354, 0.060049817, 0.01393817],
+        [0.032710269, 0.044273866, 0.011985621],
+        [0.044981284, 0.051119061, 0.006263069],
+        [0.01956036 , 0.037487751, 0.014014555],
+    ]
+
+
+
+
+    X = np.arange(3)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    p5 = plt.bar(
+        X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0], p2[0], p3[0],p4[0],p5[0]),
+               ('DBEst_0.1%', 'VerdictDB_0.1%', 'DBEst_0.5%', 'VerdictDB_0.5%','DBEst_1%', 'VerdictDB_1%'), loc='1')
+
+    plt.xticks(X + 2.5 * width, ("COUNT", 'SUM',
+                                 'AVG', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Average Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+
+    plt.show()
+
+def plt_tpcds_multi_cp_relative_error_verdictdb_0_1percent():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.20
+
+    data = [
+        [0.036729392, 0.147053419, 0.01226814],
+        [0.180193022, 0.19294517 , 0.016050075],
+        [0.013098367, 0.046292902, 0.015467639],
+        [0.063509021, 0.097632026, 0.012282212],
+        
+    ]
+    X = np.arange(3)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    # p5 = plt.bar(
+    #     X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0], p2[0], p3[0]),
+               ('DBEst_10k', 'VerdictDB_10k', 'DBEst_100k', 'VerdictDB_100k','DBEst_1%', 'VerdictDB_1%'), loc='1')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM',
+                                 'AVG', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Average Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+
+    plt.show()
+
+def plt_tpcds_multi_cp_response_time_verdictdb():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.30
+
+    data = [
+        [0.015702787, 0.114711777],
+        [0.333533842, 0.420013472], 
+    ]
+
+
+
+    X = np.arange(2)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['4'])
+    # p2 = plt.bar(
+    #     X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    # p3 = plt.bar(
+    #     X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    # p5 = plt.bar(
+    #     X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0]),
+               ('DBEst', 'VerdictDB', 'DBEst_100k', 'VerdictDB_100k','DBEst_1%', 'VerdictDB_1%'), loc='1')
+
+    plt.xticks(X + 0.5 * width, ("10k", '100k',
+                                 'AVG', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Qeury Response Time (s)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+
+    plt.show()
+
+def plt_parallel_response_time_groups():
+    plt.rcParams.update({'font.size': 18})
+    width = 0.40
+    data = [
+        [1.46, 0.57, 0.82],  # , 0.0486],
+        # [66.4,  102.4 ],#, 0.0335],
+    ]
+
+    X = np.arange(3)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(X, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['4'])
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    p1[1].set_color(colors["DBEst_100k"])
+    p1[2].set_color(colors["BlinkDB_10k"])
+
+    plt.xticks(X, ("DBEst","DBEst_parallel", 'VerdictDB', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Query Response Time (s)")
+    # ax.set_xlabel("Sample Size")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.10)
+    plt.subplots_adjust(left=0.16)
+
+    plt.show()
+
+def plt_tpcds_concurrent():
+    plt.rcParams.update({'font.size': 12})
+    # width = 0.30
+    x= [1,2,4,6,8,10,12]
+    #tpcds
+    data = [
+        [30.72 ,  30.10 ,  30.14 , 29.54,  29.79 ,  29.37 ,  29.54],
+        [32.00 ,  31.77 ,  30.56 , 30.18,  30.09 ,  30.42 ,  30.37],
+        [3.76  ,  2.42  ,  1.35  , 0.96 ,  0.83  ,  0.82  ,  0.75],
+        [23.45 ,  14.68 ,  7.83  , 5.83 ,  4.15  ,  3.79  ,  3.07]
+    ]
+    #ccpp
+    data = [
+        [64.93 , 61.33  , 61.46 ,  61.53 , 61.45 , 60.97 , 60.96 ],
+        [62.19 , 60.36  , 60.37 ,  60.41 , 60.66 , 60.08 , 60.02 ],
+        [4.60  , 2.85   , 1.60  ,  1.49  , 1.01  , 1.03  , 0.92 ],
+        [35.38 , 20.99  , 11.46 ,  9.85  , 7.31  , 7.75  , 5.78 ]
+    ]
+
+    #pm2.5 beijing
+    data = [
+        [21.42 ,  20.74 , 20.43 , 20.05  , 20.54 ,  19.96 ,  19.24 ],
+        [35.31 ,  22.39 , 20.91 , 20.75  , 20.48 ,  20.45 ,  20.40 ],
+        [1.99  ,  1.22  , 0.70  , 0.61   , 0.47  ,  0.41  ,  0.36 ],
+        [22.96 ,  13.88 , 8.86  , 7.41   , 6.09  ,  4.77  ,  4.63 ]
+    ]
+
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.plot(x, data[0], '*-',color=colors["BlinkDB_100k"], alpha=alpha['5'],linewidth=3)
+    p1 = plt.plot(x, data[1], 'x-',color=colors["BlinkDB_10k"],alpha=alpha['4'],linewidth=3)
+    p2 = plt.plot(x, data[2], '^-',color=colors["DBEst_100k"], alpha=alpha['3'],linewidth=3)
+    p3 = plt.plot(x, data[3], '.-',color=colors["DBEst_10k"],alpha=alpha['2'],linewidth=3)
+    # p2 = plt.bar(
+    #     X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    # p3 = plt.bar(
+    #     X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    # p5 = plt.bar(
+    #     X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0],p2[0],p3[0]),
+               ('VerdictDB_10k', 'VerdictDB_100k', 'DBEst_10k', 'DBEst_100k','DBEst_1%', 'VerdictDB_1%'), loc='1')
+
+    # plt.xticks(X + 0.5 * width, ("10k", '100k',
+                                 # 'AVG', 'STDDEV', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Total Qeury Response Time (s)")
+    ax.set_xlabel("Number of Processes")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.13)
+    plt.subplots_adjust(bottom=0.15)
+
+    plt.show()
+
+def plt_join_relative_error():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.20
+    data = [
+        [0.060441958, 0.059393945, 0.014499711],  # , 0.0486],
+        [0.040392629, 0.038002761, 0.005210391],  # , 0.0335],
+        [0.033410668, 0.033225831, 0.000853844],  # , 0.0182],
+        [0.024687999, 0.001692054, 0.023323738]  # , 0.0212]
+    ]
+
+    data=[
+        [0.060441958, 0.059393945, 0.014499711, 0.044778538],
+        [0.040392629, 0.038002761, 0.005210391, 0.027868594],
+        [0.033410668, 0.033225831, 0.000853844, 0.022496781],
+        [0.024687999, 0.001692054, 0.023323738, 0.01656793]
+    ]
+
+
+
+
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(
+        X + 0.00, data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 0.20, data[1], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 0.40, data[2], color=colors["DBEst_1m"], width=width, alpha=alpha['4'])
+    p4 = plt.bar(
+        X + 0.60, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['6'])
+
+    plt.legend((p1[0], p2[0], p3[0], p4[0]),
+               ('DBEst_10k', 'DBEst_100k', 'DBEst_1m', 'VerdictDB_10m'), loc='upper center')
+
+    plt.xticks(X + 1.5 * width, ("COUNT", 'SUM', 'AVG', 'OVERALL'))
+    ax.set_ylabel("Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.07)
+    # plt.subplots_adjust(left=0.23)
+
+    plt.show()
+
+def plt_join_memory_cost_comparison():
+    plt.rcParams.update({'font.size': 18})
+    width = 0.40
+    data = [
+        [0.373182,   0.746372,    1.119562,    271.8],  # , 0.0486],
+        # [66.4,  102.4 ],#, 0.0335],
+    ]
+
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(X, data[0], color=colors["DBEst_10k"], width=width)
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    p1[1].set_color(colors["DBEst_100k"])
+    p1[2].set_color(colors["DBEst_1m"])
+    p1[3].set_color(colors["BlinkDB_10k"])
+
+    plt.xticks(X, ("DBEst_10k", 'DBEst_100k', 'DBEst_1m', 'VerdictDB_10m'))
+    ax.set_ylabel("Space Overhead (MB)")
+    # ax.set_xlabel("Sample Size")
+    ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.40)
+    plt.subplots_adjust(left=0.18)
+    for item in ax.axes.get_xticklabels():
+        item.set_rotation(60)
+
+    plt.show()
+
+def plt_join_response_time():
+    plt.rcParams.update({'font.size': 18})
+    width = 0.40
+    data = [
+        [0.028452611,    0.103724667, 0.825308944, 5.40],  # , 0.0486],
+        # [66.4,  102.4 ],#, 0.0335],
+    ]
+
+    X = np.arange(4)
+    
+
+    fig, ax = plt.subplots()
+
+    p1 = plt.bar(X, data[0], color=colors["DBEst_10k"], width=width)
+    # p2 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"], width=width)
+    # p3 = plt.bar(X + 0.30, data[2], color=colors["BlinkDB_10k"], width=width)
+
+    # plt.legend((p1[0]),
+    #     ('DBEst', 'BlinkDB','BlinkDB Sampling','BlinkDB_100k'), loc='center', prop={'size': 18})
+
+    # p1[0].set_color('r')
+    p1[1].set_color(colors["DBEst_100k"])
+    p1[2].set_color(colors["DBEst_1m"])
+    p1[3].set_color(colors["BlinkDB_10k"])
+
+    plt.xticks(X, ("DBEst_10k", 'DBEst_100k', 'DBEst_1m', 'VerdictDB_10m'))
+    ax.set_ylabel("Query Response Time (s)")
+    # ax.set_xlabel("Sample Size")
+    ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+    plt.subplots_adjust(bottom=0.40)
+    plt.subplots_adjust(left=0.18)
+    for item in ax.axes.get_xticklabels():
+        item.set_rotation(60)
+
+    plt.show()
+
+def plt_tpcds_single_cp_memory_cost_comparison_verdict():
+    plt.rcParams.update({'font.size': 22})
+    fig, ax = plt.subplots()
+    
+
+    y1 = [0.040,  0.192,  1.684,   18.436]
+    y2 = [0.791,  1.700,  9.700,   70.300]
+ 
+ 
+
+    
+    x = [1E4, 1E5, 1E6, 5E6, 26E6]
+    x = [1E3,1E4, 1E5, 1E6]
+    p1 = plt.plot(x, y1, 'rx-')
+    p2 = plt.plot(x, y2, 'gh-')
+
+    plt.legend((p1[0], p2[0]),
+               ('DBEst', 'VerdictDB'), loc='1')
+
+    ax.set_xlabel("Sample Size")
+    ax.set_ylabel("Space Overhead (MB)")
+
+    plt.xticks([5E6, 26E6], ('5m', '26m'))
+    ax.set_xscale('log')
+    ax.set_yscale('log')
+
+    plt.subplots_adjust(bottom=0.16)
+    plt.subplots_adjust(left=0.20)
+
+    plt.show()
+
+
+def plt_pm25_relative_error():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.14
+    # data = [
+    #     [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+    # data = [
+    #     [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 1.2,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 24,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 0, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+
+    data = [
+        [0.013098367, 0.046292902, 0.015467639],
+        [0.063509021, 0.097632026, 0.012282212],
+        [0.040278354, 0.060049817, 0.01393817],
+        [0.032710269, 0.044273866, 0.011985621],
+        [0.044981284, 0.051119061, 0.006263069],
+        [0.01956036 , 0.037487751, 0.014014555],
+    ]
+    data = [
+        [0.0354,  0.0378,  0.0685,  0.0472],
+        [0.0909,  0.0808,  0.1154,  0.0957],
+        [0.0195,  0.0152,  0.0155,  0.0167],
+        [0.0501,  0.0252,  0.0571,  0.0441],
+        # [0.0150,  0.0052,  0.0144,  0.0115],
+        # [0.0119,  0.0096,  0.0120,  0.0112],
+    ]
+ 
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    # p5 = plt.bar(
+    #     X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0], p2[0], p3[0]),
+               ('DBEst_10k', 'VerdictDB_10k', 'DBEst_100k', 'VerdictDB_100k','DBEst_1m', 'VerdictDB_1m'), loc='upper left')
+
+    plt.xticks(X + 2.5 * width, ("COUNT", 'SUM',
+                                 'AVG', 'OVERALL', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Average Relative Error (%)")
+    # ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+    for item in ax.axes.get_xticklabels():
+        item.set_rotation(60)
+
+    plt.show()
+
+def plt_pm25_response_time():
+    plt.rcParams.update({'font.size': 12})
+    width = 0.14
+    # data = [
+    #     [0.00829, 0.2673276,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 3.1,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 41.46232,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 200, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+    # data = [
+    #     [0.00829, 0.12,  0.03481, 0.0352, 0.04278, 0.05179, 0.07853, 0.07707],
+    #     [0.09, 1.2,   0.22,  0.23, 0.22, 0.29, 0.053, 0.053],
+    #     [1.13, 24,  3.07, 3.08, 3.01, 4.66, 0.06, 0.06],
+    #     [7.07, 0, 21.07,  21.13, 19.07, 26.44, 0.056, 0.056],
+    # ]
+
+    data = [
+        [0.013098367, 0.046292902, 0.015467639],
+        [0.063509021, 0.097632026, 0.012282212],
+        [0.040278354, 0.060049817, 0.01393817],
+        [0.032710269, 0.044273866, 0.011985621],
+        # [0.044981284, 0.051119061, 0.006263069],
+        # [0.01956036 , 0.037487751, 0.014014555],
+    ]
+    data = [
+        [0.0095,  0.0141,  0.0172,  0.0136],
+        [0.5851,  0.4153,  0.3815,  0.4606],
+        [0.0940,  0.2231,  0.2060,  0.1744],
+        [0.3167,  0.3150,  0.3269,  0.3195],
+        # [1.4844 ,  2.7403,  2.6527,  2.29],
+        # [0.3887,  0.4176,  0.4089,  0.4051],
+    ]
+
+
+ 
+ 
+
+ 
+    X = np.arange(4)
+
+    fig, ax = plt.subplots()
+
+    p0 = plt.bar(
+        X , data[0], color=colors["DBEst_10k"], width=width, alpha=alpha['2'])
+    p1 = plt.bar(X + width, data[1], color=colors["BlinkDB_10k"],
+                 width=width, alpha=alpha['2'])
+    p2 = plt.bar(
+        X + 2*width, data[2], color=colors["DBEst_100k"], width=width, alpha=alpha['3'])
+    p3 = plt.bar(
+        X + 3*width, data[3], color=colors["BlinkDB_100k"], width=width, alpha=alpha['4'])
+    # p4 = plt.bar(
+    #     X + 4*width, data[4], color=colors["DBEst_1m"], width=width, alpha=alpha['5'])
+    # p5 = plt.bar(
+    #     X + 5*width, data[5], color=colors["BlinkDB_1m"], width=width, alpha=alpha['6'])
+    
+
+    plt.legend((p0[0],p1[0], p2[0], p3[0]),
+               ('DBEst_10k', 'VerdictDB_10k', 'DBEst_100k', 'VerdictDB_100k','DBEst_1m', 'VerdictDB_1m'), loc='upper left')
+
+    plt.xticks(X + 2.5 * width, ("COUNT", 'SUM',
+                                 'AVG', 'OVERALL', 'SUM', 'AVG', 'MIN', 'MAX'))
+    ax.set_ylabel("Average Response Time (s)")
+    ax.set_yscale('log')
+    formatter = FuncFormatter(to_percent)
+    # ax.yaxis.set_major_formatter(formatter)
+
+    # for item in ax.axes.get_xticklabels():
+    #     item.set_rotation(60)
+    plt.subplots_adjust(left=0.16)
+    plt.subplots_adjust(bottom=0.08)
+
+    for item in ax.axes.get_xticklabels():
+        item.set_rotation(60)
+
+    plt.show()
+
 ##----------------------------------------------------------------------------------------##
 if __name__ == "__main__":
-    plt_qreg_5d_20_gboost_win_NRMSE()
+    plt_ccpp_multi_cp_memory_usage_xgboost()

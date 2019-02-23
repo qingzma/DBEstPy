@@ -1956,14 +1956,14 @@ class CRegression:
         # select the best classifier
 
         if not self.b_select_classifier:
-            if self.classifier_type is tools.classifier_xgboost_name:
+            if self.classifier_type == tools.classifier_xgboost_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(
                     training_data_classifier,
                     y_classifier)
-            if self.classifier_type is tools.classifier_linear_name:
+            if self.classifier_type == tools.classifier_linear_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier(training_data_classifier,
                                                                                            y_classifier)
-            if self.classifier_type is tools.classifier_rbf_name:
+            if self.classifier_type == tools.classifier_rbf_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_rbf(training_data_classifier,
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type
@@ -2131,14 +2131,14 @@ class CRegression:
 
         # select the best classifier
         if not self.b_select_classifier:
-            if self.classifier_type is tools.classifier_xgboost_name:
+            if self.classifier_type == tools.classifier_xgboost_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(
                     training_data_classifier,
                     y_classifier)
-            if self.classifier_type is tools.classifier_linear_name:
+            if self.classifier_type == tools.classifier_linear_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier(training_data_classifier,
                                                                                            y_classifier)
-            if self.classifier_type is tools.classifier_rbf_name:
+            if self.classifier_type == tools.classifier_rbf_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_rbf(training_data_classifier,
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type
@@ -2322,14 +2322,14 @@ class CRegression:
         ########################################################
         # select the best classifier
         if not self.b_select_classifier:
-            if self.classifier_type is tools.classifier_xgboost_name:
+            if self.classifier_type == tools.classifier_xgboost_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_xgboost(
                     training_data_classifier,
                     y_classifier)
-            if self.classifier_type is tools.classifier_linear_name:
+            if self.classifier_type == tools.classifier_linear_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier(training_data_classifier,
                                                                                            y_classifier)
-            if self.classifier_type is tools.classifier_rbf_name:
+            if self.classifier_type == tools.classifier_rbf_name:
                 classifier, time_cost_to_train_the_best_classifier = self.build_classifier_rbf(training_data_classifier,
                                                                                                y_classifier)
             statistics.classifier_name = self.classifier_type

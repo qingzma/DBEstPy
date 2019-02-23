@@ -17,6 +17,11 @@ file11 = "../data/10k.csv"
 file12 = "../data/100k.csv"
 file13 = "../data/1_percent.csv"
 
+ss_10k =  "/home/u1796377/Workspace/DBEst/data/tpcds40g/ss_10k.csv"
+ss_100k = "/home/u1796377/Workspace/DBEst/data/tpcds40g/ss_100k.csv"
+ss_1m =   "/home/u1796377/Workspace/DBEst/data/tpcds40g/ss_1m.csv"
+
+
 file1 =  "/home/u1796377/Workspace/DBEst/data/1online_video_dataset/1transcoding_mesurment.csv"
 file2 =  "/home/u1796377/Workspace/DBEst/data/2CASP.csv"
 file3 =  "/home/u1796377/Workspace/DBEst/data/3PRSA_data.csv"
@@ -31,27 +36,27 @@ file2_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/2.
 file3_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/3.csv"
 file4_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/4.csv"
 file5_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/5.csv"
-file6_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/6.csv"
-file7_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/7.csv"
-file8_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/10k/8.csv"
+file6_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/10k/6.csv"
+file7_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/10k/7.csv"
+file8_qreg_sample_10k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/10k/8.csv"
 
 file1_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/1.csv"
 file2_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/2.csv"
 file3_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/3.csv"
 file4_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/4.csv"
 file5_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/5.csv"
-file6_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/6.csv"
-file7_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/7.csv"
-file8_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/100k/8.csv"
+file6_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/100k/6.csv"
+file7_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/100k/7.csv"
+file8_qreg_sample_100k =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/100k/8.csv"
 
 file1_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/1.csv"
 file2_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/2.csv"
 file3_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/3.csv"
 file4_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/4.csv"
 file5_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/5.csv"
-file6_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/6.csv"
-file7_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/7.csv"
-file8_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/1m/8.csv"
+file6_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/1m/6.csv"
+file7_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/1m/7.csv"
+file8_qreg_sample_1m =  "/home/u1796377/Workspace/DBEst/data/QReg_sample/fromOrigin/1m/8.csv"
 
 file9 =  "/home/u1796377/Workspace/DBEst/data/1m.csv"
 file10 = "/home/u1796377/Workspace/DBEst/data/5m.csv"
@@ -206,11 +211,11 @@ def load2d(dataID,sample_size=None):
         if sample_size is None:
             data = tools.load_csv(file7, fields, y_column, sep=' ')
         elif sample_size== "10k":
-            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column, sep=' ')
         elif sample_size== "100k":
-            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column, sep=' ')
         elif sample_size== "1m":
-            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column, sep=' ')
         else:
             return None
     if dataID == 8:
@@ -238,6 +243,26 @@ def load2d(dataID,sample_size=None):
         elif sample_size== "1m":
             fields = ['Global_intensity', 'energy']
             data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+        else:
+            return None
+
+    if dataID == "store_sales":
+        # store_sales dataset
+        # load the data
+
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price',
+                  'ss_ext_wholesale_cost']
+        fields = ['ss_wholesale_cost', 'ss_list_price']
+        y_column = 0  # should be the order in the input file, not in the "fields" order.
+        # data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(ss_10k, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(ss_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(ss_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(ss_1m, fields, y_column)
         else:
             return None
 
@@ -452,11 +477,11 @@ def load3d(dataID,sample_size=None):
         if sample_size is None:
             data = tools.load_csv(file7, fields, y_column, sep=' ')
         elif sample_size== "10k":
-            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column, sep=' ')
         elif sample_size== "100k":
-            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column, sep=' ')
         elif sample_size== "1m":
-            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column, sep=' ')
         else:
             return None
         # "../data/6YearPredictionMSD_with_header.csv"
@@ -482,6 +507,26 @@ def load3d(dataID,sample_size=None):
         else:
             return None
         # "../data/8data.txt"
+
+    if dataID == "store_sales":
+        # store_sales dataset
+        # load the data
+
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price',
+                  'ss_ext_wholesale_cost']
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price']
+        y_column = 0  # should be the order in the input file, not in the "fields" order.
+        # data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(ss_10k, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(ss_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(ss_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(ss_1m, fields, y_column)
+        else:
+            return None
     return data
 
 
@@ -643,11 +688,11 @@ def load4d(dataID,sample_size=None):
         if sample_size is None:
             data = tools.load_csv(file7, fields, y_column, sep=' ')
         elif sample_size== "10k":
-            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column, sep=' ')
         elif sample_size== "100k":
-            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column, sep=' ')
         elif sample_size== "1m":
-            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column, sep=' ')
         else:
             return None
         # "../data/7/7ethylene_methane_with_header.csv"
@@ -673,6 +718,26 @@ def load4d(dataID,sample_size=None):
         else:
             return None
         # "../data/8data.txt"
+
+    if dataID == "store_sales":
+        # store_sales dataset
+        # load the data
+
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price',
+                  'ss_ext_wholesale_cost']
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price']
+        y_column = 0  # should be the order in the input file, not in the "fields" order.
+        # data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(ss_10k, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(ss_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(ss_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(ss_1m, fields, y_column)
+        else:
+            return None
     return data
 
 
@@ -836,11 +901,11 @@ def load5d(dataID,sample_size=None):
         if sample_size is None:
             data = tools.load_csv(file7, fields, y_column, sep=' ')
         elif sample_size== "10k":
-            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column, sep=' ')
         elif sample_size== "100k":
-            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column, sep=' ')
         elif sample_size== "1m":
-            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column, sep=' ')
         else:
             return None
         # "../data/7/7ethylene_methane_with_header.csv"
@@ -866,6 +931,26 @@ def load5d(dataID,sample_size=None):
         else:
             return None
         # "../data/8data.txt"
+
+    if dataID == "store_sales":
+        # store_sales dataset
+        # load the data
+
+        fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price',
+                  'ss_ext_wholesale_cost']
+        # fields = ['ss_wholesale_cost', 'ss_list_price', 'ss_sales_price', 'ss_ext_sales_price']
+        y_column = 0  # should be the order in the input file, not in the "fields" order.
+        # data = tools.load_csv(file8, fields, y_column, sep=',')
+        if sample_size is None:
+            data = tools.load_csv(ss_10k, fields, y_column, sep=',')
+        elif sample_size== "10k":
+            data = tools.load_csv(ss_10k, fields, y_column)
+        elif sample_size== "100k":
+            data = tools.load_csv(ss_100k, fields, y_column)
+        elif sample_size== "1m":
+            data = tools.load_csv(ss_1m, fields, y_column)
+        else:
+            return None
     return data
 
 
@@ -1015,11 +1100,11 @@ def loadNd(dataID,sample_size=None):
         if sample_size is None:
             data = tools.load_csv(file7, fields, y_column, sep=' ')
         elif sample_size== "10k":
-            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_10k, fields, y_column, sep=' ')
         elif sample_size== "100k":
-            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_100k, fields, y_column, sep=' ')
         elif sample_size== "1m":
-            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file7_qreg_sample_1m, fields, y_column, sep=' ')
         else:
             return None
     if dataID == 8:
