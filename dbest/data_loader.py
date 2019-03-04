@@ -262,7 +262,7 @@ def load2d(dataID,sample_size=None):
         elif sample_size== "100k":
             data = tools.load_csv(ss_100k, fields, y_column)
         elif sample_size== "1m":
-            data = tools.load_csv(ss_1m, fields, y_column)
+            data = tools.load_csv(ss_1m, fields, y_column, sep='|')
         else:
             return None
 
@@ -524,7 +524,7 @@ def load3d(dataID,sample_size=None):
         elif sample_size== "100k":
             data = tools.load_csv(ss_100k, fields, y_column)
         elif sample_size== "1m":
-            data = tools.load_csv(ss_1m, fields, y_column)
+            data = tools.load_csv(ss_1m, fields, y_column, sep='|')
         else:
             return None
     return data
@@ -735,7 +735,7 @@ def load4d(dataID,sample_size=None):
         elif sample_size== "100k":
             data = tools.load_csv(ss_100k, fields, y_column)
         elif sample_size== "1m":
-            data = tools.load_csv(ss_1m, fields, y_column)
+            data = tools.load_csv(ss_1m, fields, y_column, sep='|')
         else:
             return None
     return data
@@ -948,7 +948,7 @@ def load5d(dataID,sample_size=None):
         elif sample_size== "100k":
             data = tools.load_csv(ss_100k, fields, y_column)
         elif sample_size== "1m":
-            data = tools.load_csv(ss_1m, fields, y_column)
+            data = tools.load_csv(ss_1m, fields, y_column, sep='|')
         else:
             return None
     return data
@@ -1112,7 +1112,7 @@ def loadNd(dataID,sample_size=None):
 
         # load the data
 
-        fields = ['timestamp', 'Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity',
+        fields = ['timestamp', 'Global_active_epower', 'Global_reactive_power', 'Voltage', 'Global_intensity',
                   'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3', 'energy']
         # fields = ['Date',  'Global_active_power', 'Global_reactive_power', 'Voltage', 'Global_intensity',
         #          'Sub_metering_1', 'Sub_metering_2', 'Sub_metering_3']
@@ -1125,7 +1125,7 @@ def loadNd(dataID,sample_size=None):
         elif sample_size== "100k":
             data = tools.load_csv(file8_qreg_sample_100k, fields, y_column)
         elif sample_size== "1m":
-            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column)
+            data = tools.load_csv(file8_qreg_sample_1m, fields, y_column, sep='|')
         else:
             return None
     return data
