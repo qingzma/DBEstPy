@@ -1,6 +1,6 @@
-```diff
+
 - This repository is no longer maintained,  a new version is at https://github.com/qingzma/DBEstClient, and will be released soon.
-```
+
 
 
 DBEst Repository
